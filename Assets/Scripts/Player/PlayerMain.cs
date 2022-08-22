@@ -15,6 +15,7 @@ namespace Player {
 
         // cached
         Health health;
+        Rigidbody2D rb;
 
         void OnEnable() {
             if (health != null) {
@@ -40,6 +41,7 @@ namespace Player {
 
         void Awake() {
             health = GetComponent<Health>();
+            rb = GetComponent<Rigidbody2D>();
 
             // TODO: REMOVE
             controller = GetComponent<PlayerController>();
@@ -61,6 +63,11 @@ namespace Player {
         public bool IsAlive() {
             if (health == null) return false;
             return health.Hp > 0;
+        }
+
+        public bool TakeDamage(float damage, Vector2 force) {
+            rb.AddForce(force);
+            return (health.TakeDamage(damage));
         }
 
         public void OnDamageTaken(float damage, float hp) {
