@@ -1,19 +1,21 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+using Core;
+
 namespace Player {
 
     public class PlayerController : MonoBehaviour {
         Vector2 move;
-        bool isFirePressed;
-        bool isFire2Pressed;
+
+        public VoidEventHandler OnFirePress = new VoidEventHandler();
+        public VoidEventHandler OnMeleePress = new VoidEventHandler();
 
         // TODO: ADD PAUSE EVENT HANDLING
         bool _isPaused = false;
 
-        public Vector2 Move { get => move; set => move = value; }
-        public bool IsFirePressed { get => isFirePressed; set => isFirePressed = value; }
-        public bool IsFire2Pressed { get => isFire2Pressed; set => isFire2Pressed = value; }
+        // public
+        public Vector2 Move => move;
 
         void OnMove(InputValue value) {
             if (_isPaused) return;
@@ -22,12 +24,12 @@ namespace Player {
 
         void OnFire(InputValue value) {
             if (_isPaused) return;
-            isFirePressed = value.isPressed;
+            if (value.isPressed) OnFirePress.Invoke();
         }
 
-        void OnFireSecondary(InputValue value) {
+        void OnMelee(InputValue value) {
             if (_isPaused) return;
-            isFire2Pressed = value.isPressed;
+            if (value.isPressed) OnMeleePress.Invoke();
         }
     }
 }
