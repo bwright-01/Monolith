@@ -101,9 +101,13 @@ namespace Core {
         public VoidEventHandler OnPlayerDeath = new VoidEventHandler();
         public EnemyEventHandler OnEnemyDeath = new EnemyEventHandler();
 
+        public VoidEventHandler OnUseKeyPress = new VoidEventHandler();
+        public VoidEventHandler OnUseKeyRelease = new VoidEventHandler();
         public VoidEventHandler OnGotoMainMenu = new VoidEventHandler();
         public VoidEventHandler OnPause = new VoidEventHandler();
         public VoidEventHandler OnUnpause = new VoidEventHandler();
+
+        public FloatEventHandler OnGainHealth = new FloatEventHandler();
 
         public FreezeTimeEventHandler OnFreezeTime = new FreezeTimeEventHandler();
         public ShakeGamepadEventHandler OnShakeGamepad = new ShakeGamepadEventHandler();

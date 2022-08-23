@@ -78,24 +78,24 @@ namespace Player {
         }
 
         public void OnDamageTaken(float damage, float hp) {
-            StartCoroutine(ieScreenShakeODamage(damage));
+            StartCoroutine(ScreenShakeOnDamage(damage));
             Debug.Log($"OnDamageTaken damage={damage} hp={hp}");
             PlaySound("PlayerDamage");
         }
 
         public void OnDeath(float damage, float hp) {
-            StartCoroutine(ieScreenShakeOnDeath());
+            StartCoroutine(ScreenShakeOnDeath());
             Debug.Log($"OnDeath damage={damage} hp={hp}");
             PlaySound("PlayerDeath");
         }
 
-        IEnumerator ieScreenShakeODamage(float damage) {
+        IEnumerator ScreenShakeOnDamage(float damage) {
             screenShakeOnDamage.GenerateImpulse(UnityEngine.Random.insideUnitCircle.normalized * damage * 0.1f);
             yield return new WaitForSeconds(0.1f);
             screenShakeOnDamage.GenerateImpulse(UnityEngine.Random.insideUnitCircle.normalized * damage * 0.1f);
         }
 
-        IEnumerator ieScreenShakeOnDeath() {
+        IEnumerator ScreenShakeOnDeath() {
             screenShakeOnDeath.GenerateImpulse(Vector3.right);
             yield return new WaitForSeconds(0.1f);
             screenShakeOnDeath.GenerateImpulse(Vector3.up);
