@@ -3,10 +3,12 @@ using UnityEngine;
 using Cinemachine;
 
 using Actor;
+using Core;
+using Audio.Sound;
 
 namespace Player {
 
-    public class PlayerMain : MonoBehaviour, iActor {
+    public class PlayerMain : MonoBehaviour, iActor, iLocalSoundPlayer {
         [SerializeField] CinemachineImpulseSource screenShakeOnDamage;
         [SerializeField] CinemachineImpulseSource screenShakeOnDeath;
 
@@ -16,6 +18,11 @@ namespace Player {
         // cached
         Health health;
         Rigidbody2D rb;
+
+        public event StringEvent OnPlaySound;
+        public void PlaySound(string soundName) {
+            if (OnPlaySound != null) OnPlaySound(soundName);
+        }
 
         void OnEnable() {
             if (health != null) {
@@ -73,11 +80,13 @@ namespace Player {
         public void OnDamageTaken(float damage, float hp) {
             StartCoroutine(ieScreenShakeODamage(damage));
             Debug.Log($"OnDamageTaken damage={damage} hp={hp}");
+            PlaySound("PlayerDamage");
         }
 
         public void OnDeath(float damage, float hp) {
             StartCoroutine(ieScreenShakeOnDeath());
             Debug.Log($"OnDeath damage={damage} hp={hp}");
+            PlaySound("PlayerDeath");
         }
 
         IEnumerator ieScreenShakeODamage(float damage) {
