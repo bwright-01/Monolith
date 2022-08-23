@@ -10,6 +10,7 @@ namespace Core {
     public delegate void StringEvent(string value);
     public delegate void GuidEvent(System.Guid value);
     public delegate void ActorEvent(Actor.iActor actor);
+    public delegate void EnemyEvent(Enemy.EnemyMain enemy);
     public delegate void HealthEvent(float damage, float hp);
 
     public class VoidEventHandler {
@@ -61,6 +62,13 @@ namespace Core {
         public void Invoke(Actor.iActor value) { if (ev != null) ev.Invoke(value); }
     }
 
+    public class EnemyEventHandler {
+        event EnemyEvent ev;
+        public void Subscribe(EnemyEvent action) { ev += action; }
+        public void Unsubscribe(EnemyEvent action) { ev -= action; }
+        public void Invoke(Enemy.EnemyMain value) { if (ev != null) ev.Invoke(value); }
+    }
+
     public class HealthEventHandler {
         event HealthEvent ev;
         public void Subscribe(HealthEvent action) { ev += action; }
@@ -74,6 +82,8 @@ namespace Core {
         public GuidEventHandler OnRegionDeactivate = new GuidEventHandler();
 
         public VoidEventHandler OnPlayerDeath = new VoidEventHandler();
+
+        public EnemyEventHandler OnEnemyDeath = new EnemyEventHandler();
 
         public VoidEventHandler OnGotoMainMenu = new VoidEventHandler();
         public VoidEventHandler OnPause = new VoidEventHandler();

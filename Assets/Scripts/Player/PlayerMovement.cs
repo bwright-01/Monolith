@@ -14,20 +14,25 @@ namespace Player {
         PlayerController controller;
         Rigidbody2D rb;
 
+        // props
+        float initialDrag;
+
         // state
-        bool hasMoveInput;
         float throttle; // 0.0 to 1.0 --> what percentage of maxSpeed to move the player
         Vector2 desiredVelocity;
-        Vector2 currentVelocity;
+        Vector2 prevVelocity;
+        Vector2 currentForces;
         Quaternion desiredHeading;
 
         void Awake() {
             controller = GetComponent<PlayerController>();
             rb = GetComponent<Rigidbody2D>();
+            initialDrag = rb.drag;
         }
 
         void Update() {
             SetThrottle();
+            SetDrag();
         }
 
         void FixedUpdate() {
@@ -35,22 +40,33 @@ namespace Player {
             HandleMove();
         }
 
+        void SetDrag() {
+            rb.drag = HasMoveInput() ? 0f : initialDrag;
+        }
+
         void SetThrottle() {
-            hasMoveInput = controller.Move.magnitude > float.Epsilon;
-            throttle = hasMoveInput ? throttle + Time.deltaTime / throttleUpTime : throttle - Time.deltaTime / throttleDownTime;
+            throttle = HasMoveInput() ? throttle + Time.deltaTime / throttleUpTime : throttle - Time.deltaTime / throttleDownTime;
             throttle = Mathf.Clamp01(throttle);
         }
 
         void HandleMove() {
+            currentForces = rb.velocity - prevVelocity;
             desiredVelocity = controller.Move * maxSpeed * throttle;
             rb.velocity = Vector2.MoveTowards(rb.velocity, desiredVelocity, speedDelta);
             rb.velocity = Vector2.ClampMagnitude(rb.velocity, maxSpeed);
+            bool areCurrentForcesOppositeVelocity = Vector2.Dot(desiredVelocity, currentForces) < -0.6f;
+            // rb.velocity += areCurrentForcesOppositeVelocity ? currentForces * 0.25f : currentForces * 1.5f;
+            rb.velocity += currentForces;
+            prevVelocity = rb.velocity;
         }
 
         void HandleRotate() {
-            desiredHeading = Quaternion.Euler(0, 0, Vector2.SignedAngle(Vector2.right, rb.velocity));
+            desiredHeading = Quaternion.Euler(0, 0, Vector2.SignedAngle(Vector2.right, controller.Move));
             transform.rotation = Quaternion.RotateTowards(transform.rotation, desiredHeading, rotateSpeed * Time.deltaTime);
-            // transform.rotation = desiredHeading;
+        }
+
+        bool HasMoveInput() {
+            return controller.Move.magnitude > float.Epsilon;
         }
     }
 }
