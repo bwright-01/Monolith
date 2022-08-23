@@ -36,6 +36,5 @@ namespace Core {
                 return direction.y >= 0f ? Vector2.up : Vector2.down;
             }
         }
-
     }
 }

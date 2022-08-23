@@ -11,6 +11,8 @@ namespace Enemy {
 
         [SerializeField] EventChannelSO eventChannel;
 
+        [SerializeField] GameObject[] killObjectsOnDeath = new GameObject[] { };
+
         // props
         System.Guid guid = new System.Guid(); // this is the unique ID used for comparing enemies, bosses, pickups, destructibles etc.
 
@@ -33,6 +35,9 @@ namespace Enemy {
 
         public void OnDeath(float damage, float hp) {
             eventChannel.OnEnemyDeath.Invoke(this);
+            foreach (var obj in killObjectsOnDeath) {
+                Destroy(obj);
+            }
         }
 
         public bool TakeDamage(float damage, Vector2 force) {

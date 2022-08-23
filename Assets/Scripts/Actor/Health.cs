@@ -6,8 +6,9 @@ using Core;
 namespace Actor {
 
     public class Health : MonoBehaviour {
+        [SerializeField] float startingHP = 100f;
         [SerializeField] bool isInvulnerable = false;
-        [SerializeField] float timeInvincibleAfterHit = 0.1f;
+        [SerializeField] float timeInvincibleAfterHit = 0f;
 
         [HideInInspector] public HealthEventHandler OnDamageTaken = new HealthEventHandler();
         [HideInInspector] public HealthEventHandler OnDeath = new HealthEventHandler();
@@ -18,6 +19,10 @@ namespace Actor {
         // state
         float hp = 100f;
         Timer timeInvincible = new Timer();
+
+        void Start() {
+            hp = startingHP;
+        }
 
         public void SetIsInvulnerable(bool value) {
             isInvulnerable = value;
