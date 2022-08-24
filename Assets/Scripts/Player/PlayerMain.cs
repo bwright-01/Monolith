@@ -8,6 +8,7 @@ using Audio.Sound;
 
 namespace Player {
 
+    [RequireComponent(typeof(Health))]
     public class PlayerMain : MonoBehaviour, iActor, iLocalSoundPlayer {
         [SerializeField] CinemachineImpulseSource screenShakeOnDamage;
         [SerializeField] CinemachineImpulseSource screenShakeOnDeath;
@@ -33,10 +34,6 @@ namespace Player {
                 health.OnDamageTaken.Subscribe(OnDamageTaken);
                 health.OnDeath.Subscribe(OnDeath);
             }
-
-            // TODO: REMOVE
-            controller.OnFirePress.Subscribe(OnFirePress);
-            controller.OnMeleePress.Subscribe(OnMeleePress);
         }
 
         void OnDisable() {
@@ -44,27 +41,11 @@ namespace Player {
                 health.OnDamageTaken.Unsubscribe(OnDamageTaken);
                 health.OnDeath.Unsubscribe(OnDeath);
             }
-
-            // TODO: REMOVE
-            controller.OnFirePress.Unsubscribe(OnFirePress);
-            controller.OnMeleePress.Unsubscribe(OnMeleePress);
         }
 
         void Awake() {
             health = GetComponent<Health>();
             rb = GetComponent<Rigidbody2D>();
-
-            // TODO: REMOVE
-            controller = GetComponent<PlayerController>();
-        }
-
-        // TODO: REMOVE
-        PlayerController controller;
-        void OnFirePress() {
-            OnDamageTaken(10f, 10f);
-        }
-        void OnMeleePress() {
-            OnDeath(10f, 10f);
         }
 
         public System.Guid Guid() {
@@ -73,7 +54,7 @@ namespace Player {
 
         public bool IsAlive() {
             if (health == null) return false;
-            return health.Hp > 0;
+            return health.IsAlive();
         }
 
         public bool TakeDamage(float damage, Vector2 force) {
@@ -86,6 +67,10 @@ namespace Player {
             Debug.Log($"OnDamageTaken damage={damage} hp={hp}");
             PlaySound("PlayerDamage");
             eventChannel.OnShakeGamepad.Invoke(.2f, .5f);
+        }
+
+        public void OnDamageGiven(float damage, bool wasKilled) {
+            // TODO: if (wasKilled) saySarcasticPun();
         }
 
         public void OnDeath(float damage, float hp) {

@@ -17,8 +17,11 @@ namespace Actor {
         [SerializeField] string ignoreTag;
         [SerializeField] List<Collider2D> ignoreColliders = new List<Collider2D>();
 
+        // props
+        float damageMultiplier = 1f;
+
         // cached
-        Collider2D _collider;
+        new Collider2D collider;
         iActor parentActor;
 
         // state
@@ -39,6 +42,10 @@ namespace Actor {
             ignoreTag = tag;
         }
 
+        public void SetDamageMultiplier(float value) {
+            damageMultiplier = value;
+        }
+
         void Awake() {
             parentActor = GetComponentInParent<iActor>();
         }
@@ -47,9 +54,7 @@ namespace Actor {
             if (ignoreParentGUID && parentActor != null && parentActor.Guid() != null) {
                 SetIgnoreUUID(parentActor.Guid());
             }
-
-            _collider = GetComponent<Collider2D>();
-
+            collider = GetComponent<Collider2D>();
             IgnoreColliders();
         }
 
@@ -71,14 +76,19 @@ namespace Actor {
             if (hitThisFrame) return;
             if (ignoreTag == other.tag) return;
             if (LayerUtils.LayerMaskContainsLayer(ignoreLayers, other.gameObject.layer)) return;
+            if (parentActor != null && !parentActor.IsAlive()) return;
 
             currentReceiver = GetDamageReceiverFromCollider(other);
 
             if (currentReceiver == null) return;
             if (ignoreGUID != null && ignoreGUID == currentReceiver.guid) return;
 
-            if (currentReceiver.TakeDamage(GetAppliedDamageAmount(), Vector2.zero)) {
+            float damage = GetAppliedDamageAmount();
+            if (currentReceiver.TakeDamage(damage, Vector2.zero)) {
                 hitThisFrame = true;
+                if (parentActor != null) parentActor.OnDamageGiven(damage, !currentReceiver.IsAlive());
+            } else {
+                if (parentActor != null) parentActor.OnDamageGiven(0, false);
             }
         }
 
@@ -92,12 +102,12 @@ namespace Actor {
         }
 
         float GetAppliedDamageAmount() {
-            return Utils.RandomVariance(damageAmount, damageVariance, 0f) * (makeFramerateIndependent ? Time.deltaTime : 1f);
+            return Utils.RandomVariance(damageAmount, damageVariance, 0f) * damageMultiplier * (makeFramerateIndependent ? Time.deltaTime : 1f);
         }
 
         void IgnoreColliders() {
             foreach (var ignoreCollider in ignoreColliders) {
-                Physics2D.IgnoreCollision(_collider, ignoreCollider);
+                Physics2D.IgnoreCollision(collider, ignoreCollider);
             }
         }
 

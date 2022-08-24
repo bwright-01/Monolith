@@ -1,5 +1,7 @@
 using UnityEngine;
 
+using Core;
+
 namespace Player {
 
     public class PlayerMovement : MonoBehaviour {
@@ -61,7 +63,8 @@ namespace Player {
         }
 
         void HandleRotate() {
-            desiredHeading = Quaternion.Euler(0, 0, Vector2.SignedAngle(Vector2.right, controller.Move));
+            if (!HasMoveInput()) return;
+            desiredHeading = Quaternion.Euler(0, 0, Vector2.SignedAngle(Vector2.down, Utils.GetNearestCardinal(controller.Move)));
             transform.rotation = Quaternion.RotateTowards(transform.rotation, desiredHeading, rotateSpeed * Time.deltaTime);
         }
 

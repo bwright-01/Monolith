@@ -4,6 +4,7 @@ using Core;
 
 namespace Enemy {
 
+    [RequireComponent(typeof(Actor.Health))]
     public class EnemyMain : MonoBehaviour, Actor.iActor {
         [SerializeField] Region region;
 
@@ -16,6 +17,8 @@ namespace Enemy {
         // props
         System.Guid guid = new System.Guid(); // this is the unique ID used for comparing enemies, bosses, pickups, destructibles etc.
 
+        // cached
+        Actor.Health health;
 
         public System.Guid Guid() {
             return guid;
@@ -26,11 +29,19 @@ namespace Enemy {
         }
 
         public bool IsAlive() {
-            throw new System.NotImplementedException();
+            return health.IsAlive();
+        }
+
+        public bool TakeDamage(float damage, Vector2 force) {
+            return health.TakeDamage(damage);
         }
 
         public void OnDamageTaken(float damage, float hp) {
-            throw new System.NotImplementedException();
+            // TODO: ADD DAMAGE NOISE
+        }
+
+        public void OnDamageGiven(float damage, bool wasKilled) {
+            // TODO: if (wasKilled) GLOAT()
         }
 
         public void OnDeath(float damage, float hp) {
@@ -40,11 +51,8 @@ namespace Enemy {
             }
         }
 
-        public bool TakeDamage(float damage, Vector2 force) {
-            throw new System.NotImplementedException();
-        }
-
         void Awake() {
+            health = GetComponent<Actor.Health>();
             if (region == null) Destroy(gameObject);
             region.RegisterActor(this);
         }

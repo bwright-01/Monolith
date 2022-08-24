@@ -16,12 +16,25 @@ namespace Actor {
         // public
         public float Hp => hp;
 
+        // cached
+        Collider2D[] colliders;
+
         // state
+        bool isAlive = true;
         float hp = 100f;
         Timer timeInvincible = new Timer();
 
-        void Start() {
+        void Awake() {
+            colliders = GetComponentsInChildren<Collider2D>(true);
             hp = startingHP;
+        }
+
+        public bool IsAlive() {
+            return hp > 0 && isAlive;
+        }
+
+        public void SetIsAlive(bool value) {
+            isAlive = value;
         }
 
         public void SetIsInvulnerable(bool value) {
@@ -29,6 +42,7 @@ namespace Actor {
         }
 
         public bool TakeDamage(float damage) {
+            if (!isAlive) return false;
             if (damage <= 0) return false;
             if (isInvulnerable) return false;
             if (hp <= 0) return false;
@@ -36,7 +50,9 @@ namespace Actor {
             hp -= damage;
 
             if (hp <= 0) {
+                isAlive = false;
                 OnDeath.Invoke(damage, hp);
+                DisableColliders();
             } else {
                 OnDamageTaken.Invoke(damage, hp);
             }
@@ -47,8 +63,15 @@ namespace Actor {
             return true;
         }
 
-        private void Update() {
+        void Update() {
             timeInvincible.Tick();
+        }
+
+        void DisableColliders() {
+            if (colliders == null) return;
+            foreach (var collider in colliders) {
+                if (collider != null) collider.enabled = false;
+            }
         }
     }
 }
