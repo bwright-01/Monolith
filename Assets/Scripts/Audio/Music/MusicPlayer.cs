@@ -64,11 +64,12 @@ namespace Audio {
                 }
             }
 
-            void Awake() {
+            void Start() {
                 tracksMap.Clear();
                 tracks = GetComponentsInChildren<Track>();
                 foreach (var track in tracks) {
-                    tracksMap.TryAdd(track.gameObject.name, track);
+                    tracksMap.TryAdd(track.name, track);
+                    if (track.Source == null) { Debug.LogWarning($"MusicPlayer track \"{track.name}\" has no audio source!!"); continue; }
                     track.Source.volume = 0;
                     track.Source.PlayScheduled(AudioSettings.dspTime + 0.5f);
                 }

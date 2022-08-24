@@ -48,7 +48,7 @@ namespace Audio {
             float currentPitchMultiplier = 1f;
 
             // public
-            public new string name => soundName;
+            public new string name => gameObject.name;
 
             public void Play() {
                 if (!ValidateSound()) return;

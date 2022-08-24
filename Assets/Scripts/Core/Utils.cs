@@ -37,5 +37,9 @@ namespace Core {
             }
         }
 
+        public static string FullGameObjectName(GameObject obj) {
+            if (obj.transform.parent != null) return $"{FullGameObjectName(obj.transform.parent.gameObject)}.{obj.name}";
+            return obj.name;
+        }
     }
 }
