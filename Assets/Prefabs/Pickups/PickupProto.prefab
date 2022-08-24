@@ -590,7 +590,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInteractable: 1
   interactableType: 0
-  useDuration: 1
+  useDuration: 0.4
   mainSprite: {fileID: 1421029759429190283}
   particleFx: {fileID: 1421029760871223190}
   progressBar: {fileID: 1421029759946418064}
