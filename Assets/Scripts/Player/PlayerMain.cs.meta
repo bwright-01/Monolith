@@ -3,7 +3,10 @@ guid: c16c6eb4bd426cc4ab22b84f949717dd
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - screenShakeOnDamage: {instanceID: 0}
+  - screenShakeOnDeath: {instanceID: 0}
+  - eventChannel: {fileID: 11400000, guid: 7981a9b65533ac444b7650afd7b5691d, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

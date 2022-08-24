@@ -1,6 +1,6 @@
 using System.Collections;
 using UnityEngine;
-// using XInputDotNetPure;
+using XInputDotNetPure;
 
 namespace Core {
 
@@ -31,7 +31,6 @@ namespace Core {
             ieShakeGamepad = StartCoroutine(ShakeGamepad(duration, intensity, intensity));
         }
 
-
         IEnumerator FreezeTime(float duration = 0.1f, float timeScale = 0f) {
             Time.timeScale = timeScale;
             yield return new WaitForSecondsRealtime(duration);
@@ -39,15 +38,15 @@ namespace Core {
         }
 
         IEnumerator ShakeGamepad(float duration = 0.1f, float leftMotor = 0.5f, float rightMotor = 0.5f) {
-            // GamePad.SetVibration(0, leftMotor, rightMotor);
-            // yield return new WaitForSecondsRealtime(duration);
-            // GamePad.SetVibration(0, 0, 0);
+            GamePad.SetVibration(0, leftMotor, rightMotor);
+            yield return new WaitForSecondsRealtime(duration);
+            GamePad.SetVibration(0, 0, 0);
             yield return null;
         }
 
         void ResetGamepadShake() {
             if (ieShakeGamepad != null) StopCoroutine(ieShakeGamepad);
-            // GamePad.SetVibration(0, 0, 0);
+            GamePad.SetVibration(0, 0, 0);
         }
     }
 }

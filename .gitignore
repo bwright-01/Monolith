@@ -75,8 +75,4 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
-# Lib
-/[Aa]ssets/[Ll]ib/
-/[Aa]ssets/[Au]udio/
-
 .env

@@ -12,6 +12,10 @@ namespace Player {
         [SerializeField] CinemachineImpulseSource screenShakeOnDamage;
         [SerializeField] CinemachineImpulseSource screenShakeOnDeath;
 
+        [Space]
+
+        [SerializeField] EventChannelSO eventChannel;
+
         // props
         System.Guid guid = new System.Guid(); // this is the unique ID used for comparing enemies, bosses, pickups, destructibles etc.
 
@@ -81,12 +85,14 @@ namespace Player {
             StartCoroutine(ScreenShakeOnDamage(damage));
             Debug.Log($"OnDamageTaken damage={damage} hp={hp}");
             PlaySound("PlayerDamage");
+            eventChannel.OnShakeGamepad.Invoke(.2f, .5f);
         }
 
         public void OnDeath(float damage, float hp) {
             StartCoroutine(ScreenShakeOnDeath());
             Debug.Log($"OnDeath damage={damage} hp={hp}");
             PlaySound("PlayerDeath");
+            eventChannel.OnShakeGamepad.Invoke(1f, .7f);
         }
 
         IEnumerator ScreenShakeOnDamage(float damage) {
