@@ -14,14 +14,19 @@ namespace Interactable {
         Slider slider;
 
         public void SetValue(float value) {
+            if (slider == null) return;
             slider.value = value;
         }
 
+        void Awake() {
+            slider = GetComponent<Slider>();
+        }
+
         void Start() {
+            if (slider == null) return;
             slider.minValue = 0f;
             slider.maxValue = 1f;
         }
-
     }
 }
 

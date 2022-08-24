@@ -11,6 +11,8 @@ namespace Player {
         public VoidEventHandler OnFirePress = new VoidEventHandler();
         public VoidEventHandler OnMeleePress = new VoidEventHandler();
 
+        [SerializeField] EventChannelSO eventChannel;
+
         // TODO: ADD PAUSE EVENT HANDLING
         bool _isPaused = false;
 
@@ -30,6 +32,15 @@ namespace Player {
         void OnMelee(InputValue value) {
             if (_isPaused) return;
             if (value.isPressed) OnMeleePress.Invoke();
+        }
+
+        void OnUse(InputValue value) {
+            if (_isPaused) return;
+            if (value.isPressed) {
+                eventChannel.OnUseKeyPress.Invoke();
+            } else {
+                eventChannel.OnUseKeyRelease.Invoke();
+            }
         }
     }
 }

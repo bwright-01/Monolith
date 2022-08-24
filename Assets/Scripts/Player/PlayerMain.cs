@@ -21,7 +21,7 @@ namespace Player {
 
         public event StringEvent OnPlaySound;
         public void PlaySound(string soundName) {
-            if (OnPlaySound != null) OnPlaySound(soundName);
+            if (OnPlaySound != null) OnPlaySound.Invoke(soundName);
         }
 
         void OnEnable() {

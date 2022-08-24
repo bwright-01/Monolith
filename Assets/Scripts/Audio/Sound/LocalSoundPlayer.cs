@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using Core;
+
 // USAGE NOTES:
 // - implement iLocalSoundPlayer in a top-level MonoBehaviour script
 // - add LocalSoundPlayer as a child or descendent
@@ -35,17 +37,18 @@ namespace Audio {
             }
 
             void Awake() {
-                iLocalSoundPlayer player = GetComponentInParent<iLocalSoundPlayer>();
+                player = GetComponentInParent<iLocalSoundPlayer>();
                 sounds = GetComponentsInChildren<LocalSound>();
-                foreach (var sound in sounds) soundsMap.TryAdd(sound.gameObject.name, sound);
+                foreach (var sound in sounds) soundsMap.TryAdd(sound.name, sound);
                 if (player == null) {
-                    Debug.LogWarning("A LocalSoundPlayer exists but has no iLocalSoundPlayer parent!! No sound events will be handled. :(");
+                    Debug.LogWarning($"{Utils.FullGameObjectName(gameObject)}.LocalSoundPlayer has no iLocalSoundPlayer parent!! No sound events will be handled. :(");
                 }
             }
 
             void OnPlaySound(string soundName) {
                 currentSound = LookupSound(soundName);
                 if (currentSound) {
+                    if (debug) Debug.Log($">> Playing sound: {soundName}");
                     currentSound.Play();
                 } else {
                     Debug.LogError($"No sound was found matching name of \"{soundName}\"");

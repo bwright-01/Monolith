@@ -13,11 +13,11 @@ namespace Enemy {
             Vector2 lastPosition;
 
             void OnEnable() {
-                foreach (var segment in segments) segment.gameObject.SetActive(true);
+                foreach (var segment in segments) if (segment != null) segment.gameObject.SetActive(true);
             }
 
             void OnDisable() {
-                foreach (var segment in segments) segment.gameObject.SetActive(false);
+                foreach (var segment in segments) if (segment != null) segment.gameObject.SetActive(false);
             }
 
             void Awake() {

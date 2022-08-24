@@ -13,8 +13,16 @@ namespace Interactable {
         [SerializeField][Range(0f, 2f)] float useDuration = 1f;
 
         [Space]
+
+        [SerializeField] SpriteRenderer mainSprite;
+        [SerializeField] ParticleSystem particleFx;
+        [SerializeField] InteractableProgressBar progressBar;
+        [SerializeField] InteractableTooltip tooltip;
+        [SerializeField] InteractableTooltip notAllowedTooltip;
+
+        [Space]
         [Header("Health Type")]
-        [SerializeField] float hpValue;
+        [SerializeField] float hpGainedOnPickup;
 
         // [Space]
         // [Header("Door Type")]
@@ -23,11 +31,6 @@ namespace Interactable {
         [Space]
 
         [SerializeField] EventChannelSO eventChannel;
-
-        // cached
-        InteractableProgressBar progressBar;
-        InteractableTooltip tooltip;
-        InteractableTooltip notAllowedTooltip;
 
         // props
         // VoidEventHandler OnUseAction = new VoidEventHandler();
@@ -41,7 +44,7 @@ namespace Interactable {
 
         public event StringEvent OnPlaySound;
         public void PlaySound(string soundName) {
-            if (OnPlaySound != null) OnPlaySound(soundName);
+            if (OnPlaySound != null) OnPlaySound.Invoke(soundName);
         }
 
         void OnUseAction() {
@@ -53,20 +56,36 @@ namespace Interactable {
 
             switch (interactableType) {
                 case InteractableType.Health:
-                    eventChannel.OnGainHealth.Invoke(hpValue);
+                    eventChannel.OnGainHealth.Invoke(hpGainedOnPickup);
+                    break;
+            }
+
+            HideTooltip();
+            HideProgressBar();
+            HideSprite();
+
+            if (particleFx != null) particleFx.Play();
+
+            switch (interactableType) {
+                case InteractableType.Health:
+                default:
+                    Destroy(gameObject, 5f);
                     break;
             }
         }
 
         void OnEnable() {
             eventChannel.OnUseKeyPress.Subscribe(OnUseKeyPress);
+            eventChannel.OnUseKeyRelease.Subscribe(OnUseKeyRelease);
         }
 
         void OnDisable() {
-            eventChannel.OnUseKeyPress.Subscribe(OnUseKeyRelease);
+            eventChannel.OnUseKeyPress.Unsubscribe(OnUseKeyPress);
+            eventChannel.OnUseKeyRelease.Unsubscribe(OnUseKeyRelease);
         }
 
         void OnUseKeyPress() {
+            if (ieUse != null) StopCoroutine(ieUse);
             if (isInteractable) {
                 PlaySound("UseStart");
                 ieUse = StartCoroutine(Use());
@@ -80,10 +99,10 @@ namespace Interactable {
             HideProgressBar();
         }
 
-        void Awake() {
-            progressBar = GetComponentInChildren<InteractableProgressBar>();
-            tooltip = GetComponentInChildren<InteractableTooltip>();
+        void Start() {
             wasInteractable = isInteractable;
+            HideTooltip();
+            HideProgressBar();
         }
 
         void Update() {
@@ -110,6 +129,10 @@ namespace Interactable {
                 HideTooltip();
                 HideProgressBar();
             }
+        }
+
+        void HideSprite() {
+            if (mainSprite != null) mainSprite.gameObject.SetActive(false);
         }
 
         void ShowTooltip() {

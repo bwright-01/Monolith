@@ -36,5 +36,10 @@ namespace Core {
                 return direction.y >= 0f ? Vector2.up : Vector2.down;
             }
         }
+
+        public static string FullGameObjectName(GameObject obj) {
+            if (obj.transform.parent != null) return $"{FullGameObjectName(obj.transform.parent.gameObject)}.{obj.name}";
+            return obj.name;
+        }
     }
 }
