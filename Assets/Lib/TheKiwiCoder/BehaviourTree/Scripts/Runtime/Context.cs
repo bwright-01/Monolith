@@ -13,13 +13,7 @@ namespace TheKiwiCoder {
         public Animator animator;
         public Rigidbody2D rb;
         public NavMeshAgent agent;
-        // public Rigidbody physics;
-        // public SphereCollider sphereCollider;
-        // public BoxCollider boxCollider;
-        // public CapsuleCollider capsuleCollider;
-        // public CharacterController characterController;
-
-        // Add other game specific systems here
+        public Movement.ActorMovement movement;
 
         public static Context CreateFromGameObject(GameObject gameObject) {
             // Fetch all commonly used components
@@ -29,13 +23,7 @@ namespace TheKiwiCoder {
             context.animator = gameObject.GetComponent<Animator>();
             context.rb = gameObject.GetComponent<Rigidbody2D>();
             context.agent = gameObject.GetComponent<NavMeshAgent>();
-            // context.physics = gameObject.GetComponent<Rigidbody>();
-            // context.sphereCollider = gameObject.GetComponent<SphereCollider>();
-            // context.boxCollider = gameObject.GetComponent<BoxCollider>();
-            // context.capsuleCollider = gameObject.GetComponent<CapsuleCollider>();
-            // context.characterController = gameObject.GetComponent<CharacterController>();
-
-            // Add whatever else you need here...
+            context.movement = gameObject.GetComponent<Movement.ActorMovement>();
 
             return context;
         }

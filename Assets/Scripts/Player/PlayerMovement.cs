@@ -57,7 +57,6 @@ namespace Player {
             rb.velocity = Vector2.MoveTowards(rb.velocity, desiredVelocity, speedDelta);
             rb.velocity = Vector2.ClampMagnitude(rb.velocity, maxSpeed);
             bool areCurrentForcesOppositeVelocity = Vector2.Dot(desiredVelocity, currentForces) < -0.6f;
-            // rb.velocity += areCurrentForcesOppositeVelocity ? currentForces * 0.25f : currentForces * 1.5f;
             rb.velocity += currentForces;
             prevVelocity = rb.velocity;
         }
