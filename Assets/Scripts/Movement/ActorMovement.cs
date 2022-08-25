@@ -79,7 +79,6 @@ namespace Movement {
             desiredVelocity = GetHeadingToTarget() * maxSpeed * throttle;
             rb.velocity = Vector2.MoveTowards(rb.velocity, desiredVelocity, speedDelta);
             rb.velocity = Vector2.ClampMagnitude(rb.velocity, maxSpeed);
-            bool areCurrentForcesOppositeVelocity = Vector2.Dot(desiredVelocity, currentForces) < -0.6f;
             rb.velocity += currentForces;
             prevVelocity = rb.velocity;
         }
