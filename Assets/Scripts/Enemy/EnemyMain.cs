@@ -1,12 +1,18 @@
 using UnityEngine;
 
 using Core;
+using Audio.Sound;
 
 namespace Enemy {
 
     [RequireComponent(typeof(Actor.Health))]
-    public class EnemyMain : MonoBehaviour, Actor.iActor {
+    public class EnemyMain : MonoBehaviour, Actor.iActor, iLocalSoundPlayer {
         [SerializeField] Region region;
+
+        [Space]
+
+        [SerializeField] string damageSound;
+        [SerializeField] string deathSound;
 
         [Space]
 
@@ -15,12 +21,35 @@ namespace Enemy {
         [SerializeField] GameObject[] killObjectsOnDeath = new GameObject[] { };
 
         // props
-        System.Guid guid = new System.Guid(); // this is the unique ID used for comparing enemies, bosses, pickups, destructibles etc.
+        System.Guid guid = System.Guid.NewGuid(); // this is the unique ID used for comparing enemies, bosses, pickups, destructibles etc.
 
         // cached
         Actor.Health health;
+        Actor.DamageFlash damageFlash;
 
-        public System.Guid Guid() {
+        void OnEnable() {
+            health.OnDamageTaken.Subscribe(OnDamageTaken);
+            health.OnDeath.Subscribe(OnDeath);
+        }
+
+        void OnDisable() {
+            health.OnDamageTaken.Unsubscribe(OnDamageTaken);
+            health.OnDeath.Unsubscribe(OnDeath);
+        }
+
+        void Awake() {
+            health = GetComponent<Actor.Health>();
+            damageFlash = GetComponent<Actor.DamageFlash>();
+            if (region == null) Destroy(gameObject);
+            region.RegisterActor(this);
+        }
+
+        public event StringEvent OnPlaySound;
+        public void PlaySound(string soundName) {
+            if (OnPlaySound != null) OnPlaySound.Invoke(soundName);
+        }
+
+        public System.Guid GUID() {
             return guid;
         }
 
@@ -37,7 +66,8 @@ namespace Enemy {
         }
 
         public void OnDamageTaken(float damage, float hp) {
-            // TODO: ADD DAMAGE NOISE
+            if (damageFlash != null) damageFlash.StartFlashing();
+            PlaySound(damageSound);
         }
 
         public void OnDamageGiven(float damage, bool wasKilled) {
@@ -45,16 +75,11 @@ namespace Enemy {
         }
 
         public void OnDeath(float damage, float hp) {
+            PlaySound(damageSound);
             eventChannel.OnEnemyDeath.Invoke(this);
             foreach (var obj in killObjectsOnDeath) {
                 Destroy(obj);
             }
-        }
-
-        void Awake() {
-            health = GetComponent<Actor.Health>();
-            if (region == null) Destroy(gameObject);
-            region.RegisterActor(this);
         }
     }
 }

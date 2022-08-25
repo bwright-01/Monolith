@@ -6,9 +6,14 @@ using Core;
 namespace Actor {
 
     public class DamageDealer : MonoBehaviour {
+        [SerializeField] bool debug;
         [SerializeField][Range(0f, 200f)] float damageAmount = 10f;
         [SerializeField][Range(0f, 200f)] float damageVariance = 4f;
         [SerializeField] bool makeFramerateIndependent;
+
+        [Space]
+
+        [SerializeField][Range(0f, 200f)] float impactForce = 0f;
 
         [Space]
 
@@ -48,11 +53,8 @@ namespace Actor {
 
         void Awake() {
             parentActor = GetComponentInParent<iActor>();
-        }
-
-        void Start() {
-            if (ignoreParentGUID && parentActor != null && parentActor.Guid() != null) {
-                SetIgnoreUUID(parentActor.Guid());
+            if (ignoreParentGUID && parentActor != null && parentActor.GUID() != null) {
+                SetIgnoreUUID(parentActor.GUID());
             }
             collider = GetComponent<Collider2D>();
             IgnoreColliders();
@@ -71,6 +73,8 @@ namespace Actor {
         }
 
         void HandleCollision(Collider2D other) {
+            if (debug) Debug.Log($">>> collision occurred! hit: \"{Utils.FullGameObjectName(other.gameObject)}\"");
+
             if (!enabled) return;
             if (other == null) return;
             if (hitThisFrame) return;
@@ -84,7 +88,7 @@ namespace Actor {
             if (ignoreGUID != null && ignoreGUID == currentReceiver.guid) return;
 
             float damage = GetAppliedDamageAmount();
-            if (currentReceiver.TakeDamage(damage, Vector2.zero)) {
+            if (currentReceiver.TakeDamage(damage, GetHeadingTowardsOtherCollider(other) * impactForce)) {
                 hitThisFrame = true;
                 if (parentActor != null) parentActor.OnDamageGiven(damage, !currentReceiver.IsAlive());
             } else {
@@ -99,6 +103,10 @@ namespace Actor {
             currentReceiver = col.GetComponent<DamageReceiver>();
             hitMap[col] = currentReceiver;
             return currentReceiver;
+        }
+
+        Vector2 GetHeadingTowardsOtherCollider(Collider2D col) {
+            return (col.transform.position - transform.position).normalized;
         }
 
         float GetAppliedDamageAmount() {

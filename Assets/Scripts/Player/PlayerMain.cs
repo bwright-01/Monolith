@@ -18,7 +18,7 @@ namespace Player {
         [SerializeField] EventChannelSO eventChannel;
 
         // props
-        System.Guid guid = new System.Guid(); // this is the unique ID used for comparing enemies, bosses, pickups, destructibles etc.
+        System.Guid guid = System.Guid.NewGuid(); // this is the unique ID used for comparing enemies, bosses, pickups, destructibles etc.
 
         // cached
         Health health;
@@ -30,17 +30,13 @@ namespace Player {
         }
 
         void OnEnable() {
-            if (health != null) {
-                health.OnDamageTaken.Subscribe(OnDamageTaken);
-                health.OnDeath.Subscribe(OnDeath);
-            }
+            health.OnDamageTaken.Subscribe(OnDamageTaken);
+            health.OnDeath.Subscribe(OnDeath);
         }
 
         void OnDisable() {
-            if (health != null) {
-                health.OnDamageTaken.Unsubscribe(OnDamageTaken);
-                health.OnDeath.Unsubscribe(OnDeath);
-            }
+            health.OnDamageTaken.Unsubscribe(OnDamageTaken);
+            health.OnDeath.Unsubscribe(OnDeath);
         }
 
         void Awake() {
@@ -48,7 +44,7 @@ namespace Player {
             rb = GetComponent<Rigidbody2D>();
         }
 
-        public System.Guid Guid() {
+        public System.Guid GUID() {
             return guid;
         }
 
@@ -58,7 +54,7 @@ namespace Player {
         }
 
         public bool TakeDamage(float damage, Vector2 force) {
-            rb.AddForce(force);
+            rb.AddForce(force, ForceMode2D.Impulse);
             return (health.TakeDamage(damage));
         }
 

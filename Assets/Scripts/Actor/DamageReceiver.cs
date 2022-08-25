@@ -12,10 +12,10 @@ namespace Actor {
         iActor actor;
         Rigidbody2D rb;
 
-        public iActor root => actor;
+        public iActor rootActor => actor;
         public new Rigidbody2D rigidbody => rb;
 
-        public System.Nullable<System.Guid> guid => actor != null ? actor.Guid() : null;
+        public System.Nullable<System.Guid> guid => actor != null ? actor.GUID() : null;
 
         void Awake() {
             rb = GetComponentInParent<Rigidbody2D>();
@@ -27,7 +27,12 @@ namespace Actor {
         }
 
         public bool TakeDamage(float damage, Vector2 force) {
+            Debug.Log($"--> DamageReceiver: taking damage...");
+
             if (actor == null) return false;
+
+            Debug.Log($"--> DamageReceiver took {damage} damage");
+
             return actor.TakeDamage(damage, force);
         }
     }

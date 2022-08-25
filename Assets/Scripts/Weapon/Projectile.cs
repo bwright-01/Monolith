@@ -1,17 +1,17 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
 using Core;
 using System;
+using Actor;
 using Audio.Sound;
 
 namespace Weapons {
 
-    [RequireComponent(typeof(Actor.Health))]
-    [RequireComponent(typeof(Actor.DamageReceiver))]
-    [RequireComponent(typeof(Actor.DamageDealer))]
-    public class Projectile : MonoBehaviour, Actor.iActor, iLocalSoundPlayer {
+    [RequireComponent(typeof(Health))]
+    [RequireComponent(typeof(DamageReceiver))]
+    [RequireComponent(typeof(DamageDealer))]
+    public class Projectile : MonoBehaviour, iActor, iLocalSoundPlayer {
         [Header("General Settings")]
         [Space]
         [SerializeField] float moveSpeed = 5f;
@@ -29,7 +29,7 @@ namespace Weapons {
         [SerializeField] GameObject impactFX;
 
         // components
-        Actor.Health health;
+        Health health;
         BoxCollider2D box;
         CircleCollider2D circle;
         CapsuleCollider2D capsule;
@@ -50,14 +50,14 @@ namespace Weapons {
         float height = 0.5f;
         int numCollisions = 0;
 
-        System.Guid guid = new System.Guid();
+        System.Guid guid = System.Guid.NewGuid();
 
         public event StringEvent OnPlaySound;
         public void PlaySound(string soundName) {
             if (OnPlaySound != null) OnPlaySound(soundName);
         }
 
-        public Guid Guid() {
+        public Guid GUID() {
             return guid;
         }
 
@@ -66,16 +66,14 @@ namespace Weapons {
         }
 
         public bool TakeDamage(float damage, Vector2 force) {
-            return (health.TakeDamage(damage));
+            return health.TakeDamage(damage);
         }
 
         public void OnDamageTaken(float damage, float hp) {
-            OnDeath();
+            Die();
         }
 
-        public void OnDeath() { OnDeath(1000f, -1000f); }
         public void OnDeath(float damage, float hp) {
-            health.SetIsAlive(false);
             Cleanup();
         }
 
@@ -86,7 +84,7 @@ namespace Weapons {
             bool ShouldRichochet = UnityEngine.Random.Range(0f, 1f) <= ricochetProbability;
             if (wasKilled || numCollisions >= numCollisionsMax || !ShouldRichochet) {
                 AddImpactFx();
-                OnDeath();
+                Die();
             } else {
                 Ricochet();
             }
@@ -97,17 +95,13 @@ namespace Weapons {
         }
 
         void OnEnable() {
-            if (health != null) {
-                health.OnDamageTaken.Subscribe(OnDamageTaken);
-                health.OnDeath.Subscribe(OnDeath);
-            }
+            health.OnDamageTaken.Subscribe(OnDamageTaken);
+            health.OnDeath.Subscribe(OnDeath);
         }
 
         void OnDisable() {
-            if (health != null) {
-                health.OnDamageTaken.Unsubscribe(OnDamageTaken);
-                health.OnDeath.Unsubscribe(OnDeath);
-            }
+            health.OnDamageTaken.Unsubscribe(OnDamageTaken);
+            health.OnDeath.Unsubscribe(OnDeath);
         }
 
         void Init() {
@@ -120,15 +114,18 @@ namespace Weapons {
             startingPosition = transform.position;
         }
 
-        void Start() {
+        void Awake() {
             rb = GetComponent<Rigidbody2D>();
             sr = GetComponentInChildren<SpriteRenderer>();
             trails = GetComponentsInChildren<TrailRenderer>();
             box = GetComponent<BoxCollider2D>();
             circle = GetComponent<CircleCollider2D>();
             capsule = GetComponent<CapsuleCollider2D>();
-            health = GetComponent<Actor.Health>();
+            health = GetComponent<Health>();
             particleFx = GetComponentInChildren<ParticleSystem>();
+        }
+
+        void Start() {
             Init();
         }
 
@@ -137,16 +134,20 @@ namespace Weapons {
             UpdateHeading();
             if (rb == null) MoveViaTransform();
             timeAlive += Time.deltaTime;
-            if (timeAlive > lifetime) OnDeath();
-            if ((transform.position - startingPosition).magnitude > outOfRange) OnDeath();
+            if (timeAlive > lifetime) Die();
+            if ((transform.position - startingPosition).magnitude > outOfRange) Die();
         }
 
         void OnBecameInvisible() {
-            OnDeath();
+            Die();
         }
 
         void FixedUpdate() {
             if (rb != null) MoveViaRigidbody();
+        }
+
+        void Die() {
+            TakeDamage(Constants.INSTAKILL, Vector2.zero);
         }
 
         void UpdateHeading() {

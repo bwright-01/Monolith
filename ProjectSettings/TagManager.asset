@@ -9,14 +9,14 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Region
+  - Enemy
+  - Bullet
+  - Environment
+  - Interactable
   - 
   - 
   - 
@@ -39,6 +39,24 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 187838517
+    locked: 0
+  - name: Environment
+    uniqueID: 645213223
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Action
+    uniqueID: 687501607
+    locked: 0
+  - name: Player
+    uniqueID: 193565167
+    locked: 0
+  - name: UI
+    uniqueID: 3389503249
+    locked: 0
+  - name: Foreground
+    uniqueID: 2612978951
     locked: 0
