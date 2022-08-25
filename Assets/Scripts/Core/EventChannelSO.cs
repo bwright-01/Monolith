@@ -90,7 +90,7 @@ namespace Core {
         event ShakeGamepadEvent ev;
         public void Subscribe(ShakeGamepadEvent action) { ev += action; }
         public void Unsubscribe(ShakeGamepadEvent action) { ev -= action; }
-        public void Invoke(float duration, float timescale) { if (ev != null) ev.Invoke(duration, timescale); }
+        public void Invoke(float duration, float intensity) { if (ev != null) ev.Invoke(duration, intensity); }
     }
 
     [CreateAssetMenu(fileName = "EventChannel", menuName = "ScriptableObjects/EventChannel")]
