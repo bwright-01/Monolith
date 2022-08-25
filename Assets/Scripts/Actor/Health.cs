@@ -33,10 +33,6 @@ namespace Actor {
             return hp > 0 && isAlive;
         }
 
-        public void SetIsAlive(bool value) {
-            isAlive = value;
-        }
-
         public void SetIsInvulnerable(bool value) {
             isInvulnerable = value;
         }

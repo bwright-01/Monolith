@@ -4859,14 +4859,14 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8673064300862581254}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.1
+  m_Mass: 0.001
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -4900,9 +4900,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa44c277cb30d2542acb93b3f308aa11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debug: 1
   damageAmount: 10
   damageVariance: 2
   makeFramerateIndependent: 0
+  impactForce: 1
   ignoreParentGUID: 1
   ignoreLayers:
     serializedVersion: 2
@@ -4968,6 +4970,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8673064302038137287}
   - component: {fileID: 8673064302038137286}
+  - component: {fileID: 2986246393526197179}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -5042,3 +5045,15 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2986246393526197179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8673064302038137284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 718477b0f0debd04f89c937e75ae4eb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

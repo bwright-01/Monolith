@@ -12,10 +12,10 @@ namespace Actor {
         iActor actor;
         Rigidbody2D rb;
 
-        public iActor root => actor;
+        public iActor rootActor => actor;
         public new Rigidbody2D rigidbody => rb;
 
-        public System.Nullable<System.Guid> guid => actor != null ? actor.Guid() : null;
+        public System.Nullable<System.Guid> guid => actor != null ? actor.GUID() : null;
 
         void Awake() {
             rb = GetComponentInParent<Rigidbody2D>();

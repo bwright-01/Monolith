@@ -82,7 +82,7 @@ namespace Weapon {
 
         void SpawnProjectile(Vector3 origin, Quaternion rotation) {
             Actor.DamageDealer damager = Object.Instantiate(bulletPrefab, origin, rotation * GetAccuracyMod());
-            damager.SetIgnoreUUID(actor.Guid());
+            damager.SetIgnoreUUID(actor.GUID());
             damager.SetDamageMultiplier(damageMultiplier);
             if (rb != null) rb.AddForce(-transform.up * recoil, ForceMode2D.Impulse);
         }

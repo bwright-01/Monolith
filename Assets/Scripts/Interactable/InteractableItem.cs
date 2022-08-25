@@ -38,7 +38,8 @@ namespace Interactable {
         // state
         bool isUseActionInvoked;
         bool wasInteractable = true;
-        bool triggerActive;
+        bool isTriggerActive;
+        bool wasTriggerActive;
         Timer useTimer = new Timer(TimerDirection.Increment);
         Coroutine ieUse;
 
@@ -50,7 +51,7 @@ namespace Interactable {
         void OnUseAction() {
             if (isUseActionInvoked) return;
             isUseActionInvoked = true;
-            triggerActive = false;
+            isTriggerActive = false;
 
             PlaySound("UseComplete");
 
@@ -85,6 +86,7 @@ namespace Interactable {
         }
 
         void OnUseKeyPress() {
+            if (!isTriggerActive) return;
             if (ieUse != null) StopCoroutine(ieUse);
             if (isInteractable) {
                 PlaySound("UseStart");
@@ -111,13 +113,20 @@ namespace Interactable {
                 HideTooltip();
                 ShowTooltip();
             }
+            // if player leaves the trigger zone while pressing USE key, cancel the action
+            if (!isTriggerActive && wasTriggerActive) {
+                if (ieUse != null) StopCoroutine(ieUse);
+                HideTooltip();
+                HideProgressBar();
+            }
             wasInteractable = isInteractable;
+            wasTriggerActive = isTriggerActive;
         }
 
         void OnTriggerEnter2D(Collider2D other) {
             if (isUseActionInvoked) return;
             if (other.CompareTag("Player")) {
-                triggerActive = true;
+                isTriggerActive = true;
                 ShowTooltip();
             }
         }
@@ -125,7 +134,7 @@ namespace Interactable {
         void OnTriggerExit2D(Collider2D other) {
             if (isUseActionInvoked) return;
             if (other.CompareTag("Player")) {
-                triggerActive = false;
+                isTriggerActive = false;
                 HideTooltip();
                 HideProgressBar();
             }
@@ -161,7 +170,7 @@ namespace Interactable {
         }
 
         IEnumerator Use() {
-            if (triggerActive && !isUseActionInvoked) {
+            if (isTriggerActive && !isUseActionInvoked) {
                 ShowProgressBar();
 
                 useTimer.SetDuration(useDuration);

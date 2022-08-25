@@ -7,6 +7,7 @@ namespace Player {
     [RequireComponent(typeof(PlayerController))]
     public class PlayerShooter : MonoBehaviour {
         [SerializeField] Weapon.Gun gun;
+        [SerializeField] Weapon.Melee melee;
 
         PlayerController controller;
 
@@ -23,6 +24,7 @@ namespace Player {
         void Awake() {
             controller = GetComponent<PlayerController>();
             if (gun == null) Debug.LogError($"Gun is null in {Utils.FullGameObjectName(gameObject)}");
+            if (melee == null) Debug.LogError($"Melee is null in {Utils.FullGameObjectName(gameObject)}");
         }
 
         void OnFirePress() {
@@ -30,7 +32,7 @@ namespace Player {
         }
 
         void OnMeleePress() {
-            // TODO: IMPLEMENT
+            melee.TryAttack();
         }
     }
 }

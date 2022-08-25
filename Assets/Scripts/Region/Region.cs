@@ -14,12 +14,12 @@ public class Region : MonoBehaviour, Actor.iGuid {
     [SerializeField] EventChannelSO eventChannel;
 
     // props
-    System.Guid guid = new System.Guid(); // this is the unique ID used for comparing enemies, bosses, pickups, destructibles etc.
+    System.Guid guid = System.Guid.NewGuid(); // this is the unique ID used for comparing enemies, bosses, pickups, destructibles etc.
 
     //state
     List<Enemy.EnemyMain> enemies = new List<Enemy.EnemyMain>();
 
-    public System.Guid Guid() {
+    public System.Guid GUID() {
         return guid;
     }
 
