@@ -27,12 +27,7 @@ namespace Actor {
         }
 
         public bool TakeDamage(float damage, Vector2 force) {
-            Debug.Log($"--> DamageReceiver: taking damage...");
-
             if (actor == null) return false;
-
-            Debug.Log($"--> DamageReceiver took {damage} damage");
-
             return actor.TakeDamage(damage, force);
         }
     }
