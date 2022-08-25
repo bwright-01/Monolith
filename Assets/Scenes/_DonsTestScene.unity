@@ -5838,7 +5838,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.4016395, y: 1}
+    m_SensorSize: {x: 1.9402262, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -8828,8 +8828,8 @@ MonoBehaviour:
   overheatTime: 3
   cooldownTime: 1.5
   recoil: 0
-  hasPerfectAccuracy: 1
-  accuracyAngle: 5
+  hasPerfectAccuracy: 0
+  accuracyAngle: 2.5
   accuracyCurve:
     serializedVersion: 2
     m_Curve:
