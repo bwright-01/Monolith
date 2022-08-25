@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Core;
+using UnityEngine.Events;
 
 namespace Actor {
 
@@ -12,15 +13,22 @@ namespace Actor {
         [SerializeField] bool makeFramerateIndependent;
 
         [Space]
+        [Space]
 
         [SerializeField][Range(0f, 200f)] float impactForce = 0f;
 
+        [Space]
         [Space]
 
         [SerializeField] bool ignoreParentGUID = true;
         [SerializeField] LayerMask ignoreLayers;
         [SerializeField] string ignoreTag;
         [SerializeField] List<Collider2D> ignoreColliders = new List<Collider2D>();
+
+        [Space]
+        [Space]
+
+        [SerializeField] UnityEvent<int> OnHit;
 
         // props
         float damageMultiplier = 1f;
@@ -81,6 +89,8 @@ namespace Actor {
             if (ignoreTag == other.tag) return;
             if (LayerUtils.LayerMaskContainsLayer(ignoreLayers, other.gameObject.layer)) return;
             if (parentActor != null && !parentActor.IsAlive()) return;
+
+            OnHit.Invoke(other.gameObject.layer);
 
             currentReceiver = GetDamageReceiverFromCollider(other);
 
