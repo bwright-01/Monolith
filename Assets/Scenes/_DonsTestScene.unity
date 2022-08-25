@@ -3859,6 +3859,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b77e1d66bdb89848b44b3576e3c0145, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  testSound: {fileID: 11400000, guid: 034d67d79c4daaf4c9fc6952b12378b2, type: 2}
   eventChannel: {fileID: 11400000, guid: 7981a9b65533ac444b7650afd7b5691d, type: 2}
 --- !u!114 &1048276988
 MonoBehaviour:
@@ -5208,7 +5209,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24994d4b41e90e648b51c2b377916a69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debug: 1
+  debug: 0
   timeWaitAfterAttack: 0.5
   attackTriggerName: Attack
   animator: {fileID: 0}

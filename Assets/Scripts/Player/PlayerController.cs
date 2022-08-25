@@ -11,6 +11,18 @@ namespace Player {
         public VoidEventHandler OnFirePress = new VoidEventHandler();
         public VoidEventHandler OnMeleePress = new VoidEventHandler();
 
+        // TODO: REMOVE
+        [SerializeField] Audio.Sound.SingleSound testSound;
+        private void Awake() {
+            testSound.Init(this);
+        }
+        private void OnGUI() {
+            GUILayout.TextField("Test Sound");
+            if (GUILayout.Button("Play")) {
+                testSound.Play();
+            }
+        }
+
         [SerializeField] EventChannelSO eventChannel;
 
         // TODO: ADD PAUSE EVENT HANDLING
