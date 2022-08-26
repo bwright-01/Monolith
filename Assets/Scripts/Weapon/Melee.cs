@@ -8,7 +8,8 @@ namespace Weapon {
 
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(Actor.DamageDealer))]
-    public class Melee : MonoBehaviour {
+
+    public class Melee : BaseWeapon {
         [SerializeField] bool debug = false;
 
         [Space]
@@ -45,12 +46,12 @@ namespace Weapon {
             hitEnvironmentSound.Init(this);
         }
 
-        public void TryAttack() {
+        public override void TryAttack() {
             if (ieAttack != null) return;
 
             attackSound.Play();
 
-            if (animator != null) {
+            if (animator != null && animator.runtimeAnimatorController != null) {
                 animator.SetTrigger(attackTriggerName);
             } else {
                 ApplyDamage();

@@ -3,18 +3,14 @@ using TheKiwiCoder;
 
 using Core;
 
-public class Patrol : ActionNode {
-
-    [SerializeField] float timePatrol = 5f;
-    [SerializeField] float timeWait = 1f;
-    [SerializeField] Vector2 initialHeading = Vector2.right;
+public class PatrolAction : ActionNode {
 
     Vector2 heading;
     Timer patrolling = new Timer();
     Timer waiting = new Timer();
 
     protected override void OnStart() {
-        heading = initialHeading * -1;
+        heading = context.enemyPatrol.InitialHeading * -1;
         StartPatrol();
     }
 
@@ -31,7 +27,7 @@ public class Patrol : ActionNode {
     void StartPatrol() {
         heading = heading * -1;
         context.movement.SetHeading(heading);
-        patrolling.SetDuration(timePatrol);
+        patrolling.SetDuration(context.enemyPatrol.TimePatrol);
         patrolling.SetOnEnd((float t) => {
             StartWait();
         });
@@ -39,8 +35,8 @@ public class Patrol : ActionNode {
     }
 
     void StartWait() {
-        context.movement.ClearTarget();
-        waiting.SetDuration(timeWait);
+        context.movement.Halt();
+        waiting.SetDuration(context.enemyPatrol.TimeWait);
         waiting.SetOnEnd((float t) => {
             StartPatrol();
         });

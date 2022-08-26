@@ -22,30 +22,6 @@ MonoBehaviour:
   description: 
   drawGizmos: 0
   child: {fileID: 3107423400785181848}
---- !u!114 &-3935334068450472009
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f531f15c3ef008c4e8dbcdc6c623f92f, type: 3}
-  m_Name: Patrol
-  m_EditorClassIdentifier: 
-  state: 0
-  started: 0
-  guid: 1b0bfabafb1a66648824a4243ae16d28
-  position: {x: -224, y: -328}
-  blackboard:
-    moveToPosition: {x: 0, y: 0, z: 0}
-    heading: {x: 0, y: 0, z: 0}
-  description: 
-  drawGizmos: 0
-  timePatrol: 8
-  timeWait: 1
-  initialHeading: {x: 0, y: -1}
 --- !u!114 &-1423442988450952474
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68,7 +44,8 @@ MonoBehaviour:
   description: 
   drawGizmos: 0
   children:
-  - {fileID: -3935334068450472009}
+  - {fileID: 7630949139992083875}
+  - {fileID: 6861021343416023074}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79,7 +56,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2d285eb63c2cdd74180de7cfceaa96ad, type: 3}
-  m_Name: PatrolUTDLong
+  m_Name: HoldAndAttackPlayer
   m_EditorClassIdentifier: 
   rootNode: {fileID: -6883819902055838589}
   treeState: 0
@@ -87,7 +64,8 @@ MonoBehaviour:
   - {fileID: -6883819902055838589}
   - {fileID: 3107423400785181848}
   - {fileID: -1423442988450952474}
-  - {fileID: -3935334068450472009}
+  - {fileID: 7630949139992083875}
+  - {fileID: 6861021343416023074}
   blackboard:
     moveToPosition: {x: 0, y: 0, z: 0}
     heading: {x: 0, y: 0, z: 0}
@@ -114,4 +92,47 @@ MonoBehaviour:
   drawGizmos: 0
   child: {fileID: -1423442988450952474}
   restartOnSuccess: 1
-  restartOnFailure: 0
+  restartOnFailure: 1
+--- !u!114 &6861021343416023074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a5134d9de14153468b48928d3e7359a, type: 3}
+  m_Name: Wait
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: c336a13371914494c98156a043d029f7
+  position: {x: -74.000015, y: -331.0001}
+  blackboard:
+    moveToPosition: {x: 0, y: 0, z: 0}
+    heading: {x: 0, y: 0, z: 0}
+  description: 
+  drawGizmos: 0
+  duration: 0.5
+--- !u!114 &7630949139992083875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10dd81f01a56f5140a0e0eddca00ebd2, type: 3}
+  m_Name: AttackAction
+  m_EditorClassIdentifier: 
+  state: 0
+  started: 0
+  guid: a2a9e6f8846bc184e95656be77fcb309
+  position: {x: -373.9999, y: -331.35016}
+  blackboard:
+    moveToPosition: {x: 0, y: 0, z: 0}
+    heading: {x: 0, y: 0, z: 0}
+  description: 
+  drawGizmos: 0

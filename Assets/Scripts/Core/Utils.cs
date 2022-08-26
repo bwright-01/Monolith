@@ -41,5 +41,37 @@ namespace Core {
             if (obj.transform.parent != null) return $"{FullGameObjectName(obj.transform.parent.gameObject)}.{obj.name}";
             return obj.name;
         }
+
+        public static Color Transparentize(Color color, float alpha) {
+            return new Color(color.r, color.g, color.b, alpha);
+        }
+
+        // DEBUG RECT - place inside OnGUI
+
+        public static void DebugDrawRect(Vector3 pos, float size, Color color) {
+            Debug.DrawLine(new Vector3(pos.x - size / 2, pos.y + size / 2, 0f), new Vector3(pos.x + size / 2, pos.y + size / 2, 0f), color);
+            Debug.DrawLine(new Vector3(pos.x - size / 2, pos.y + size / 2, 0f), new Vector3(pos.x - size / 2, pos.y - size / 2, 0f), color);
+            Debug.DrawLine(new Vector3(pos.x - size / 2, pos.y - size / 2, 0f), new Vector3(pos.x + size / 2, pos.y - size / 2, 0f), color);
+            Debug.DrawLine(new Vector3(pos.x + size / 2, pos.y + size / 2, 0f), new Vector3(pos.x + size / 2, pos.y - size / 2, 0f), color);
+        }
+        public static void DebugDrawRect(Vector3 position, float size) {
+            DebugDrawRect(position, size, Color.red);
+        }
+        public static void DebugDrawRect(Vector3 position, Color color) {
+            DebugDrawRect(position, .1f, color);
+        }
+        public static void DebugDrawRect(Vector3 position) {
+            DebugDrawRect(position, .1f, Color.red);
+        }
+
+        // DEBUG CIRCLE - place inside OnDrawGizmos
+
+        public static void DebugDrawCircle(Vector2 position, float radius, Color color) {
+            Gizmos.color = color;
+            Gizmos.DrawSphere(position, radius);
+        }
+        public static void DebugDrawCircle(Vector2 position, float radius) {
+            DebugDrawCircle(position, radius, Utils.Transparentize(Color.magenta, 0.3f));
+        }
     }
 }

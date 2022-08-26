@@ -31,7 +31,6 @@ namespace Audio {
             public override bool hasSource => source != null;
 
             // state
-            float volumeFadeStart = 0f;
             Timer fadeTimer = new Timer();
             int currentClipIndex = 0;
 

@@ -5,8 +5,7 @@ using Audio.Sound;
 
 namespace Weapon {
 
-    class Gun : MonoBehaviour {
-
+    public class Gun : BaseWeapon {
         [Header("Damage")]
         [Space]
         [SerializeField][Range(0f, 10f)] float damageMultiplier = 1f;
@@ -58,7 +57,7 @@ namespace Weapon {
         bool isTryingToShoot;
 
         // this method should ideally be called every frame
-        public void TryShoot() {
+        public override void TryAttack() {
             isTryingToShoot = true;
         }
 

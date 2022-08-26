@@ -18,6 +18,7 @@ MonoBehaviour:
   position: {x: -224, y: -744}
   blackboard:
     moveToPosition: {x: 0, y: 0, z: 0}
+    heading: {x: 0, y: 0, z: 0}
   description: 
   drawGizmos: 0
   child: {fileID: 3107423400785181848}
@@ -39,6 +40,7 @@ MonoBehaviour:
   position: {x: -74, y: -342}
   blackboard:
     moveToPosition: {x: 0, y: 0, z: 0}
+    heading: {x: 0, y: 0, z: 0}
   description: 
   drawGizmos: 0
   duration: 1
@@ -60,6 +62,7 @@ MonoBehaviour:
   position: {x: -224, y: -494}
   blackboard:
     moveToPosition: {x: 0, y: 0, z: 0}
+    heading: {x: 0, y: 0, z: 0}
   description: 
   drawGizmos: 0
   children:
@@ -87,6 +90,7 @@ MonoBehaviour:
   - {fileID: 3277233191954090310}
   blackboard:
     moveToPosition: {x: 0, y: 0, z: 0}
+    heading: {x: 0, y: 0, z: 0}
 --- !u!114 &3107423400785181848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105,6 +109,7 @@ MonoBehaviour:
   position: {x: -224, y: -609}
   blackboard:
     moveToPosition: {x: 0, y: 0, z: 0}
+    heading: {x: 0, y: 0, z: 0}
   description: 
   drawGizmos: 0
   child: {fileID: -5032082373569984827}
@@ -128,6 +133,7 @@ MonoBehaviour:
   position: {x: -374, y: -342}
   blackboard:
     moveToPosition: {x: 0, y: 0, z: 0}
+    heading: {x: 0, y: 0, z: 0}
   description: 
   drawGizmos: 0
   message: Hello World!

@@ -16,6 +16,11 @@ namespace Movement {
         [SerializeField][Tooltip("How fast the actor can change directions")][Range(0.001f, 2f)] float speedDelta = 0.1f;
         [SerializeField][Tooltip("How fast the actor can rotate (degrees / sec)")][Range(0f, 1080f)] float rotateSpeed = 720f;
 
+        [Space]
+        [Space]
+
+        [SerializeField] Vector2 aimOrientation = Vector2.up;
+
         // cached
         Rigidbody2D rb;
 
@@ -23,7 +28,8 @@ namespace Movement {
         float initialDrag;
 
         // state
-        Transform target;
+        Transform moveTarget;
+        Transform aimTarget;
         Vector2 heading;
         float throttle; // 0.0 to 1.0 --> what percentage of maxSpeed to move the actor
         Vector2 desiredVelocity;
@@ -31,20 +37,24 @@ namespace Movement {
         Vector2 currentForces;
         Quaternion desiredHeading;
 
+        public void LookAt(Transform value) {
+            aimTarget = value;
+        }
+
         public void SetTarget(Transform value) {
-            target = value;
+            moveTarget = value;
             heading = Vector2.zero;
             mode = ActorMovementMode.Target;
         }
 
         public void SetHeading(Vector2 value) {
             heading = value;
-            target = null;
+            moveTarget = null;
             mode = ActorMovementMode.Heading;
         }
 
-        public void ClearTarget() {
-            target = null;
+        public void Halt() {
+            moveTarget = null;
             heading = Vector2.zero;
             mode = ActorMovementMode.Heading;
         }
@@ -66,17 +76,17 @@ namespace Movement {
         }
 
         void SetDrag() {
-            rb.drag = HasTarget() ? 0f : initialDrag;
+            rb.drag = HasMoveTarget() ? 0f : initialDrag;
         }
 
         void SetThrottle() {
-            throttle = HasTarget() ? throttle + Time.deltaTime / throttleUpTime : throttle - Time.deltaTime / throttleDownTime;
+            throttle = HasMoveTarget() ? throttle + Time.deltaTime / throttleUpTime : throttle - Time.deltaTime / throttleDownTime;
             throttle = Mathf.Clamp01(throttle);
         }
 
         void HandleMove() {
             currentForces = rb.velocity - prevVelocity;
-            desiredVelocity = GetHeadingToTarget() * maxSpeed * throttle;
+            desiredVelocity = GetHeadingToMoveTarget() * maxSpeed * throttle;
             rb.velocity = Vector2.MoveTowards(rb.velocity, desiredVelocity, speedDelta);
             rb.velocity = Vector2.ClampMagnitude(rb.velocity, maxSpeed);
             rb.velocity += currentForces;
@@ -84,26 +94,35 @@ namespace Movement {
         }
 
         void HandleRotate() {
-            if (!HasTarget()) return;
-            desiredHeading = Quaternion.Euler(0, 0, Vector2.SignedAngle(Vector2.up, GetHeadingToTarget()));
+            if (!HasAimTarget() && !HasMoveTarget()) return;
+            desiredHeading = Quaternion.Euler(0, 0, Vector2.SignedAngle(aimOrientation, GetHeadingToAimTarget()));
             transform.rotation = Quaternion.RotateTowards(transform.rotation, desiredHeading, rotateSpeed * Time.deltaTime);
         }
 
         void HandleReachTarget() {
-            if (target == null) return;
-            if (Vector2.Distance(target.position, transform.position) > float.Epsilon) return;
-            ClearTarget();
+            if (moveTarget == null) return;
+            if (Vector2.Distance(moveTarget.position, transform.position) > float.Epsilon) return;
+            Halt();
         }
 
-        Vector2 GetHeadingToTarget() {
+        Vector2 GetHeadingToMoveTarget() {
             if (mode == ActorMovementMode.Heading) return heading;
-            if (target == null) return Vector2.zero;
-            return (target.position - transform.position).normalized;
+            if (moveTarget == null) return Vector2.zero;
+            return (moveTarget.position - transform.position).normalized;
         }
 
-        bool HasTarget() {
+        Vector2 GetHeadingToAimTarget() {
+            if (HasAimTarget()) return (aimTarget.position - transform.position).normalized;
+            return GetHeadingToMoveTarget();
+        }
+
+        bool HasAimTarget() {
+            return aimTarget != null;
+        }
+
+        bool HasMoveTarget() {
             if (mode == ActorMovementMode.Heading) return heading != Vector2.zero;
-            return target != null;
+            return moveTarget != null;
         }
     }
 }
