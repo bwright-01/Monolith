@@ -1,8 +1,9 @@
 
 using UnityEngine;
 
-using Player;
 using Core;
+using Player;
+using Movement;
 
 // TODO: USE RAYCAST
 
@@ -14,11 +15,25 @@ namespace Enemy {
         [SerializeField] float rangeOfSight = 5f;
 
         PlayerMain player;
+        ActorMovement movement;
 
         public bool CanSeePlayer() {
             player = PlayerUtils.FindPlayer();
             if (!PlayerUtils.CheckIsAlive(player)) return false;
             return Vector2.Distance(player.transform.position, transform.position) <= rangeOfSight;
+        }
+
+        public void LookAtPlayer() {
+            if (movement == null) return;
+            if (CanSeePlayer()) {
+                movement.LookAt(player.transform);
+            } else {
+                movement.LookAt(null);
+            }
+        }
+
+        private void Awake() {
+            movement = GetComponent<ActorMovement>();
         }
 
         void OnDrawGizmos() {

@@ -1,9 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
+using Core;
 using Player;
 using Movement;
-using Core;
 
 // NOTES
 // This component will constantly try to attack the player as long
@@ -35,6 +35,7 @@ namespace Enemy {
         ActorMovement movement;
         PlayerMain player;
         Animator animator;
+        EnemySight sight;
 
         public void AttackImmediately() {
             weapon.TryAttack();
@@ -56,6 +57,7 @@ namespace Enemy {
         }
 
         void Awake() {
+            sight = GetComponent<EnemySight>();
             movement = GetComponent<ActorMovement>();
             animator = GetComponent<Animator>();
             if (disableOnAwake) enabled = false;
@@ -64,19 +66,12 @@ namespace Enemy {
         void TryAttack() {
             if (!ScreenUtils.IsObjectOnScreen(gameObject)) return;
             if (!IsPlayerInAttackRange()) return;
-            LookAtPlayer();
+            sight.LookAtPlayer();
             if (animator != null && animator.runtimeAnimatorController != null) {
                 animator.SetTrigger(animatorAttackTriggerName);
             } else {
                 AttackImmediately();
             }
-        }
-
-        void LookAtPlayer() {
-            player = PlayerUtils.FindPlayer();
-            if (!PlayerUtils.CheckIsAlive(player)) return;
-            if (movement == null) return;
-            movement.LookAt(player.transform);
         }
 
         float GetTimeWaitAfterAttack() {
