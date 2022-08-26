@@ -3,13 +3,17 @@ using UnityEngine;
 using Cinemachine;
 
 using Actor;
-using Core;
 using Audio.Sound;
 
 namespace Player {
 
     [RequireComponent(typeof(Health))]
     public class PlayerMain : MonoActor {
+
+        [SerializeField] LoopableSound hazardLavaSound;
+
+        [Space]
+        [Space]
 
         [SerializeField] CinemachineImpulseSource screenShakeOnDamage;
         [SerializeField] CinemachineImpulseSource screenShakeOnDeath;
@@ -20,20 +24,33 @@ namespace Player {
 
         void OnEnable() {
             SubscribeToEvents();
+            eventChannel.OnHazardEnter.Subscribe(OnHazardEnter);
+            eventChannel.OnHazardExit.Subscribe(OnHazardExit);
         }
 
         void OnDisable() {
             UnsubscribeFromEvents();
+            eventChannel.OnHazardEnter.Unsubscribe(OnHazardEnter);
+            eventChannel.OnHazardExit.Unsubscribe(OnHazardExit);
         }
 
         void Awake() {
             Init();
             controller = GetComponent<PlayerController>();
             movement = GetComponent<PlayerMovement>();
+            hazardLavaSound.Init(this);
         }
 
         public override Region GetRegion() {
             return null;
+        }
+
+        void OnHazardEnter(Environment.HazardType hazardType) {
+            hazardLavaSound.Play();
+        }
+
+        void OnHazardExit(Environment.HazardType hazardType) {
+            hazardLavaSound.Stop();
         }
 
         public override void OnDamageTaken(float damage, float hp) {

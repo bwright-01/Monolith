@@ -13,6 +13,7 @@ namespace Core {
     public delegate void ActorEvent(Actor.iActor actor);
     public delegate void EnemyEvent(Enemy.EnemyMain enemy);
     public delegate void HealthEvent(float damage, float hp);
+    public delegate void HazardEvent(Environment.HazardType hazardType);
     public delegate void FreezeTimeEvent(float duration = 0.1f, float timeScale = 0f);
     public delegate void ShakeGamepadEvent(float duration = 0.1f, float intensity = 0f);
 
@@ -79,6 +80,13 @@ namespace Core {
         public void Invoke(float damage, float hp) { if (ev != null) ev.Invoke(damage, hp); }
     }
 
+    public class HazardEventHandler {
+        event HazardEvent ev;
+        public void Subscribe(HazardEvent action) { ev += action; }
+        public void Unsubscribe(HazardEvent action) { ev -= action; }
+        public void Invoke(Environment.HazardType hazardType) { if (ev != null) ev.Invoke(hazardType); }
+    }
+
     public class FreezeTimeEventHandler {
         event FreezeTimeEvent ev;
         public void Subscribe(FreezeTimeEvent action) { ev += action; }
@@ -108,6 +116,9 @@ namespace Core {
         public VoidEventHandler OnUnpause = new VoidEventHandler();
 
         public FloatEventHandler OnGainHealth = new FloatEventHandler();
+
+        public HazardEventHandler OnHazardEnter = new HazardEventHandler();
+        public HazardEventHandler OnHazardExit = new HazardEventHandler();
 
         public FreezeTimeEventHandler OnFreezeTime = new FreezeTimeEventHandler();
         public ShakeGamepadEventHandler OnShakeGamepad = new ShakeGamepadEventHandler();
