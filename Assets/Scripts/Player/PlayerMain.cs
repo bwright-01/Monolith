@@ -9,75 +9,52 @@ using Audio.Sound;
 namespace Player {
 
     [RequireComponent(typeof(Health))]
-    public class PlayerMain : MonoBehaviour, iActor {
+    public class PlayerMain : MonoActor {
+
         [SerializeField] CinemachineImpulseSource screenShakeOnDamage;
         [SerializeField] CinemachineImpulseSource screenShakeOnDeath;
 
-        [Space]
-        [Space]
-
-        [SerializeField] SingleSound damageSound;
-        [SerializeField] SingleSound deathSound;
-
-        [Space]
-        [Space]
-
-        [SerializeField] EventChannelSO eventChannel;
-
-        // props
-        System.Guid guid = System.Guid.NewGuid(); // this is the unique ID used for comparing enemies, bosses, pickups, destructibles etc.
-
         // cached
-        Health health;
-        Rigidbody2D rb;
+        PlayerController controller;
+        PlayerMovement movement;
 
         void OnEnable() {
-            health.OnDamageTaken.Subscribe(OnDamageTaken);
-            health.OnDeath.Subscribe(OnDeath);
+            SubscribeToEvents();
         }
 
         void OnDisable() {
-            health.OnDamageTaken.Unsubscribe(OnDamageTaken);
-            health.OnDeath.Unsubscribe(OnDeath);
+            UnsubscribeFromEvents();
         }
 
         void Awake() {
-            health = GetComponent<Health>();
-            rb = GetComponent<Rigidbody2D>();
-            damageSound.Init(this);
-            deathSound.Init(this);
+            Init();
+            controller = GetComponent<PlayerController>();
+            movement = GetComponent<PlayerMovement>();
         }
 
-        public System.Guid GUID() {
-            return guid;
+        public override Region GetRegion() {
+            return null;
         }
 
-        public bool IsAlive() {
-            if (health == null) return false;
-            return health.IsAlive();
-        }
-
-        public bool TakeDamage(float damage, Vector2 force) {
-            rb.AddForce(force, ForceMode2D.Impulse);
-            return (health.TakeDamage(damage));
-        }
-
-        public void OnDamageTaken(float damage, float hp) {
+        public override void OnDamageTaken(float damage, float hp) {
+            CommonDamageActions();
             StartCoroutine(ScreenShakeOnDamage(damage));
-            Debug.Log($"OnDamageTaken damage={damage} hp={hp}");
-            damageSound.Play();
             eventChannel.OnShakeGamepad.Invoke(.2f, .5f);
         }
 
-        public void OnDamageGiven(float damage, bool wasKilled) {
+        public override void OnDamageGiven(float damage, bool wasKilled) {
             // TODO: if (wasKilled) saySarcasticPun();
         }
 
-        public void OnDeath(float damage, float hp) {
+        public override void OnDeath(float damage, float hp) {
+            CommonDeathActions();
+
+            controller.enabled = false;
+            movement.enabled = false;
+
             StartCoroutine(ScreenShakeOnDeath());
-            Debug.Log($"OnDeath damage={damage} hp={hp}");
-            deathSound.Play();
             eventChannel.OnShakeGamepad.Invoke(1f, .7f);
+            eventChannel.OnFreezeTime.Invoke(1f, 0.3f);
         }
 
         IEnumerator ScreenShakeOnDamage(float damage) {

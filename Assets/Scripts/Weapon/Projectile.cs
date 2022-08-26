@@ -65,6 +65,10 @@ namespace Weapons {
             return health.IsAlive();
         }
 
+        public Region GetRegion() {
+            return null;
+        }
+
         public bool TakeDamage(float damage, Vector2 force) {
             return health.TakeDamage(damage);
         }

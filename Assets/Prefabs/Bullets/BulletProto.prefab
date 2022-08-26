@@ -4900,7 +4900,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa44c277cb30d2542acb93b3f308aa11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debug: 1
+  debug: 0
   damageAmount: 10
   damageVariance: 2
   makeFramerateIndependent: 0

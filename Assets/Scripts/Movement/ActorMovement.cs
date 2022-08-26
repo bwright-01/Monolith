@@ -11,6 +11,7 @@ namespace Movement {
 
         [SerializeField] ActorMovementMode mode = ActorMovementMode.Heading;
         [SerializeField][Range(0f, 100f)] float maxSpeed = 5f;
+        [SerializeField][Range(0f, 100f)] float minSpeed = 0f;
         [SerializeField][Tooltip("How quickly the actor accelerates to max speed")][Range(0.001f, 2f)] float throttleUpTime = 0.3f;
         [SerializeField][Tooltip("How quickly the actor comes to a stop")][Range(0.001f, 2f)] float throttleDownTime = 0.05f;
         [SerializeField][Tooltip("How fast the actor can change directions")][Range(0.001f, 2f)] float speedDelta = 0.1f;
@@ -19,10 +20,16 @@ namespace Movement {
         [Space]
         [Space]
 
+        [SerializeField] string animatorMoveTriggerName = "Moving";
+
+        [Space]
+        [Space]
+
         [SerializeField] Vector2 aimOrientation = Vector2.up;
 
         // cached
         Rigidbody2D rb;
+        Animator animator;
 
         // props
         float initialDrag;
@@ -31,11 +38,12 @@ namespace Movement {
         Transform moveTarget;
         Transform aimTarget;
         Vector2 heading;
+        Vector2 offset;
         float throttle; // 0.0 to 1.0 --> what percentage of maxSpeed to move the actor
         Vector2 desiredVelocity;
         Vector2 prevVelocity;
         Vector2 currentForces;
-        Quaternion desiredHeading;
+        Quaternion desiredRotation;
 
         public void LookAt(Transform value) {
             aimTarget = value;
@@ -53,14 +61,23 @@ namespace Movement {
             mode = ActorMovementMode.Heading;
         }
 
+        public void SetOffset(Vector2 value) {
+            offset = value;
+        }
+
         public void Halt() {
             moveTarget = null;
             heading = Vector2.zero;
             mode = ActorMovementMode.Heading;
         }
 
+        void OnDisable() {
+            rb.drag = initialDrag;
+        }
+
         void Awake() {
             rb = GetComponent<Rigidbody2D>();
+            animator = GetComponent<Animator>();
             initialDrag = rb.drag;
         }
 
@@ -68,6 +85,7 @@ namespace Movement {
             SetThrottle();
             SetDrag();
             HandleReachTarget();
+            HandleAnimation();
         }
 
         void FixedUpdate() {
@@ -84,10 +102,23 @@ namespace Movement {
             throttle = Mathf.Clamp01(throttle);
         }
 
+        void HandleAnimation() {
+            if (!HasAnimator()) return;
+            if (rb.velocity.magnitude > float.Epsilon) {
+                animator.SetBool(animatorMoveTriggerName, true);
+            } else {
+                animator.SetBool(animatorMoveTriggerName, false);
+            }
+        }
+
         void HandleMove() {
             currentForces = rb.velocity - prevVelocity;
-            desiredVelocity = GetHeadingToMoveTarget() * maxSpeed * throttle;
+            // desiredVelocity = GetHeadingToMoveTarget() * maxSpeed * throttle;
+            desiredVelocity = GetAimRotation() * aimOrientation * maxSpeed * throttle + (GetAimRotation() * GetOffset());
             rb.velocity = Vector2.MoveTowards(rb.velocity, desiredVelocity, speedDelta);
+            rb.velocity = rb.velocity.magnitude >= minSpeed
+                ? rb.velocity
+                : GetAimRotation() * aimOrientation * minSpeed + (GetAimRotation() * GetOffset());
             rb.velocity = Vector2.ClampMagnitude(rb.velocity, maxSpeed);
             rb.velocity += currentForces;
             prevVelocity = rb.velocity;
@@ -95,8 +126,8 @@ namespace Movement {
 
         void HandleRotate() {
             if (!HasAimTarget() && !HasMoveTarget()) return;
-            desiredHeading = Quaternion.Euler(0, 0, Vector2.SignedAngle(aimOrientation, GetHeadingToAimTarget()));
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, desiredHeading, rotateSpeed * Time.deltaTime);
+            desiredRotation = GetAimRotation();
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, desiredRotation, rotateSpeed * Time.deltaTime);
         }
 
         void HandleReachTarget() {
@@ -116,6 +147,14 @@ namespace Movement {
             return GetHeadingToMoveTarget();
         }
 
+        Vector2 GetOffset() {
+            return rb.velocity.magnitude > float.Epsilon ? offset : Vector2.zero;
+        }
+
+        Quaternion GetAimRotation() {
+            return Quaternion.Euler(0, 0, Vector2.SignedAngle(aimOrientation, GetHeadingToAimTarget()));
+        }
+
         bool HasAimTarget() {
             return aimTarget != null;
         }
@@ -123,6 +162,10 @@ namespace Movement {
         bool HasMoveTarget() {
             if (mode == ActorMovementMode.Heading) return heading != Vector2.zero;
             return moveTarget != null;
+        }
+
+        bool HasAnimator() {
+            return animator != null && animator.runtimeAnimatorController != null;
         }
     }
 }

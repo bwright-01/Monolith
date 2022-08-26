@@ -13,6 +13,10 @@ public class Region : MonoBehaviour, Actor.iGuid {
 
     [SerializeField] EventChannelSO eventChannel;
 
+    // cache
+    Actor.DamageReceiver cachedDamageReceiver;
+    Region cachedRegion;
+
     // props
     System.Guid guid = System.Guid.NewGuid(); // this is the unique ID used for comparing enemies, bosses, pickups, destructibles etc.
 
@@ -47,24 +51,58 @@ public class Region : MonoBehaviour, Actor.iGuid {
     void Activate() {
         sr.color = activeColor;
         eventChannel.OnRegionActivate.Invoke(guid);
-        foreach (var enemy in enemies) enemy.gameObject.SetActive(true);
+        // foreach (var enemy in enemies) enemy.gameObject.SetActive(true);
     }
 
     void Deactivate() {
         sr.color = inactiveColor;
         eventChannel.OnRegionDeactivate.Invoke(guid);
-        foreach (var enemy in enemies) enemy.gameObject.SetActive(false);
+        // foreach (var enemy in enemies) enemy.gameObject.SetActive(false);
     }
 
     void OnTriggerEnter2D(Collider2D other) {
+        Layer.Init();
+
         if (other.CompareTag("Player")) {
             Activate();
+            return;
+        }
+
+        if (Layer.Enemy.Equals(other.gameObject.layer)) {
+            SetEnemyRegion(other);
         }
     }
 
     void OnTriggerExit2D(Collider2D other) {
+        Layer.Init();
+
         if (other.CompareTag("Player")) {
             Deactivate();
+            return;
         }
+
+        if (Layer.Enemy.Equals(other.gameObject.layer)) {
+            KillEnemyIfOutsideOwnRegion(other);
+        }
+    }
+
+    void SetEnemyRegion(Collider2D other) {
+        cachedDamageReceiver = other.gameObject.GetComponent<Actor.DamageReceiver>();
+        if (cachedDamageReceiver == null) return;
+        cachedRegion = cachedDamageReceiver.GetRegion();
+        if (cachedRegion != null) return;
+        cachedDamageReceiver.SetRegion(this);
+        RegisterActor((Enemy.EnemyMain)cachedDamageReceiver.rootActor);
+    }
+
+    void KillEnemyIfOutsideOwnRegion(Collider2D other) {
+        cachedDamageReceiver = other.gameObject.GetComponent<Actor.DamageReceiver>();
+        if (cachedDamageReceiver == null) return;
+        cachedRegion = cachedDamageReceiver.GetRegion();
+        if (cachedRegion == null) return;
+        if (cachedRegion != this) return;
+        cachedDamageReceiver.TakeDamage(Actor.Constants.INSTAKILL, Vector2.zero);
+
+        Debug.Break();
     }
 }

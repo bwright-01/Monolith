@@ -5,9 +5,7 @@ namespace Core {
 
     class ScreenUtils {
         // cached state
-        static bool hasInitializedBounds = false;
         static Camera cachedCamera;
-
         static Vector2 minScreenBoundsWorld;
         static Vector2 maxScreenBoundsWorld;
 

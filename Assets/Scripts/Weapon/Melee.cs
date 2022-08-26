@@ -33,13 +33,16 @@ namespace Weapon {
 
         // cached
         new Collider2D collider;
+        Actor.DamageDealer damageDealer;
 
         // state
         Coroutine ieAttack;
 
         void Awake() {
             collider = GetComponent<Collider2D>();
+            damageDealer = GetComponent<Actor.DamageDealer>();
             collider.enabled = false;
+            damageDealer.enabled = false;
             if (debugSprite != null) debugSprite.enabled = false;
             attackSound.Init(this);
             hitEnemySound.Init(this);
@@ -72,12 +75,14 @@ namespace Weapon {
         }
 
         IEnumerator IAttack() {
+            damageDealer.enabled = true;
             collider.enabled = true;
             if (debug && debugSprite != null) debugSprite.enabled = true;
 
             yield return new WaitForFixedUpdate();
 
             collider.enabled = false;
+            damageDealer.enabled = false;
 
             yield return new WaitForSeconds(timeWaitAfterAttack);
 

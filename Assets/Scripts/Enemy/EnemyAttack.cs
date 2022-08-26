@@ -29,12 +29,13 @@ namespace Enemy {
         [Space]
         [Space]
 
-        [SerializeField] string animatorAttackTriggerName = "Attack";
+        [SerializeField] string animatorAttackTriggerName = "Attacking";
 
         // cached
         ActorMovement movement;
         PlayerMain player;
         Animator animator;
+        EnemyMain enemy;
         EnemySight sight;
 
         public void AttackImmediately() {
@@ -54,9 +55,11 @@ namespace Enemy {
 
         void OnDisable() {
             StopAllCoroutines();
+            if (HasAnimator()) animator.SetBool(animatorAttackTriggerName, false);
         }
 
         void Awake() {
+            enemy = GetComponent<EnemyMain>();
             sight = GetComponent<EnemySight>();
             movement = GetComponent<ActorMovement>();
             animator = GetComponent<Animator>();
@@ -67,8 +70,8 @@ namespace Enemy {
             if (!ScreenUtils.IsObjectOnScreen(gameObject)) return;
             if (!IsPlayerInAttackRange()) return;
             sight.LookAtPlayer();
-            if (animator != null && animator.runtimeAnimatorController != null) {
-                animator.SetTrigger(animatorAttackTriggerName);
+            if (HasAnimator()) {
+                animator.SetBool(animatorAttackTriggerName, true);
             } else {
                 AttackImmediately();
             }
@@ -78,10 +81,14 @@ namespace Enemy {
             return Utils.RandomVariance(timeWaitAfterAttack, timeWaitVariance, timeWaitAfterAttack * 0.5f, timeWaitAfterAttack * 2f);
         }
 
+        bool HasAnimator() {
+            return animator != null && animator.runtimeAnimatorController != null;
+        }
+
         IEnumerator IConstantlyAttackPlayer() {
             yield return new WaitForSeconds(timeWaitBeforeInitialAttack);
 
-            while (true) {
+            while (enemy.IsAlive()) {
                 TryAttack();
                 yield return new WaitForSeconds(GetTimeWaitAfterAttack());
             }

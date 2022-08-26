@@ -15,11 +15,14 @@ namespace TheKiwiCoder {
 
         public GameObject gameObject;
         public Transform transform;
+        public Movement.Wander wander;
         public Movement.ActorMovement movement;
         public Enemy.EnemyPatrol enemyPatrol;
         public Enemy.EnemyAttack enemyAttack;
         public Enemy.EnemySight enemySight;
         public Player.PlayerMain player;
+
+        public Vector3 initialPosition;
 
         public static Context CreateFromGameObject(GameObject gameObject) {
             // UNUSED:
@@ -31,9 +34,15 @@ namespace TheKiwiCoder {
             context.gameObject = gameObject;
             context.transform = gameObject.transform;
             context.movement = gameObject.GetComponent<Movement.ActorMovement>();
+            context.wander = gameObject.GetComponent<Movement.Wander>();
             context.enemyPatrol = gameObject.GetComponent<Enemy.EnemyPatrol>();
             context.enemyAttack = gameObject.GetComponent<Enemy.EnemyAttack>();
             context.enemySight = gameObject.GetComponent<Enemy.EnemySight>();
+
+            context.initialPosition = gameObject.transform.position;
+
+            if (context.enemyAttack != null) context.enemyAttack.enabled = false;
+            if (context.wander != null) context.wander.enabled = false;
 
             return context;
         }
