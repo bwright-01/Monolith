@@ -6,13 +6,13 @@ using Audio.Sound;
 namespace Enemy {
 
     [RequireComponent(typeof(Actor.Health))]
-    public class EnemyMain : MonoBehaviour, Actor.iActor, iLocalSoundPlayer {
+    public class EnemyMain : MonoBehaviour, Actor.iActor {
         [SerializeField] Region region;
 
         [Space]
 
-        [SerializeField] string damageSound;
-        [SerializeField] string deathSound;
+        [SerializeField] SingleSound damageSound;
+        [SerializeField] SingleSound deathSound;
 
         [Space]
 
@@ -42,11 +42,8 @@ namespace Enemy {
             damageFlash = GetComponent<Actor.DamageFlash>();
             if (region == null) Destroy(gameObject);
             region.RegisterActor(this);
-        }
-
-        public event StringEvent OnPlaySound;
-        public void PlaySound(string soundName) {
-            if (OnPlaySound != null) OnPlaySound.Invoke(soundName);
+            damageSound.Init(this);
+            deathSound.Init(this);
         }
 
         public System.Guid GUID() {
@@ -67,7 +64,7 @@ namespace Enemy {
 
         public void OnDamageTaken(float damage, float hp) {
             if (damageFlash != null) damageFlash.StartFlashing();
-            PlaySound(damageSound);
+            damageSound.Play();
         }
 
         public void OnDamageGiven(float damage, bool wasKilled) {
@@ -75,7 +72,7 @@ namespace Enemy {
         }
 
         public void OnDeath(float damage, float hp) {
-            PlaySound(damageSound);
+            deathSound.Play();
             eventChannel.OnEnemyDeath.Invoke(this);
             foreach (var obj in killObjectsOnDeath) {
                 Destroy(obj);

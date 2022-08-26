@@ -8,7 +8,7 @@ namespace Weapon {
 
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(Actor.DamageDealer))]
-    public class Melee : MonoBehaviour, iLocalSoundPlayer {
+    public class Melee : MonoBehaviour {
         [SerializeField] bool debug = false;
 
         [Space]
@@ -26,9 +26,9 @@ namespace Weapon {
         [Space]
         [Space]
 
-        [SerializeField] string attackSound = "AttackSound";
-        [SerializeField] string hitEnemySound = "HitEnemySound";
-        [SerializeField] string hitEnvironmentSound = "HitEnvironmentSound";
+        [SerializeField] SingleSound attackSound;
+        [SerializeField] SingleSound hitEnemySound;
+        [SerializeField] SingleSound hitEnvironmentSound;
 
         // cached
         new Collider2D collider;
@@ -36,21 +36,19 @@ namespace Weapon {
         // state
         Coroutine ieAttack;
 
-        public event StringEvent OnPlaySound;
-        public void PlaySound(string soundName) {
-            if (OnPlaySound != null) OnPlaySound(soundName);
-        }
-
         void Awake() {
             collider = GetComponent<Collider2D>();
             collider.enabled = false;
             if (debugSprite != null) debugSprite.enabled = false;
+            attackSound.Init(this);
+            hitEnemySound.Init(this);
+            hitEnvironmentSound.Init(this);
         }
 
         public void TryAttack() {
             if (ieAttack != null) return;
 
-            PlaySound(attackSound);
+            attackSound.Play();
 
             if (animator != null) {
                 animator.SetTrigger(attackTriggerName);
@@ -66,9 +64,9 @@ namespace Weapon {
         public void OnHit(int layer) {
             int mask = Layer.Enemy.mask | Layer.NPC.mask;
             if (LayerUtils.LayerMaskContainsLayer(mask, layer)) {
-                PlaySound(hitEnemySound);
+                hitEnemySound.Play();
             } else {
-                PlaySound(hitEnvironmentSound);
+                hitEnvironmentSound.Play();
             }
         }
 

@@ -13,6 +13,7 @@ namespace Player {
 
         // TODO: REMOVE
         [SerializeField] Audio.Sound.SingleSound testSound;
+
         private void Awake() {
             testSound.Init(this);
         }

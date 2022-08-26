@@ -4911,6 +4911,9 @@ MonoBehaviour:
     m_Bits: 0
   ignoreTag: 
   ignoreColliders: []
+  OnHit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &8673064300862581263
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4958,6 +4961,8 @@ MonoBehaviour:
   ricochetAngle: 60
   ricochetVariance: 20
   outOfRange: 20
+  impactSound: {fileID: 11400000, guid: eb8c0f56fc337104eb83fde8495a56f3, type: 2}
+  ricochetSound: {fileID: 11400000, guid: b23a2bb785d7f0b4990a1cdb02289644, type: 2}
   impactLifetime: 1
   impactFX: {fileID: 0}
 --- !u!1 &8673064302038137284

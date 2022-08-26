@@ -6,12 +6,20 @@ using Audio.Sound;
 
 namespace Interactable {
 
-    public class InteractableItem : MonoBehaviour, iLocalSoundPlayer {
+    public class InteractableItem : MonoBehaviour {
 
         [SerializeField] bool isInteractable = true;
         [SerializeField] InteractableType interactableType;
         [SerializeField][Range(0f, 2f)] float useDuration = 1f;
 
+        [Space]
+        [Space]
+
+        [SerializeField] SingleSound useStartSound;
+        [SerializeField] SingleSound useSuccessSound;
+        [SerializeField] SingleSound useErrorSound;
+
+        [Space]
         [Space]
 
         [SerializeField] SpriteRenderer mainSprite;
@@ -29,6 +37,7 @@ namespace Interactable {
         // [SerializeField] Door door;
 
         [Space]
+        [Space]
 
         [SerializeField] EventChannelSO eventChannel;
 
@@ -43,17 +52,12 @@ namespace Interactable {
         Timer useTimer = new Timer(TimerDirection.Increment);
         Coroutine ieUse;
 
-        public event StringEvent OnPlaySound;
-        public void PlaySound(string soundName) {
-            if (OnPlaySound != null) OnPlaySound.Invoke(soundName);
-        }
-
         void OnUseAction() {
             if (isUseActionInvoked) return;
             isUseActionInvoked = true;
             isTriggerActive = false;
 
-            PlaySound("UseComplete");
+            useSuccessSound.Play();
 
             switch (interactableType) {
                 case InteractableType.Health:
@@ -89,16 +93,22 @@ namespace Interactable {
             if (!isTriggerActive) return;
             if (ieUse != null) StopCoroutine(ieUse);
             if (isInteractable) {
-                PlaySound("UseStart");
+                useStartSound.Play();
                 ieUse = StartCoroutine(Use());
             } else {
-                PlaySound("UseError");
+                useErrorSound.Play();
             }
         }
 
         void OnUseKeyRelease() {
             if (ieUse != null) StopCoroutine(ieUse);
             HideProgressBar();
+        }
+
+        void Awake() {
+            useStartSound.Init(this);
+            useSuccessSound.Init(this);
+            useErrorSound.Init(this);
         }
 
         void Start() {

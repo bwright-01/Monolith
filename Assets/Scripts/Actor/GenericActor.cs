@@ -7,13 +7,13 @@ using Core;
 namespace Actor {
 
     [RequireComponent(typeof(Health))]
-    public class GenericActor : MonoBehaviour, iActor, iLocalSoundPlayer {
+    public class GenericActor : MonoBehaviour, iActor {
         [SerializeField] bool debug = false;
 
         [Space]
 
-        [SerializeField] string damageSound = "ActorDamageSound";
-        [SerializeField] string deathSound = "ActorDeathSound";
+        [SerializeField] SingleSound damageSound;
+        [SerializeField] SingleSound deathSound;
 
         // props
         System.Guid guid = System.Guid.NewGuid();
@@ -37,11 +37,8 @@ namespace Actor {
             rb = GetComponent<Rigidbody2D>();
             health = GetComponent<Health>();
             damageFlash = GetComponent<DamageFlash>();
-        }
-
-        public event StringEvent OnPlaySound;
-        public void PlaySound(string soundName) {
-            if (OnPlaySound != null) OnPlaySound.Invoke(soundName);
+            damageSound.Init(this);
+            deathSound.Init(this);
         }
 
         public System.Guid GUID() {
@@ -59,7 +56,7 @@ namespace Actor {
 
         public void OnDamageTaken(float damage, float hp) {
             if (damageFlash != null) damageFlash.StartFlashing();
-            PlaySound(damageSound);
+            damageSound.Play();
         }
 
         public void OnDamageGiven(float damage, bool wasKilled) {
@@ -67,7 +64,7 @@ namespace Actor {
         }
 
         public void OnDeath(float damage, float hp) {
-            PlaySound(deathSound);
+            deathSound.Play();
             Destroy(gameObject);
         }
 

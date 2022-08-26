@@ -11,7 +11,7 @@ namespace Weapons {
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(DamageReceiver))]
     [RequireComponent(typeof(DamageDealer))]
-    public class Projectile : MonoBehaviour, iActor, iLocalSoundPlayer {
+    public class Projectile : MonoBehaviour, iActor {
         [Header("General Settings")]
         [Space]
         [SerializeField] float moveSpeed = 5f;
@@ -22,6 +22,11 @@ namespace Weapons {
         [SerializeField][Range(0f, 180f)] float ricochetAngle = 60f;
         [SerializeField][Range(0f, 90f)] float ricochetVariance = 20f;
         [SerializeField] float outOfRange = 20f;
+
+        [Header("Audio")]
+        [Space]
+        [SerializeField] SingleSound impactSound;
+        [SerializeField] SingleSound ricochetSound;
 
         [Header("Effects")]
         [Space]
@@ -52,11 +57,6 @@ namespace Weapons {
 
         System.Guid guid = System.Guid.NewGuid();
 
-        public event StringEvent OnPlaySound;
-        public void PlaySound(string soundName) {
-            if (OnPlaySound != null) OnPlaySound(soundName);
-        }
-
         public Guid GUID() {
             return guid;
         }
@@ -80,7 +80,7 @@ namespace Weapons {
         public void OnDamageGiven(float damage, bool wasKilled) {
             if (!IsAlive()) return;
             numCollisions++;
-            PlaySound("ProjectileImpact");
+            impactSound.Play();
             bool ShouldRichochet = UnityEngine.Random.Range(0f, 1f) <= ricochetProbability;
             if (wasKilled || numCollisions >= numCollisionsMax || !ShouldRichochet) {
                 AddImpactFx();
@@ -123,6 +123,8 @@ namespace Weapons {
             capsule = GetComponent<CapsuleCollider2D>();
             health = GetComponent<Health>();
             particleFx = GetComponentInChildren<ParticleSystem>();
+            impactSound.Init(this);
+            ricochetSound.Init(this);
         }
 
         void Start() {
@@ -170,7 +172,7 @@ namespace Weapons {
 
         void Ricochet() {
             if (!IsAlive()) return;
-            PlaySound("ProjectileRicochet");
+            ricochetSound.Play();
             heading = -heading;
             Quaternion ricochet = GetRicochet();
             heading = (ricochet * heading).normalized;

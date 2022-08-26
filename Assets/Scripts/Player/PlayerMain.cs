@@ -9,10 +9,17 @@ using Audio.Sound;
 namespace Player {
 
     [RequireComponent(typeof(Health))]
-    public class PlayerMain : MonoBehaviour, iActor, iLocalSoundPlayer {
+    public class PlayerMain : MonoBehaviour, iActor {
         [SerializeField] CinemachineImpulseSource screenShakeOnDamage;
         [SerializeField] CinemachineImpulseSource screenShakeOnDeath;
 
+        [Space]
+        [Space]
+
+        [SerializeField] SingleSound damageSound;
+        [SerializeField] SingleSound deathSound;
+
+        [Space]
         [Space]
 
         [SerializeField] EventChannelSO eventChannel;
@@ -23,11 +30,6 @@ namespace Player {
         // cached
         Health health;
         Rigidbody2D rb;
-
-        public event StringEvent OnPlaySound;
-        public void PlaySound(string soundName) {
-            if (OnPlaySound != null) OnPlaySound.Invoke(soundName);
-        }
 
         void OnEnable() {
             health.OnDamageTaken.Subscribe(OnDamageTaken);
@@ -42,6 +44,8 @@ namespace Player {
         void Awake() {
             health = GetComponent<Health>();
             rb = GetComponent<Rigidbody2D>();
+            damageSound.Init(this);
+            deathSound.Init(this);
         }
 
         public System.Guid GUID() {
@@ -61,7 +65,7 @@ namespace Player {
         public void OnDamageTaken(float damage, float hp) {
             StartCoroutine(ScreenShakeOnDamage(damage));
             Debug.Log($"OnDamageTaken damage={damage} hp={hp}");
-            PlaySound("PlayerDamage");
+            damageSound.Play();
             eventChannel.OnShakeGamepad.Invoke(.2f, .5f);
         }
 
@@ -72,7 +76,7 @@ namespace Player {
         public void OnDeath(float damage, float hp) {
             StartCoroutine(ScreenShakeOnDeath());
             Debug.Log($"OnDeath damage={damage} hp={hp}");
-            PlaySound("PlayerDeath");
+            deathSound.Play();
             eventChannel.OnShakeGamepad.Invoke(1f, .7f);
         }
 

@@ -1,6 +1,8 @@
 using Core;
 using UnityEngine;
 
+using Audio.Sound;
+
 namespace Weapon {
 
     class Gun : MonoBehaviour {
@@ -39,8 +41,8 @@ namespace Weapon {
 
         [Header("Audio")]
         [Space]
-        [SerializeField] string shotSound;
-        [SerializeField] string overloadedSound;
+        [SerializeField] SingleSound shotSound;
+        [SerializeField] SingleSound overloadedSound;
 
         int firingCycle = 0;
         Timer firing = new Timer();
@@ -65,10 +67,13 @@ namespace Weapon {
             rb = GetComponentInParent<Rigidbody2D>();
             Init();
             if (bulletPrefab == null) Debug.LogError($"Bullet prefab null in {Utils.FullGameObjectName(gameObject)}");
+            shotSound.Init(this);
+            overloadedSound.Init(this);
         }
 
         void Update() {
             if (ShouldFire()) {
+                shotSound.Play();
                 SpawnProjectile(transform.position, transform.rotation);
                 AfterFire();
             } else {
