@@ -4,6 +4,8 @@ using Core;
 
 namespace Player {
 
+    [RequireComponent(typeof(Rigidbody2D))]
+
     public class PlayerMovement : MonoBehaviour {
 
         [SerializeField][Range(0f, 100f)] float maxSpeed = 5f;
@@ -25,6 +27,10 @@ namespace Player {
         Vector2 prevVelocity;
         Vector2 currentForces;
         Quaternion desiredHeading;
+
+        void OnDisable() {
+            rb.drag = initialDrag;
+        }
 
         void Awake() {
             controller = GetComponent<PlayerController>();

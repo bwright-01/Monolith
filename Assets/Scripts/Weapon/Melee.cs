@@ -8,7 +8,8 @@ namespace Weapon {
 
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(Actor.DamageDealer))]
-    public class Melee : MonoBehaviour, iLocalSoundPlayer {
+
+    public class Melee : BaseWeapon {
         [SerializeField] bool debug = false;
 
         [Space]
@@ -26,33 +27,34 @@ namespace Weapon {
         [Space]
         [Space]
 
-        [SerializeField] string attackSound = "AttackSound";
-        [SerializeField] string hitEnemySound = "HitEnemySound";
-        [SerializeField] string hitEnvironmentSound = "HitEnvironmentSound";
+        [SerializeField] SingleSound attackSound;
+        [SerializeField] SingleSound hitEnemySound;
+        [SerializeField] SingleSound hitEnvironmentSound;
 
         // cached
         new Collider2D collider;
+        Actor.DamageDealer damageDealer;
 
         // state
         Coroutine ieAttack;
 
-        public event StringEvent OnPlaySound;
-        public void PlaySound(string soundName) {
-            if (OnPlaySound != null) OnPlaySound(soundName);
-        }
-
         void Awake() {
             collider = GetComponent<Collider2D>();
+            damageDealer = GetComponent<Actor.DamageDealer>();
             collider.enabled = false;
+            damageDealer.enabled = false;
             if (debugSprite != null) debugSprite.enabled = false;
+            attackSound.Init(this);
+            hitEnemySound.Init(this);
+            hitEnvironmentSound.Init(this);
         }
 
-        public void TryAttack() {
+        public override void TryAttack() {
             if (ieAttack != null) return;
 
-            PlaySound(attackSound);
+            attackSound.Play();
 
-            if (animator != null) {
+            if (animator != null && animator.runtimeAnimatorController != null) {
                 animator.SetTrigger(attackTriggerName);
             } else {
                 ApplyDamage();
@@ -66,19 +68,21 @@ namespace Weapon {
         public void OnHit(int layer) {
             int mask = Layer.Enemy.mask | Layer.NPC.mask;
             if (LayerUtils.LayerMaskContainsLayer(mask, layer)) {
-                PlaySound(hitEnemySound);
+                hitEnemySound.Play();
             } else {
-                PlaySound(hitEnvironmentSound);
+                hitEnvironmentSound.Play();
             }
         }
 
         IEnumerator IAttack() {
+            damageDealer.enabled = true;
             collider.enabled = true;
             if (debug && debugSprite != null) debugSprite.enabled = true;
 
             yield return new WaitForFixedUpdate();
 
             collider.enabled = false;
+            damageDealer.enabled = false;
 
             yield return new WaitForSeconds(timeWaitAfterAttack);
 

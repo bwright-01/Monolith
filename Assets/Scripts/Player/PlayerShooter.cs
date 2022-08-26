@@ -28,7 +28,7 @@ namespace Player {
         }
 
         void OnFirePress() {
-            gun.TryShoot();
+            gun.TryAttack();
         }
 
         void OnMeleePress() {

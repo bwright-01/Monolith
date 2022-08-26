@@ -6,6 +6,9 @@ namespace TheKiwiCoder {
     public class Parallel : CompositeNode {
         List<State> childrenLeftToExecute = new List<State>();
 
+        State currentStatus;
+        bool stillRunning;
+
         protected override void OnStart() {
             childrenLeftToExecute.Clear();
             children.ForEach(a => {
@@ -17,20 +20,20 @@ namespace TheKiwiCoder {
         }
 
         protected override State OnUpdate() {
-            bool stillRunning = false;
+            stillRunning = false;
             for (int i = 0; i < childrenLeftToExecute.Count(); ++i) {
                 if (childrenLeftToExecute[i] == State.Running) {
-                    var status = children[i].Update();
-                    if (status == State.Failure) {
+                    currentStatus = children[i].Update();
+                    if (currentStatus == State.Failure) {
                         AbortRunningChildren();
                         return State.Failure;
                     }
 
-                    if (status == State.Running) {
+                    if (currentStatus == State.Running) {
                         stillRunning = true;
                     }
 
-                    childrenLeftToExecute[i] = status;
+                    childrenLeftToExecute[i] = currentStatus;
                 }
             }
 

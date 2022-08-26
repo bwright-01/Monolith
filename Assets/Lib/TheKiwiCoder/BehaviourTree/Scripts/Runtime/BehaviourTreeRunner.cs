@@ -9,6 +9,11 @@ namespace TheKiwiCoder {
         // Storage container object to hold game object subsystems
         Context context;
 
+        void OnDisable() {
+            if (context.enemyAttack != null) context.enemyAttack.enabled = false;
+            if (context.wander != null) context.wander.enabled = false;
+        }
+
         // Start is called before the first frame update
         void Start() {
             context = CreateBehaviourTreeContext();
