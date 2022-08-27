@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using Core;
+
 // USAGE NOTES:
 // - Add MusicPlayer - can be a persisted GameObject, but doesn't have to be
 // - Add Tracks as children - each Track should have an AudioSource component
@@ -16,6 +18,11 @@ namespace Audio {
             [SerializeField][Range(0f, 20f)] float crossfadeDuration = 10f;
             [SerializeField][Range(0f, 1f)] float musicVolume = 0.7f;
 
+            [Space]
+            [Space]
+
+            [SerializeField] EventChannelSO eventChannel;
+
             // props
             Track[] tracks;
             Dictionary<string, Track> tracksMap = new Dictionary<string, Track>();
@@ -28,6 +35,14 @@ namespace Audio {
             Coroutine ieFadeIn;
             Coroutine ieFadeOut;
             Coroutine ieCrossFade;
+
+            void OnEnable() {
+                eventChannel.OnPlayMusic.Subscribe(OnPlayMusic);
+            }
+
+            void OnDisable() {
+                eventChannel.OnPlayMusic.Unsubscribe(OnPlayMusic);
+            }
 
             public void OnPlayMusic(string trackName) {
                 incomingTrack = LookupTrack(trackName);

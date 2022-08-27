@@ -113,6 +113,7 @@ namespace Core {
     public class EventChannelSO : ScriptableObject {
         public GuidEventHandler OnRegionActivate = new GuidEventHandler();
         public GuidEventHandler OnRegionDeactivate = new GuidEventHandler();
+        public StringEventHandler OnPlayMusic = new StringEventHandler();
 
         public VoidEventHandler OnRespawnPlayer = new VoidEventHandler();
         public PlayerEventHandler OnPlayerSpawned = new PlayerEventHandler();

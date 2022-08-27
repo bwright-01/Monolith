@@ -14,11 +14,6 @@ namespace Game {
         [SerializeField] GameState _state;
         [SerializeField] EventChannelSO eventChannel;
 
-        [Space]
-        [Space]
-
-        [SerializeField][Range(0f, 5f)] float timeBeforeRespawn = 2f;
-
         public GameState state => _state;
 
         // singleton
@@ -37,16 +32,15 @@ namespace Game {
 
         void Awake() {
             Layer.Init();
+            state.Init();
             _current = SystemUtils.ManageSingleton<GameSystems>(_current, this);
         }
 
         void OnPlayerDeath() {
-            if (ieRespawn != null) StopCoroutine(ieRespawn);
-            ieRespawn = StartCoroutine(IWaitThenRespawn());
-        }
-
-        IEnumerator IWaitThenRespawn() {
-            yield return new WaitForSeconds(timeBeforeRespawn);
+            state.LoseLife();
+            if (state.lives <= 0) {
+                // TODO: HANDLE GAME OVER STATE
+            }
             eventChannel.OnRespawnPlayer.Invoke();
         }
     }

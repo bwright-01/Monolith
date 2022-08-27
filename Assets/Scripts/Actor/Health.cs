@@ -10,11 +10,13 @@ namespace Actor {
         [SerializeField] bool isInvulnerable = false;
         [SerializeField] float timeInvincibleAfterHit = 0f;
 
+        [HideInInspector] public HealthEventHandler OnHealthGained = new HealthEventHandler();
         [HideInInspector] public HealthEventHandler OnDamageTaken = new HealthEventHandler();
         [HideInInspector] public HealthEventHandler OnDeath = new HealthEventHandler();
 
         // public
         public float Hp => hp;
+        public float healthPercentage => Mathf.Clamp01(hp / startingHP);
 
         // cached
         Collider2D[] colliders;
@@ -35,6 +37,14 @@ namespace Actor {
 
         public void SetIsInvulnerable(bool value) {
             isInvulnerable = value;
+        }
+
+        public bool GainHealth(float amount) {
+            if (!isAlive) return false;
+            hp += amount;
+            hp = Mathf.Min(startingHP, hp);
+            OnHealthGained.Invoke(amount, hp);
+            return true;
         }
 
         public bool TakeDamage(float damage) {

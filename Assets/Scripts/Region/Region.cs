@@ -10,6 +10,12 @@ public class Region : MonoBehaviour, Actor.iGuid {
     [SerializeField] Color activeColor;
 
     [Space]
+    [Space]
+
+    [SerializeField] string musicTrack;
+
+    [Space]
+    [Space]
 
     [SerializeField] EventChannelSO eventChannel;
 
@@ -51,6 +57,7 @@ public class Region : MonoBehaviour, Actor.iGuid {
     void Activate() {
         sr.color = activeColor;
         eventChannel.OnRegionActivate.Invoke(guid);
+        eventChannel.OnPlayMusic.Invoke(musicTrack);
         // foreach (var enemy in enemies) enemy.gameObject.SetActive(true);
     }
 
