@@ -34,12 +34,14 @@ namespace Player {
             SubscribeToEvents();
             eventChannel.OnHazardEnter.Subscribe(OnHazardEnter);
             eventChannel.OnHazardExit.Subscribe(OnHazardExit);
+            eventChannel.OnGainHealth.Subscribe(OnGainHealth);
         }
 
         void OnDisable() {
             UnsubscribeFromEvents();
             eventChannel.OnHazardEnter.Unsubscribe(OnHazardEnter);
             eventChannel.OnHazardExit.Unsubscribe(OnHazardExit);
+            eventChannel.OnGainHealth.Unsubscribe(OnGainHealth);
             StopAllCoroutines();
         }
 
@@ -71,6 +73,10 @@ namespace Player {
 
         void OnHazardExit(Environment.HazardType hazardType) {
             hazardLavaSound.Stop();
+        }
+
+        void OnGainHealth(float amount) {
+            actorHealth.GainHealth(amount);
         }
 
         public override void OnHealthGained(float amount, float hp) {

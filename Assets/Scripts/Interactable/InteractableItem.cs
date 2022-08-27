@@ -44,6 +44,9 @@ namespace Interactable {
         // props
         // VoidEventHandler OnUseAction = new VoidEventHandler();
 
+        // cached
+        Map.MinimapComponent minimapComponent;
+
         // state
         bool isUseActionInvoked;
         bool wasInteractable = true;
@@ -75,6 +78,7 @@ namespace Interactable {
                 case InteractableType.Health:
                 default:
                     Destroy(gameObject, 5f);
+                    if (minimapComponent != null) Destroy(minimapComponent);
                     break;
             }
         }
