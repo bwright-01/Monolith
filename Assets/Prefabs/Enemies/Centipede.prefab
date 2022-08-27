@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 1620768740405018836}
   - component: {fileID: 1620768740405018839}
   - component: {fileID: 1620768740405018838}
+  - component: {fileID: 5956959934237475174}
   m_Layer: 7
   m_Name: Centipede
   m_TagString: Untagged
@@ -260,6 +261,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tree: {fileID: 11400000, guid: 52d11051b31620f4b84d8c4fb563f7aa, type: 2}
+--- !u!114 &5956959934237475174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1620768740405018819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35e56bba278189447a49e1fafe65e3fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mapPointPrefab: {fileID: 2625619740083429415, guid: a581d20ce5ded3a498fa31e76beb6f9c, type: 3}
+  minimap: {fileID: 0}
 --- !u!1 &1620768740727572892
 GameObject:
   m_ObjectHideFlags: 0
