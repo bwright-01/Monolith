@@ -12,7 +12,9 @@ public class Region : MonoBehaviour, Actor.iGuid {
     [Space]
     [Space]
 
-    [SerializeField] string musicTrack;
+    [SerializeField] string musicTrackA;
+    [SerializeField] string musicTrackB;
+    [SerializeField] string musicTrackC;
     [SerializeField] bool playMusicOnAwake;
 
     [Space]
@@ -28,6 +30,7 @@ public class Region : MonoBehaviour, Actor.iGuid {
     System.Guid guid = System.Guid.NewGuid(); // this is the unique ID used for comparing enemies, bosses, pickups, destructibles etc.
 
     //state
+    bool isActive;
     List<Enemy.EnemyMain> enemies = new List<Enemy.EnemyMain>();
 
     public System.Guid GUID() {
@@ -40,10 +43,12 @@ public class Region : MonoBehaviour, Actor.iGuid {
 
     void OnEnable() {
         eventChannel.OnEnemyDeath.Subscribe(OnEnemyDeath);
+        eventChannel.OnMonolithDeath.Subscribe(OnMonolithDeath);
     }
 
     void OnDisable() {
         eventChannel.OnEnemyDeath.Unsubscribe(OnEnemyDeath);
+        eventChannel.OnMonolithDeath.Unsubscribe(OnMonolithDeath);
     }
 
     void Start() {
@@ -56,11 +61,27 @@ public class Region : MonoBehaviour, Actor.iGuid {
         enemies.Remove(enemy);
     }
 
+    void OnMonolithDeath(Environment.MonolithType monolithType) {
+        if (isActive) PlayMusic();
+    }
+
     void PlayMusic() {
-        eventChannel.OnPlayMusic.Invoke(musicTrack);
+        switch (Game.GameSystems.current.state.GetNumMonolithsDestroyed()) {
+            case 0:
+                eventChannel.OnPlayMusic.Invoke(musicTrackA);
+                break;
+            case 1:
+                eventChannel.OnPlayMusic.Invoke(musicTrackB);
+                break;
+            default:
+            case 2:
+                eventChannel.OnPlayMusic.Invoke(musicTrackC);
+                break;
+        }
     }
 
     void Activate() {
+        isActive = true;
         sr.color = activeColor;
         eventChannel.OnRegionActivate.Invoke(guid);
         PlayMusic();
@@ -68,6 +89,7 @@ public class Region : MonoBehaviour, Actor.iGuid {
     }
 
     void Deactivate() {
+        isActive = false;
         sr.color = inactiveColor;
         eventChannel.OnRegionDeactivate.Invoke(guid);
         // foreach (var enemy in enemies) enemy.gameObject.SetActive(false);

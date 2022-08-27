@@ -11,6 +11,13 @@ using Core;
 namespace Audio {
     namespace Music {
 
+        enum TrackStatus {
+            Idle,
+            Playing,
+            FadingIn,
+            FadingOut,
+        }
+
         public class MusicPlayer : MonoBehaviour {
             [SerializeField] bool debug = false;
             [SerializeField][Range(0f, 20f)] float fadeInDuration = 4f;
@@ -26,15 +33,14 @@ namespace Audio {
             // props
             Track[] tracks;
             Dictionary<string, Track> tracksMap = new Dictionary<string, Track>();
+            Dictionary<Track, TrackStatus> coroutineMap = new Dictionary<Track, TrackStatus>();
 
             // state
             bool isPlaying = false; // note this keeps track of what can currently be *heard*, not necessarily of what is currently playing (all tracks start playing silently)
+            Track foundTrack;
             Track currentTrack;
             Track incomingTrack;
-
-            Coroutine ieFadeIn;
-            Coroutine ieFadeOut;
-            Coroutine ieCrossFade;
+            Track outgoingTrack;
 
             void OnEnable() {
                 eventChannel.OnPlayMusic.Subscribe(OnPlayMusic);
@@ -48,24 +54,35 @@ namespace Audio {
 
             public void OnPlayMusic(string trackName) {
                 if (IsTrackPlayingOrEnqueued(trackName)) return;
-                incomingTrack = LookupTrack(trackName);
-                if (incomingTrack == null) {
+                foundTrack = LookupTrack(trackName);
+                if (foundTrack == null) {
                     Debug.LogError($"No track was found matching name of \"{trackName}\"");
                     return;
                 }
-                if (ieFadeIn != null) StopCoroutine(ieFadeIn);
-                if (ieFadeOut != null) StopCoroutine(ieFadeOut);
-                if (ieCrossFade != null) StopCoroutine(ieCrossFade);
+                StopAllCoroutines();
                 if (isPlaying) {
-                    ieCrossFade = StartCoroutine(MusicUtils.CrossFade(currentTrack, incomingTrack, crossfadeDuration, musicVolume, (Track newTrack) => {
+                    if (debug) Debug.Log($"CROSSFADE >> current={currentTrack.name} found={foundTrack.name} incoming={(incomingTrack != null ? incomingTrack.name : "null")} outgoing={(outgoingTrack != null ? outgoingTrack.name : "null")}");
+
+                    // in the last iteration, the incoming track would eventually become the current track
+                    // here, `incomingTrack` represents the track that we now should be fading FROM
+                    currentTrack = incomingTrack != null ? incomingTrack : currentTrack;
+                    if (outgoingTrack != null) outgoingTrack.Source.volume = 0f;
+                    incomingTrack = foundTrack;
+                    outgoingTrack = currentTrack;
+
+                    StartCoroutine(MusicUtils.CrossFade(outgoingTrack, incomingTrack, crossfadeDuration, musicVolume, (Track newTrack) => {
                         currentTrack = newTrack;
                         incomingTrack = null;
+                        outgoingTrack = null;
+
+                        if (debug) Debug.Log($"CROSSFADE_FINISHED >> current={currentTrack.name}");
                     }));
                 } else {
+                    if (debug) Debug.Log($"FADEIN >> found={foundTrack.name}");
                     isPlaying = true;
-                    currentTrack = incomingTrack;
+                    currentTrack = foundTrack;
                     ZeroOutAllTracks();
-                    ieFadeIn = StartCoroutine(MusicUtils.FadeIn(currentTrack, fadeInDuration, musicVolume));
+                    StartCoroutine(MusicUtils.FadeIn(currentTrack, fadeInDuration, musicVolume));
                 }
             }
 
@@ -74,11 +91,10 @@ namespace Audio {
             }
 
             public void OnStopMusic() {
-                if (ieFadeIn != null) StopCoroutine(ieFadeIn);
-                if (ieFadeOut != null) StopCoroutine(ieFadeOut);
-                if (ieCrossFade != null) StopCoroutine(ieCrossFade);
+                if (debug) Debug.Log($"FADEOUT");
+                StopAllCoroutines();
                 foreach (var track in tracks) {
-                    ieFadeOut = StartCoroutine(MusicUtils.FadeOut(track, fadeOutDuration));
+                    StartCoroutine(MusicUtils.FadeOut(track, fadeOutDuration));
                 }
                 currentTrack = null;
                 incomingTrack = null;

@@ -38,6 +38,7 @@ namespace Actor {
         SpriteRenderer sr;
         Health health;
         DamageFlash damageFlash;
+        Map.MinimapComponent minimapComponent;
 
         // cached - enemy specific
         Movement.ActorMovement actorMovement;
@@ -77,6 +78,7 @@ namespace Actor {
             sr = GetComponentInChildren<SpriteRenderer>();
             health = GetComponent<Health>();
             damageFlash = GetComponent<DamageFlash>();
+            minimapComponent = GetComponent<Map.MinimapComponent>();
 
             damageSound.Init(this);
             deathSound.Init(this);
@@ -129,6 +131,7 @@ namespace Actor {
             deathSound.Play();
 
             if (hideOnDeath && sr != null) sr.enabled = false;
+            if (minimapComponent != null) Destroy(minimapComponent);
 
             if (behaviourTree != null) behaviourTree.enabled = false;
             if (enemyAttack != null) enemyAttack.enabled = false;
