@@ -26,6 +26,10 @@ namespace Enemy {
             region = value;
         }
 
+        public override void OnHealthGained(float amount, float hp) {
+            // do nothing
+        }
+
         public override void OnDamageTaken(float damage, float hp) {
             CommonDamageActions();
         }

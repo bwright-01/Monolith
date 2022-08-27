@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6565066346141863060}
   - component: {fileID: 6565066346141863061}
-  m_Layer: 11
+  m_Layer: 7
   m_Name: Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78,7 +78,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  bulletPrefab: {fileID: 8673064300862581261, guid: 42aec47ca2ab376439cca64f2ce5e227, type: 3}
+  bulletPrefab: {fileID: 8554644581863853057, guid: c9a056cf4dfacda4491d06e1f0d968d9, type: 3}
   shotSound: {fileID: 11400000, guid: eb8c0f56fc337104eb83fde8495a56f3, type: 2}
   overloadedSound: {fileID: 11400000, guid: b23a2bb785d7f0b4990a1cdb02289644, type: 2}
 --- !u!1 &6565066347014586358
@@ -92,8 +92,9 @@ GameObject:
   - component: {fileID: 6565066347014586359}
   - component: {fileID: 6565066347014586354}
   - component: {fileID: 6565066347014586357}
+  - component: {fileID: 1544684079270354536}
   - component: {fileID: 6565066347014586356}
-  m_Layer: 11
+  m_Layer: 7
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -147,6 +148,32 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &1544684079270354536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6565066347014586358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa44c277cb30d2542acb93b3f308aa11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debug: 0
+  damageAmount: 10
+  damageVariance: 4
+  makeFramerateIndependent: 0
+  impactForce: 5
+  ignoreParentGUID: 1
+  ignoreLayers:
+    serializedVersion: 2
+    m_Bits: 14327
+  ignoreTag: 
+  ignoreColliders: []
+  OnHit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &6565066347014586356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,7 +196,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6565066348156119646}
   - component: {fileID: 6565066348156119633}
-  m_Layer: 11
+  m_Layer: 7
   m_Name: Hexagon Pointed-Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -262,7 +289,7 @@ GameObject:
   - component: {fileID: 6565066348232381287}
   - component: {fileID: 6565066348232381284}
   - component: {fileID: 6565066348232381307}
-  m_Layer: 11
+  m_Layer: 7
   m_Name: VaguePatroller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -355,7 +382,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ea259ffaac022344972307587249222, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debug: 0
   damageSound: {fileID: 11400000, guid: 71be08e07e49e9044adc04e52660d2f2, type: 2}
   deathSound: {fileID: 11400000, guid: 2d9e0c3e240363b428332c03ac8dcde8, type: 2}
   hideOnDeath: 1

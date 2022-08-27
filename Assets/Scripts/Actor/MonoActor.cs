@@ -9,10 +9,10 @@ namespace Actor {
     [RequireComponent(typeof(Actor.Health))]
 
     public abstract class MonoActor : MonoBehaviour, iActor {
-        [SerializeField] bool debug = false;
+        // [SerializeField] bool debug = false;
 
-        [Space]
-        [Space]
+        // [Space]
+        // [Space]
 
         [SerializeField] SingleSound damageSound;
         [SerializeField] SingleSound deathSound;
@@ -29,9 +29,6 @@ namespace Actor {
         [Space]
 
         [SerializeField] protected EventChannelSO eventChannel;
-
-        [Space]
-        [Space]
 
         // props
         System.Guid guid = System.Guid.NewGuid();
@@ -51,6 +48,9 @@ namespace Actor {
         Enemy.EnemySight enemySight;
         TheKiwiCoder.BehaviourTreeRunner behaviourTree;
 
+        public Health actorHealth => health;
+        public float healthPercentage => health != null ? health.healthPercentage : 0;
+
         void OnDestroy() {
             CleanupOthers();
             StopAllCoroutines();
@@ -59,11 +59,13 @@ namespace Actor {
         }
 
         protected void SubscribeToEvents() {
+            health.OnHealthGained.Subscribe(OnHealthGained);
             health.OnDamageTaken.Subscribe(OnDamageTaken);
             health.OnDeath.Subscribe(OnDeath);
         }
 
         protected void UnsubscribeFromEvents() {
+            health.OnHealthGained.Unsubscribe(OnHealthGained);
             health.OnDamageTaken.Unsubscribe(OnDamageTaken);
             health.OnDeath.Unsubscribe(OnDeath);
         }
@@ -101,10 +103,16 @@ namespace Actor {
 
         public abstract Region GetRegion();
 
+        public bool GainHealth(float amount) {
+            return health.GainHealth(amount);
+        }
+
         public bool TakeDamage(float damage, Vector2 force) {
             if (rb != null) rb.AddForce(force, ForceMode2D.Impulse);
             return health.TakeDamage(damage);
         }
+
+        public abstract void OnHealthGained(float amount, float hp);
 
         public abstract void OnDamageTaken(float damage, float hp);
 
@@ -140,13 +148,13 @@ namespace Actor {
             foreach (var obj in disableObjectsOnDeath) if (obj != null) obj.SetActive(false);
         }
 
-        void OnGUI() {
-            if (!debug) return;
-            GUILayout.TextField(gameObject.name);
-            if (GUILayout.Button("Take Damage")) {
-                TakeDamage(10f, Vector2.zero);
-            }
-        }
+        // void OnGUI() {
+        //     if (!debug) return;
+        //     GUILayout.TextField(gameObject.name);
+        //     if (GUILayout.Button("Take Damage")) {
+        //         TakeDamage(10f, Vector2.zero);
+        //     }
+        // }
     }
 }
 

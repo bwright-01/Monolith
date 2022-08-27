@@ -115,6 +115,8 @@ Transform:
   m_Children:
   - {fileID: 3844958333024966016}
   - {fileID: 3844958334921337015}
+  - {fileID: 1148499586829611519}
+  - {fileID: 3120743260676657911}
   m_Father: {fileID: 3844958334926481126}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -182,7 +184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debug: 0
-  damageAmount: 10
+  damageAmount: 20
   damageVariance: 4
   makeFramerateIndependent: 0
   impactForce: 5
@@ -213,8 +215,11 @@ MonoBehaviour:
   animator: {fileID: 0}
   debugSprite: {fileID: 3844958334892354030}
   attackSound: {fileID: 11400000, guid: 29a9af6fce4acc84e9701d7d58859d2e, type: 2}
-  hitEnemySound: {fileID: 11400000, guid: 29a9af6fce4acc84e9701d7d58859d2e, type: 2}
-  hitEnvironmentSound: {fileID: 11400000, guid: 29a9af6fce4acc84e9701d7d58859d2e, type: 2}
+  upgradedAttackSound: {fileID: 11400000, guid: 46fdadf877c11874b99bbd9039a558cc, type: 2}
+  hitEnemySound: {fileID: 11400000, guid: eb8c0f56fc337104eb83fde8495a56f3, type: 2}
+  hitEnvironmentSound: {fileID: 11400000, guid: eb8c0f56fc337104eb83fde8495a56f3, type: 2}
+  screenShakeOnMelee: {fileID: 4505797948942577196}
+  screenShakeOnMeleeUpgraded: {fileID: 7860101096969151392}
 --- !u!1 &3844958333842691061
 GameObject:
   m_ObjectHideFlags: 0
@@ -293,7 +298,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  bulletPrefab: {fileID: 8673064300862581261, guid: 42aec47ca2ab376439cca64f2ce5e227, type: 3}
+  bulletPrefab: {fileID: 1518752865355330600, guid: e44fda6e9abb7844ab50a2b4890eb8fb, type: 3}
   shotSound: {fileID: 11400000, guid: 780842ad860a7ac4085355e07cb7bf1a, type: 2}
   overloadedSound: {fileID: 11400000, guid: a057943cb7de43e47adfb89de1741d11, type: 2}
 --- !u!1 &3844958334090965031
@@ -866,7 +871,7 @@ MonoBehaviour:
       m_Calls: []
   m_ActionEvents: []
   m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
+  m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
@@ -882,7 +887,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b77e1d66bdb89848b44b3576e3c0145, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testSound: {fileID: 11400000, guid: 034d67d79c4daaf4c9fc6952b12378b2, type: 2}
+  timeAimAfterFiring: 0.25
   eventChannel: {fileID: 11400000, guid: 7981a9b65533ac444b7650afd7b5691d, type: 2}
 --- !u!114 &3844958334926481132
 MonoBehaviour:
@@ -901,6 +906,7 @@ MonoBehaviour:
   throttleDownTime: 0.05
   speedDelta: 0.5
   rotateSpeed: 720
+  eventChannel: {fileID: 11400000, guid: 7981a9b65533ac444b7650afd7b5691d, type: 2}
 --- !u!114 &3844958334926485776
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -928,7 +934,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c16c6eb4bd426cc4ab22b84f949717dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debug: 0
   damageSound: {fileID: 11400000, guid: 18c50da0e9cb8e64a866cb8d1ea29675, type: 2}
   deathSound: {fileID: 11400000, guid: 04350ea02692db149971b645dc28d451, type: 2}
   hideOnDeath: 1
@@ -954,6 +959,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gun: {fileID: 3844958333842691063}
   melee: {fileID: 3844958333541571678}
+  noAmmoClick: {fileID: 11400000, guid: a057943cb7de43e47adfb89de1741d11, type: 2}
+  timeRecharge: 3
+  numberOfShots: 5
+  eventChannel: {fileID: 11400000, guid: 7981a9b65533ac444b7650afd7b5691d, type: 2}
 --- !u!114 &3844958334926485777
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -971,3 +980,173 @@ MonoBehaviour:
   damageFlashDuration: 0.1
   damageSpriteTarget: {fileID: 3844958334926481125}
   secondaryDamageSpriteTargets: []
+--- !u!1 &8514097084532103416
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1148499586829611519}
+  - component: {fileID: 4505797948942577196}
+  m_Layer: 3
+  m_Name: OnMelee
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1148499586829611519
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8514097084532103416}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3844958333527336450}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4505797948942577196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8514097084532103416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ImpulseDefinition:
+    m_ImpulseChannel: 1
+    m_ImpulseShape: 4
+    m_CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_ImpulseDuration: 0.1
+    m_ImpulseType: 1
+    m_DissipationRate: 0.25
+    m_RawSignal: {fileID: 0}
+    m_AmplitudeGain: 1
+    m_FrequencyGain: 1
+    m_RepeatMode: 0
+    m_Randomize: 1
+    m_TimeEnvelope:
+      m_AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_AttackTime: 0
+      m_SustainTime: 0.2
+      m_DecayTime: 0.7
+      m_ScaleWithImpact: 1
+      m_HoldForever: 0
+    m_ImpactRadius: 100
+    m_DirectionMode: 0
+    m_DissipationMode: 2
+    m_DissipationDistance: 100
+    m_PropagationSpeed: 343
+  m_DefaultVelocity: {x: 0, y: 0.02, z: 0}
+--- !u!1 &9156863432826421694
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3120743260676657911}
+  - component: {fileID: 7860101096969151392}
+  m_Layer: 3
+  m_Name: OnMeleeUpgraded
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3120743260676657911
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9156863432826421694}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3844958333527336450}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7860101096969151392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9156863432826421694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ImpulseDefinition:
+    m_ImpulseChannel: 1
+    m_ImpulseShape: 4
+    m_CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_ImpulseDuration: 0.15
+    m_ImpulseType: 1
+    m_DissipationRate: 0.25
+    m_RawSignal: {fileID: 0}
+    m_AmplitudeGain: 1
+    m_FrequencyGain: 1
+    m_RepeatMode: 0
+    m_Randomize: 1
+    m_TimeEnvelope:
+      m_AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_AttackTime: 0
+      m_SustainTime: 0.2
+      m_DecayTime: 0.7
+      m_ScaleWithImpact: 1
+      m_HoldForever: 0
+    m_ImpactRadius: 100
+    m_DirectionMode: 0
+    m_DissipationMode: 2
+    m_DissipationDistance: 100
+    m_PropagationSpeed: 343
+  m_DefaultVelocity: {x: 0, y: 0.5, z: 0}

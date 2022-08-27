@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 using Core;
+using UnityEngine.EventSystems;
 
 // This class houses all of the main systems that should persist from one scene to another
 // This, and only this MonoBehaviour, should be a Singleton
@@ -12,14 +13,11 @@ namespace Game {
     public class GameSystems : MonoBehaviour {
 
         [SerializeField] GameState _state;
+        [SerializeField] EventSystem _eventSystem;
         [SerializeField] EventChannelSO eventChannel;
 
-        [Space]
-        [Space]
-
-        [SerializeField][Range(0f, 5f)] float timeBeforeRespawn = 2f;
-
         public GameState state => _state;
+        public EventSystem eventSystem => _eventSystem;
 
         // singleton
         static GameSystems _current;
@@ -27,27 +25,43 @@ namespace Game {
 
         Coroutine ieRespawn;
 
+
         private void OnEnable() {
             eventChannel.OnPlayerDeath.Subscribe(OnPlayerDeath);
+            eventChannel.OnMonolithDeath.Subscribe(OnMonolithDeath);
+            eventChannel.OnApplyUpgrade.Subscribe(OnApplyUpgrade);
         }
 
         private void OnDisable() {
             eventChannel.OnPlayerDeath.Unsubscribe(OnPlayerDeath);
+            eventChannel.OnMonolithDeath.Unsubscribe(OnMonolithDeath);
+            eventChannel.OnApplyUpgrade.Unsubscribe(OnApplyUpgrade);
         }
 
         void Awake() {
             Layer.Init();
+            state.Init();
             _current = SystemUtils.ManageSingleton<GameSystems>(_current, this);
         }
 
         void OnPlayerDeath() {
-            if (ieRespawn != null) StopCoroutine(ieRespawn);
-            ieRespawn = StartCoroutine(IWaitThenRespawn());
+            state.LoseLife();
+            if (state.lives <= 0) {
+                // TODO: HANDLE GAME OVER STATE
+            }
+            eventChannel.OnRespawnPlayer.Invoke();
         }
 
-        IEnumerator IWaitThenRespawn() {
-            yield return new WaitForSeconds(timeBeforeRespawn);
-            eventChannel.OnRespawnPlayer.Invoke();
+        void OnMonolithDeath(Environment.MonolithType monolithType) {
+            state.SetMonolithDestroyed(monolithType);
+            if (state.AreAllMonolithsDestroyed) {
+                eventChannel.OnAllMonolithsDestroyed.Invoke();
+            }
+        }
+
+        void OnApplyUpgrade(UpgradeType upgradeType) {
+            state.ApplyUpgrade(upgradeType);
+            eventChannel.OnAbilityUpgraded.Invoke(upgradeType);
         }
     }
 }

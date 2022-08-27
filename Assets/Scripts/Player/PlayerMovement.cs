@@ -14,6 +14,11 @@ namespace Player {
         [SerializeField][Tooltip("How fast the player can change directions")][Range(0.001f, 2f)] float speedDelta = 0.1f;
         [SerializeField][Tooltip("How fast the player can rotate (degrees / sec)")][Range(0f, 1080f)] float rotateSpeed = 720f;
 
+        [Space]
+        [Space]
+
+        [SerializeField] EventChannelSO eventChannel;
+
         // cached
         PlayerController controller;
         Rigidbody2D rb;
@@ -34,7 +39,18 @@ namespace Player {
             return controller.Move.magnitude > float.Epsilon;
         }
 
+        bool IsAiming() {
+            if (!enabled) return false;
+            if (!controller.enabled) return false;
+            return controller.IsAiming;
+        }
+
+        void OnEnable() {
+            eventChannel.OnAbilityUpgraded.Subscribe(OnAbilityUpgraded);
+        }
+
         void OnDisable() {
+            eventChannel.OnAbilityUpgraded.Unsubscribe(OnAbilityUpgraded);
             rb.drag = initialDrag;
         }
 
@@ -42,6 +58,10 @@ namespace Player {
             controller = GetComponent<PlayerController>();
             rb = GetComponent<Rigidbody2D>();
             initialDrag = rb.drag;
+        }
+
+        void Start() {
+            CheckForUpgrades();
         }
 
         void Update() {
@@ -52,6 +72,16 @@ namespace Player {
         void FixedUpdate() {
             HandleRotate();
             HandleMove();
+        }
+
+        void OnAbilityUpgraded(Game.UpgradeType upgradeType) {
+            CheckForUpgrades();
+        }
+
+        void CheckForUpgrades() {
+            if (Game.GameSystems.current.state.IsMovementUpgraded) {
+                maxSpeed = Game.GameSystems.current.state.UpgradedMoveSpeed;
+            }
         }
 
         void SetDrag() {
@@ -74,8 +104,10 @@ namespace Player {
 
         void HandleRotate() {
             if (!HasMoveInput()) return;
-            desiredHeading = Quaternion.Euler(0, 0, Vector2.SignedAngle(Vector2.down, Utils.GetNearestCardinal(controller.Move)));
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, desiredHeading, rotateSpeed * Time.deltaTime);
+            if (IsAiming()) return;
+            transform.rotation = Quaternion.Euler(0, 0, Vector2.SignedAngle(Vector2.down, Utils.GetNearestCardinal(controller.Move))); ;
+            // desiredHeading = Quaternion.Euler(0, 0, Vector2.SignedAngle(Vector2.down, Utils.GetNearestCardinal(controller.Move)));
+            // transform.rotation = Quaternion.RotateTowards(transform.rotation, desiredHeading, rotateSpeed * Time.deltaTime);
         }
     }
 }

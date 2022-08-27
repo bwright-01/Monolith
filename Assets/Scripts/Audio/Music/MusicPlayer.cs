@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using Core;
+
 // USAGE NOTES:
 // - Add MusicPlayer - can be a persisted GameObject, but doesn't have to be
 // - Add Tracks as children - each Track should have an AudioSource component
@@ -16,6 +18,11 @@ namespace Audio {
             [SerializeField][Range(0f, 20f)] float crossfadeDuration = 10f;
             [SerializeField][Range(0f, 1f)] float musicVolume = 0.7f;
 
+            [Space]
+            [Space]
+
+            [SerializeField] EventChannelSO eventChannel;
+
             // props
             Track[] tracks;
             Dictionary<string, Track> tracksMap = new Dictionary<string, Track>();
@@ -29,7 +36,18 @@ namespace Audio {
             Coroutine ieFadeOut;
             Coroutine ieCrossFade;
 
+            void OnEnable() {
+                eventChannel.OnPlayMusic.Subscribe(OnPlayMusic);
+                eventChannel.OnStopMusic.Subscribe(OnStopMusic);
+            }
+
+            void OnDisable() {
+                eventChannel.OnPlayMusic.Unsubscribe(OnPlayMusic);
+                eventChannel.OnStopMusic.Unsubscribe(OnStopMusic);
+            }
+
             public void OnPlayMusic(string trackName) {
+                if (IsTrackPlayingOrEnqueued(trackName)) return;
                 incomingTrack = LookupTrack(trackName);
                 if (incomingTrack == null) {
                     Debug.LogError($"No track was found matching name of \"{trackName}\"");
@@ -55,13 +73,19 @@ namespace Audio {
                 OnPlayMusic(currentTrack.name);
             }
 
-            public void StopMusic() {
+            public void OnStopMusic() {
                 if (ieFadeIn != null) StopCoroutine(ieFadeIn);
                 if (ieFadeOut != null) StopCoroutine(ieFadeOut);
                 if (ieCrossFade != null) StopCoroutine(ieCrossFade);
                 foreach (var track in tracks) {
                     ieFadeOut = StartCoroutine(MusicUtils.FadeOut(track, fadeOutDuration));
                 }
+                currentTrack = null;
+                incomingTrack = null;
+            }
+
+            public void StopMusic() {
+                OnStopMusic();
             }
 
             void Start() {
@@ -86,6 +110,12 @@ namespace Audio {
                     return value;
                 }
                 return null;
+            }
+
+            bool IsTrackPlayingOrEnqueued(string trackName) {
+                if (currentTrack != null && currentTrack.name == trackName) return true;
+                if (incomingTrack != null && incomingTrack.name == trackName) return true;
+                return false;
             }
 
             void OnGUI() {

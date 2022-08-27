@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using Cinemachine;
 
 using Core;
 using Audio.Sound;
@@ -28,8 +29,15 @@ namespace Weapon {
         [Space]
 
         [SerializeField] SingleSound attackSound;
+        [SerializeField] SingleSound upgradedAttackSound;
         [SerializeField] SingleSound hitEnemySound;
         [SerializeField] SingleSound hitEnvironmentSound;
+
+        [Space]
+        [Space]
+
+        [SerializeField] CinemachineImpulseSource screenShakeOnMelee;
+        [SerializeField] CinemachineImpulseSource screenShakeOnMeleeUpgraded;
 
         // cached
         new Collider2D collider;
@@ -37,6 +45,13 @@ namespace Weapon {
 
         // state
         Coroutine ieAttack;
+        Coroutine ieScreenShake;
+        bool isUpgraded;
+
+        public void SetDamageMultiplier(float value) {
+            damageDealer.SetDamageMultiplier(value);
+            if (value > 1f) isUpgraded = true;
+        }
 
         void Awake() {
             collider = GetComponent<Collider2D>();
@@ -45,6 +60,7 @@ namespace Weapon {
             damageDealer.enabled = false;
             if (debugSprite != null) debugSprite.enabled = false;
             attackSound.Init(this);
+            upgradedAttackSound.Init(this);
             hitEnemySound.Init(this);
             hitEnvironmentSound.Init(this);
         }
@@ -52,7 +68,15 @@ namespace Weapon {
         public override void TryAttack() {
             if (ieAttack != null) return;
 
-            attackSound.Play();
+            if (ieScreenShake != null) StopCoroutine(ieScreenShake);
+
+            if (isUpgraded) {
+                upgradedAttackSound.Play();
+                ieScreenShake = StartCoroutine(ScreenShakeOnMeleeUpgraded());
+            } else {
+                attackSound.Play();
+                ieScreenShake = StartCoroutine(ScreenShakeOnMelee());
+            }
 
             if (animator != null && animator.runtimeAnimatorController != null) {
                 animator.SetTrigger(attackTriggerName);
@@ -88,6 +112,18 @@ namespace Weapon {
 
             if (debug && debugSprite != null) debugSprite.enabled = false;
             ieAttack = null;
+        }
+
+        IEnumerator ScreenShakeOnMelee() {
+            screenShakeOnMelee.GenerateImpulse(UnityEngine.Random.insideUnitCircle.normalized * 0.05f);
+            yield return new WaitForSeconds(0.1f);
+            screenShakeOnMelee.GenerateImpulse(UnityEngine.Random.insideUnitCircle.normalized * 0.05f);
+        }
+
+        IEnumerator ScreenShakeOnMeleeUpgraded() {
+            screenShakeOnMelee.GenerateImpulse(UnityEngine.Random.insideUnitCircle.normalized * 0.1f);
+            yield return new WaitForSeconds(0.1f);
+            screenShakeOnMelee.GenerateImpulse(UnityEngine.Random.insideUnitCircle.normalized * 0.1f);
         }
 
         void OnGUI() {

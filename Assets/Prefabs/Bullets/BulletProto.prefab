@@ -4823,6 +4823,7 @@ GameObject:
   - component: {fileID: 8673064300862581249}
   - component: {fileID: 8673064300862581251}
   - component: {fileID: 8673064300862581248}
+  - component: {fileID: -2173587455283361234}
   - component: {fileID: 8673064300862581261}
   - component: {fileID: 8673064300862581263}
   - component: {fileID: 8673064300862581260}
@@ -4888,6 +4889,22 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 0.31, y: 1}
   m_Direction: 0
+--- !u!70 &-2173587455283361234
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8673064300862581254}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 0.22, y: 0.73}
+  m_Direction: 0
 --- !u!114 &8673064300862581261
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4908,12 +4925,24 @@ MonoBehaviour:
   ignoreParentGUID: 1
   ignoreLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 13695
   ignoreTag: 
   ignoreColliders: []
   OnHit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8673064300862581250}
+        m_TargetAssemblyTypeName: Weapons.Projectile, Assembly-CSharp
+        m_MethodName: OnHitSomething
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &8673064300862581263
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4962,7 +4991,7 @@ MonoBehaviour:
   ricochetVariance: 20
   outOfRange: 20
   impactSound: {fileID: 11400000, guid: eb8c0f56fc337104eb83fde8495a56f3, type: 2}
-  ricochetSound: {fileID: 11400000, guid: b23a2bb785d7f0b4990a1cdb02289644, type: 2}
+  ricochetSound: {fileID: 11400000, guid: a057943cb7de43e47adfb89de1741d11, type: 2}
   impactLifetime: 1
   impactFX: {fileID: 0}
 --- !u!1 &8673064302038137284

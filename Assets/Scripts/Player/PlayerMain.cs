@@ -26,6 +26,10 @@ namespace Player {
         PlayerShooter shooter;
         PlayerInput input;
 
+        public PlayerShooter GetShooter() {
+            return shooter;
+        }
+
         void OnEnable() {
             SubscribeToEvents();
             eventChannel.OnHazardEnter.Subscribe(OnHazardEnter);
@@ -67,6 +71,10 @@ namespace Player {
 
         void OnHazardExit(Environment.HazardType hazardType) {
             hazardLavaSound.Stop();
+        }
+
+        public override void OnHealthGained(float amount, float hp) {
+            // do nothing
         }
 
         public override void OnDamageTaken(float damage, float hp) {

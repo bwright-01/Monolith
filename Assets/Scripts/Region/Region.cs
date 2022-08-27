@@ -10,6 +10,13 @@ public class Region : MonoBehaviour, Actor.iGuid {
     [SerializeField] Color activeColor;
 
     [Space]
+    [Space]
+
+    [SerializeField] string musicTrack;
+    [SerializeField] bool playMusicOnAwake;
+
+    [Space]
+    [Space]
 
     [SerializeField] EventChannelSO eventChannel;
 
@@ -42,15 +49,21 @@ public class Region : MonoBehaviour, Actor.iGuid {
     void Start() {
         if (!debug) sr.enabled = false;
         Deactivate();
+        if (playMusicOnAwake) PlayMusic();
     }
 
     void OnEnemyDeath(Enemy.EnemyMain enemy) {
-        // TODO: FILTER ENEMY OUT OF ENEMIES LIST
+        enemies.Remove(enemy);
+    }
+
+    void PlayMusic() {
+        eventChannel.OnPlayMusic.Invoke(musicTrack);
     }
 
     void Activate() {
         sr.color = activeColor;
         eventChannel.OnRegionActivate.Invoke(guid);
+        PlayMusic();
         // foreach (var enemy in enemies) enemy.gameObject.SetActive(true);
     }
 
@@ -102,7 +115,5 @@ public class Region : MonoBehaviour, Actor.iGuid {
         if (cachedRegion == null) return;
         if (cachedRegion != this) return;
         cachedDamageReceiver.TakeDamage(Actor.Constants.INSTAKILL, Vector2.zero);
-
-        Debug.Break();
     }
 }

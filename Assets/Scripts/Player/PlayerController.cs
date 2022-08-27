@@ -1,36 +1,52 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 
 using Core;
+using System.Collections;
 
 namespace Player {
 
     public class PlayerController : MonoBehaviour {
+
+        [SerializeField][Range(0f, 1f)] float timeAimAfterFiring = 0.4f;
+
+        [Space]
+        [Space]
+
+        [SerializeField] EventChannelSO eventChannel;
+
         Vector2 move;
+        bool isAiming;
 
         public VoidEventHandler OnFirePress = new VoidEventHandler();
         public VoidEventHandler OnMeleePress = new VoidEventHandler();
-
-        // TODO: REMOVE
-        [SerializeField] Audio.Sound.SingleSound testSound;
-
-        private void Awake() {
-            testSound.Init(this);
-        }
-        private void OnGUI() {
-            GUILayout.TextField("Test Sound");
-            if (GUILayout.Button("Play")) {
-                testSound.Play();
-            }
-        }
-
-        [SerializeField] EventChannelSO eventChannel;
 
         // TODO: ADD PAUSE EVENT HANDLING
         bool _isPaused = false;
 
         // public
         public Vector2 Move => move;
+        public bool IsAiming => isAiming || recentlyFired.active;
+
+        // cached
+        PlayerInput input;
+        InputSystemUIInputModule uiModule;
+
+        Timer recentlyFired = new Timer();
+
+        void Start() {
+            input = GetComponent<PlayerInput>();
+            input.SwitchCurrentActionMap("Player");
+            input.enabled = true;
+            recentlyFired.SetDuration(timeAimAfterFiring);
+            StartCoroutine(IHackUiModule());
+        }
+
+        private void Update() {
+            recentlyFired.SetDuration(timeAimAfterFiring);
+            recentlyFired.Tick();
+        }
 
         void OnMove(InputValue value) {
             if (_isPaused) return;
@@ -39,7 +55,10 @@ namespace Player {
 
         void OnFire(InputValue value) {
             if (_isPaused) return;
-            if (value.isPressed) OnFirePress.Invoke();
+            if (value.isPressed) {
+                recentlyFired.Start();
+                OnFirePress.Invoke();
+            }
         }
 
         void OnMelee(InputValue value) {
@@ -54,6 +73,21 @@ namespace Player {
             } else {
                 eventChannel.OnUseKeyRelease.Invoke();
             }
+        }
+
+        void OnAim(InputValue value) {
+            if (_isPaused) return;
+            isAiming = value.isPressed;
+            recentlyFired.End();
+        }
+
+        // UNITY WHYYYYYYY??
+        // This fixes a bug where keyboard events were not registered.
+        IEnumerator IHackUiModule() {
+            uiModule = Game.GameSystems.current.eventSystem.GetComponent<InputSystemUIInputModule>();
+            uiModule.enabled = false;
+            yield return new WaitForFixedUpdate();
+            uiModule.enabled = true;
         }
     }
 }

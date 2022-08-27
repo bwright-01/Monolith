@@ -94,7 +94,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ea259ffaac022344972307587249222, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debug: 0
   damageSound: {fileID: 11400000, guid: 71be08e07e49e9044adc04e52660d2f2, type: 2}
   deathSound: {fileID: 11400000, guid: 2d9e0c3e240363b428332c03ac8dcde8, type: 2}
   hideOnDeath: 1
@@ -156,7 +155,7 @@ MonoBehaviour:
   ignoreParentGUID: 1
   ignoreLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 14327
   ignoreTag: 
   ignoreColliders: []
   OnHit:
@@ -366,7 +365,7 @@ MonoBehaviour:
   ignoreParentGUID: 1
   ignoreLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 14327
   ignoreTag: 
   ignoreColliders: []
   OnHit:
@@ -502,7 +501,7 @@ MonoBehaviour:
   ignoreParentGUID: 1
   ignoreLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 14327
   ignoreTag: 
   ignoreColliders: []
   OnHit:
@@ -637,7 +636,7 @@ MonoBehaviour:
   ignoreParentGUID: 1
   ignoreLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 14327
   ignoreTag: 
   ignoreColliders: []
   OnHit:
@@ -773,7 +772,7 @@ MonoBehaviour:
   ignoreParentGUID: 1
   ignoreLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 14327
   ignoreTag: 
   ignoreColliders: []
   OnHit:
@@ -1413,7 +1412,7 @@ MonoBehaviour:
   ignoreParentGUID: 1
   ignoreLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 14327
   ignoreTag: 
   ignoreColliders: []
   OnHit:
@@ -1549,7 +1548,7 @@ MonoBehaviour:
   ignoreParentGUID: 1
   ignoreLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 14327
   ignoreTag: 
   ignoreColliders: []
   OnHit:

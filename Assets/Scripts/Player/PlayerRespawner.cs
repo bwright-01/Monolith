@@ -9,7 +9,8 @@ namespace Player {
 
     public class PlayerRespawner : MonoBehaviour {
 
-        [SerializeField][Range(0f, 5f)] float spawnTime = 1.5f;
+        [SerializeField][Range(0f, 5f)] float waitBeforeRespawn = 1.5f;
+        [SerializeField][Range(0f, 5f)] float spawnDuration = 1.5f;
         [SerializeField] bool spawnOnAwake = true;
 
         [Space]
@@ -30,6 +31,9 @@ namespace Player {
         Coroutine ieRespawn;
         GameObject temp;
         GameObject spawned;
+
+        // state
+        bool hasSpawnedOnce;
 
         void OnEnable() {
             eventChannel.OnRespawnPlayer.Subscribe(OnRespawnPlayer);
@@ -56,6 +60,8 @@ namespace Player {
         }
 
         IEnumerator IRespawn() {
+            if (hasSpawnedOnce) yield return new WaitForSeconds(waitBeforeRespawn);
+
             respawnLocation = Game.GameSystems.current.state.respawnPoint;
 
             temp = new GameObject("PlayerSpawnPlaceholder");
@@ -70,7 +76,7 @@ namespace Player {
                 respawnFX.Play();
             }
 
-            yield return new WaitForSeconds(spawnTime);
+            yield return new WaitForSeconds(spawnDuration);
 
             spawned = Instantiate(playerPrefab, respawnLocation, Quaternion.identity);
             spawned.name = "Player";
@@ -82,6 +88,8 @@ namespace Player {
             if (respawnFX != null) respawnFX.Stop();
 
             PlayerUtils.InvalidateCache();
+            eventChannel.OnPlayerSpawned.Invoke(spawned.GetComponent<PlayerMain>());
+            hasSpawnedOnce = true;
 
             Destroy(temp);
 

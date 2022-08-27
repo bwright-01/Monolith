@@ -45,19 +45,19 @@
                     "name": "Use",
                     "type": "PassThrough",
                     "id": "d873ba37-301a-42e3-81d7-43bbc62dfdad",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
                 },
                 {
-                    "name": "ToggleAim",
-                    "type": "Button",
+                    "name": "Aim",
+                    "type": "PassThrough",
                     "id": "afac2607-3fcf-413a-a7b0-a2c0ca29f611",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -376,7 +376,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "ToggleAim",
+                    "action": "Aim",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -387,7 +387,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "ToggleAim",
+                    "action": "Aim",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
