@@ -51,6 +51,13 @@ namespace Actor {
         Enemy.EnemySight enemySight;
         TheKiwiCoder.BehaviourTreeRunner behaviourTree;
 
+        void OnDestroy() {
+            CleanupOthers();
+            StopAllCoroutines();
+            damageSound.Unload();
+            deathSound.Unload();
+        }
+
         protected void SubscribeToEvents() {
             health.OnDamageTaken.Subscribe(OnDamageTaken);
             health.OnDeath.Subscribe(OnDeath);
@@ -123,9 +130,14 @@ namespace Actor {
             if (movementMod != null) movementMod.enabled = false;
             if (actorMovement != null) actorMovement.enabled = false;
 
+            CleanupOthers();
+
+            if (destroyOnDeath) Destroy(gameObject);
+        }
+
+        void CleanupOthers() {
             foreach (var obj in killActorsOnDeath) if (obj != null) obj.TakeDamage(Constants.INSTAKILL, Vector2.zero);
             foreach (var obj in disableObjectsOnDeath) if (obj != null) obj.SetActive(false);
-            if (destroyOnDeath) Destroy(gameObject);
         }
 
         void OnGUI() {

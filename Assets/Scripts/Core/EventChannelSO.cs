@@ -11,8 +11,10 @@ namespace Core {
     public delegate void StringEvent(string value);
     public delegate void GuidEvent(System.Guid value);
     public delegate void ActorEvent(Actor.iActor actor);
+    public delegate void PlayerEvent(Player.PlayerMain player);
     public delegate void EnemyEvent(Enemy.EnemyMain enemy);
     public delegate void HealthEvent(float damage, float hp);
+    public delegate void HazardEvent(Environment.HazardType hazardType);
     public delegate void FreezeTimeEvent(float duration = 0.1f, float timeScale = 0f);
     public delegate void ShakeGamepadEvent(float duration = 0.1f, float intensity = 0f);
 
@@ -65,6 +67,13 @@ namespace Core {
         public void Invoke(Actor.iActor value) { if (ev != null) ev.Invoke(value); }
     }
 
+    public class PlayerEventHandler {
+        event PlayerEvent ev;
+        public void Subscribe(PlayerEvent action) { ev += action; }
+        public void Unsubscribe(PlayerEvent action) { ev -= action; }
+        public void Invoke(Player.PlayerMain value) { if (ev != null) ev.Invoke(value); }
+    }
+
     public class EnemyEventHandler {
         event EnemyEvent ev;
         public void Subscribe(EnemyEvent action) { ev += action; }
@@ -77,6 +86,13 @@ namespace Core {
         public void Subscribe(HealthEvent action) { ev += action; }
         public void Unsubscribe(HealthEvent action) { ev -= action; }
         public void Invoke(float damage, float hp) { if (ev != null) ev.Invoke(damage, hp); }
+    }
+
+    public class HazardEventHandler {
+        event HazardEvent ev;
+        public void Subscribe(HazardEvent action) { ev += action; }
+        public void Unsubscribe(HazardEvent action) { ev -= action; }
+        public void Invoke(Environment.HazardType hazardType) { if (ev != null) ev.Invoke(hazardType); }
     }
 
     public class FreezeTimeEventHandler {
@@ -98,6 +114,8 @@ namespace Core {
         public GuidEventHandler OnRegionActivate = new GuidEventHandler();
         public GuidEventHandler OnRegionDeactivate = new GuidEventHandler();
 
+        public VoidEventHandler OnRespawnPlayer = new VoidEventHandler();
+        public PlayerEventHandler OnPlayerSpawned = new PlayerEventHandler();
         public VoidEventHandler OnPlayerDeath = new VoidEventHandler();
         public EnemyEventHandler OnEnemyDeath = new EnemyEventHandler();
 
@@ -108,6 +126,9 @@ namespace Core {
         public VoidEventHandler OnUnpause = new VoidEventHandler();
 
         public FloatEventHandler OnGainHealth = new FloatEventHandler();
+
+        public HazardEventHandler OnHazardEnter = new HazardEventHandler();
+        public HazardEventHandler OnHazardExit = new HazardEventHandler();
 
         public FreezeTimeEventHandler OnFreezeTime = new FreezeTimeEventHandler();
         public ShakeGamepadEventHandler OnShakeGamepad = new ShakeGamepadEventHandler();

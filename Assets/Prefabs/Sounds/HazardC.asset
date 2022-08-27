@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: HazardC
   m_EditorClassIdentifier: 
   soundName: HazardC
-  volume: 0.7
+  volume: 0.314
   pitch: 1
   ignoreListenerPause: 0
   realtimeEditorInspect: 0

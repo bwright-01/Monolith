@@ -10,27 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e36459a4cb634074097c94fb7d2fe4d2, type: 3}
-  m_Name: ImpactSound
+  m_Name: EnemySpawn
   m_EditorClassIdentifier: 
-  soundName: 
-  volume: 0.4
+  soundName: EnemySpawn
+  volume: 0.5
   pitch: 1
   ignoreListenerPause: 0
   realtimeEditorInspect: 0
   mixerGroup: {fileID: 0}
   spatialBlend: 1
   spread: 180
-  minFalloffDistance: 20
+  minFalloffDistance: 5
   maxFalloffDistance: 40
   dopplerLevel: 1
   volumeVariance: 0.1
   pitchVariance: 0.1
-  delayVariance: 0.01
+  delayVariance: 0.03
   courseDelayVariance: 0
   clips:
-  - {fileID: 8300000, guid: 080eb9a132fda2f46ad762e5d794559b, type: 3}
-  - {fileID: 8300000, guid: 59e4df70f85914f4a9d7fb7a5b8c186e, type: 3}
-  - {fileID: 8300000, guid: ed381789b823ac94486742da54359d83, type: 3}
+  - {fileID: 8300000, guid: ed75532145060504d8db2575d95b3c3f, type: 3}
   oneShot: 0
   maxSimultaneousClips: 99
   simulPlayThreshold: 0.05

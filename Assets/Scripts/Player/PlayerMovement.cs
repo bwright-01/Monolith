@@ -28,6 +28,12 @@ namespace Player {
         Vector2 currentForces;
         Quaternion desiredHeading;
 
+        public bool HasMoveInput() {
+            if (!enabled) return false;
+            if (!controller.enabled) return false;
+            return controller.Move.magnitude > float.Epsilon;
+        }
+
         void OnDisable() {
             rb.drag = initialDrag;
         }
@@ -70,10 +76,6 @@ namespace Player {
             if (!HasMoveInput()) return;
             desiredHeading = Quaternion.Euler(0, 0, Vector2.SignedAngle(Vector2.down, Utils.GetNearestCardinal(controller.Move)));
             transform.rotation = Quaternion.RotateTowards(transform.rotation, desiredHeading, rotateSpeed * Time.deltaTime);
-        }
-
-        bool HasMoveInput() {
-            return controller.Move.magnitude > float.Epsilon;
         }
     }
 }

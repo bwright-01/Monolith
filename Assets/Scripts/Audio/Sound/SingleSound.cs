@@ -37,9 +37,13 @@ namespace Audio {
             // simultaneous clips - keep track of timestamps
             static Dictionary<string, double> simulPlayLookup = new Dictionary<string, double>(100);
             double simulPlayStepAmount = 0.0;
+
+            MonoBehaviour _script;
             Coroutine iRetryPlay;
+            Coroutine iInspect;
 
             public override void Init(MonoBehaviour script, AudioMixerGroup mix = null, AudioSource existingSource = null) {
+                _script = script;
                 if (existingSource != null && existingSource.clip != null) {
                     clips = new AudioClip[1] { existingSource.clip };
                 }
@@ -68,7 +72,15 @@ namespace Audio {
 
                 InitSimultaneousSoundLookup();
 
-                if (existingSource == null) script.StartCoroutine(RealtimeEditorInspection());
+                if (existingSource == null) iInspect = script.StartCoroutine(RealtimeEditorInspection());
+            }
+
+            public override void Unload() {
+                if (_script != null && iRetryPlay != null) _script.StopCoroutine(iRetryPlay);
+                if (_script != null && iInspect != null) _script.StopCoroutine(iInspect);
+                _script = null;
+                Destroy(source);
+                source = null;
             }
 
             public override void Play() {
@@ -122,14 +134,14 @@ namespace Audio {
             }
 
             bool ValidateSound() {
-                if (clips.Length == 0 || source == null) {
-                    return false;
-                }
+                if (_script == null) return false;
+                if (clips.Length == 0) return false;
+                if (source == null) return false;
                 return true;
             }
 
             protected override IEnumerator RealtimeEditorInspection() {
-                while (true) {
+                while (_script != null) {
                     yield return new WaitForSecondsRealtime(1f);
                     if (!realtimeEditorInspect) continue;
                     if (source == null) continue;

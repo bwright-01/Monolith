@@ -38,6 +38,7 @@ namespace Audio {
             double timeLoopEndScheduled = 0.0;
             MonoBehaviour _script;
             Coroutine playCoroutine;
+            Coroutine inspectCoroutine;
 
             // state
             PlayCursor cursor = PlayCursor.Head;
@@ -72,10 +73,23 @@ namespace Audio {
                     clipTailDuration = GetClipDuration(clipTail);
                 }
 
-                script.StartCoroutine(RealtimeEditorInspection());
+                inspectCoroutine = script.StartCoroutine(RealtimeEditorInspection());
+            }
+
+            public override void Unload() {
+                if (_script != null && playCoroutine != null) _script.StopCoroutine(playCoroutine);
+                if (_script != null && inspectCoroutine != null) _script.StopCoroutine(inspectCoroutine);
+                _script = null;
+                Destroy(sourceHead);
+                Destroy(sourceLoop);
+                Destroy(sourceTail);
+                sourceHead = null;
+                sourceLoop = null;
+                sourceTail = null;
             }
 
             void SetSource(AudioClip clip, AudioSource source, bool loop) {
+                if (_script == null) return;
                 if (source == null) return;
                 source.volume = volume;
                 source.pitch = pitch;
@@ -154,7 +168,7 @@ namespace Audio {
             }
 
             protected override IEnumerator RealtimeEditorInspection() {
-                while (true) {
+                while (_script != null) {
                     yield return new WaitForSecondsRealtime(1f);
                     if (!realtimeEditorInspect) continue;
 
@@ -174,9 +188,8 @@ namespace Audio {
             }
 
             bool ValidateSound() {
-                if (sourceLoop == null) {
-                    return false;
-                }
+                if (_script == null) return false;
+                if (sourceLoop == null) return false;
                 return true;
             }
 
