@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 using Core;
+using UnityEngine.EventSystems;
 
 // This class houses all of the main systems that should persist from one scene to another
 // This, and only this MonoBehaviour, should be a Singleton
@@ -12,15 +13,18 @@ namespace Game {
     public class GameSystems : MonoBehaviour {
 
         [SerializeField] GameState _state;
+        [SerializeField] EventSystem _eventSystem;
         [SerializeField] EventChannelSO eventChannel;
 
         public GameState state => _state;
+        public EventSystem eventSystem => _eventSystem;
 
         // singleton
         static GameSystems _current;
         public static GameSystems current => _current;
 
         Coroutine ieRespawn;
+
 
         private void OnEnable() {
             eventChannel.OnPlayerDeath.Subscribe(OnPlayerDeath);

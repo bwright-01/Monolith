@@ -34,6 +34,12 @@ namespace Player {
             return controller.Move.magnitude > float.Epsilon;
         }
 
+        bool IsAiming() {
+            if (!enabled) return false;
+            if (!controller.enabled) return false;
+            return controller.IsAiming;
+        }
+
         void OnDisable() {
             rb.drag = initialDrag;
         }
@@ -74,8 +80,10 @@ namespace Player {
 
         void HandleRotate() {
             if (!HasMoveInput()) return;
-            desiredHeading = Quaternion.Euler(0, 0, Vector2.SignedAngle(Vector2.down, Utils.GetNearestCardinal(controller.Move)));
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, desiredHeading, rotateSpeed * Time.deltaTime);
+            if (IsAiming()) return;
+            transform.rotation = Quaternion.Euler(0, 0, Vector2.SignedAngle(Vector2.down, Utils.GetNearestCardinal(controller.Move))); ;
+            // desiredHeading = Quaternion.Euler(0, 0, Vector2.SignedAngle(Vector2.down, Utils.GetNearestCardinal(controller.Move)));
+            // transform.rotation = Quaternion.RotateTowards(transform.rotation, desiredHeading, rotateSpeed * Time.deltaTime);
         }
     }
 }

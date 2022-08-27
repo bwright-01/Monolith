@@ -26,6 +26,10 @@ namespace Player {
         PlayerShooter shooter;
         PlayerInput input;
 
+        public PlayerShooter GetShooter() {
+            return shooter;
+        }
+
         void OnEnable() {
             SubscribeToEvents();
             eventChannel.OnHazardEnter.Subscribe(OnHazardEnter);

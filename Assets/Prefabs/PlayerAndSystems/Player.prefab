@@ -866,7 +866,7 @@ MonoBehaviour:
       m_Calls: []
   m_ActionEvents: []
   m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
+  m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
@@ -882,7 +882,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b77e1d66bdb89848b44b3576e3c0145, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testSound: {fileID: 11400000, guid: 034d67d79c4daaf4c9fc6952b12378b2, type: 2}
+  timeAimAfterFiring: 0.25
   eventChannel: {fileID: 11400000, guid: 7981a9b65533ac444b7650afd7b5691d, type: 2}
 --- !u!114 &3844958334926481132
 MonoBehaviour:
@@ -928,7 +928,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c16c6eb4bd426cc4ab22b84f949717dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debug: 0
   damageSound: {fileID: 11400000, guid: 18c50da0e9cb8e64a866cb8d1ea29675, type: 2}
   deathSound: {fileID: 11400000, guid: 04350ea02692db149971b645dc28d451, type: 2}
   hideOnDeath: 1
@@ -954,6 +953,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gun: {fileID: 3844958333842691063}
   melee: {fileID: 3844958333541571678}
+  noAmmoClick: {fileID: 11400000, guid: a057943cb7de43e47adfb89de1741d11, type: 2}
+  timeRecharge: 3
+  numberOfShots: 5
 --- !u!114 &3844958334926485777
 MonoBehaviour:
   m_ObjectHideFlags: 0

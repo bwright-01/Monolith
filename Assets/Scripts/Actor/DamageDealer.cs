@@ -82,6 +82,7 @@ namespace Actor {
 
         void HandleCollision(Collider2D other) {
             if (debug) Debug.Log($">>> collision occurred! hit: \"{Utils.FullGameObjectName(other.gameObject)}\"");
+            if (debug) Debug.Log($"    in layer: \"{other.gameObject.layer}\"");
 
             if (!enabled) return;
             if (other == null) return;
@@ -89,10 +90,6 @@ namespace Actor {
             if (ignoreTag == other.tag) return;
             if (LayerUtils.LayerMaskContainsLayer(ignoreLayers.value, other.gameObject.layer)) return;
             if (parentActor != null && !parentActor.IsAlive()) return;
-
-            if (debug) Debug.Log($"ignoreLayers {ignoreLayers.value}");
-            if (debug) Debug.Log($"other.gameObject.layer {other.gameObject.layer}");
-            if (debug) Debug.Log($"LayerUtils.LayerMaskContainsLayer(ignoreLayers, other.gameObject.layer) {LayerUtils.LayerMaskContainsLayer(ignoreLayers, other.gameObject.layer)}");
 
             currentReceiver = GetDamageReceiverFromCollider(other);
             if (ignoreGUID != null && currentReceiver != null && ignoreGUID == currentReceiver.guid) return;
