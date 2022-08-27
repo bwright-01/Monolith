@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: c8dbc53785300fb42b7d9ec3bb83141f
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - doorRemoveFX: {instanceID: 0}
+  - doorRemoveSound: {fileID: 11400000, guid: b23a2bb785d7f0b4990a1cdb02289644, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

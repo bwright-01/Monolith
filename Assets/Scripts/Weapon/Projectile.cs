@@ -81,16 +81,23 @@ namespace Weapons {
             Cleanup();
         }
 
-        public void OnDamageGiven(float damage, bool wasKilled) {
+        public void OnHitSomething(int layer) {
             if (!IsAlive()) return;
             numCollisions++;
             impactSound.Play();
             bool ShouldRichochet = UnityEngine.Random.Range(0f, 1f) <= ricochetProbability;
-            if (wasKilled || numCollisions >= numCollisionsMax || !ShouldRichochet) {
+            if (numCollisions >= numCollisionsMax || !ShouldRichochet) {
                 AddImpactFx();
                 Die();
             } else {
                 Ricochet();
+            }
+        }
+
+        public void OnDamageGiven(float damage, bool wasKilled) {
+            if (!IsAlive()) return;
+            if (wasKilled) {
+                Die();
             }
         }
 

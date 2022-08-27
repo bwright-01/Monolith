@@ -13,6 +13,7 @@ namespace Core {
     public delegate void ActorEvent(Actor.iActor actor);
     public delegate void PlayerEvent(Player.PlayerMain player);
     public delegate void EnemyEvent(Enemy.EnemyMain enemy);
+    public delegate void MonolithEvent(Environment.MonolithType monolithType);
     public delegate void HealthEvent(float damage, float hp);
     public delegate void HazardEvent(Environment.HazardType hazardType);
     public delegate void FreezeTimeEvent(float duration = 0.1f, float timeScale = 0f);
@@ -81,6 +82,13 @@ namespace Core {
         public void Invoke(Enemy.EnemyMain value) { if (ev != null) ev.Invoke(value); }
     }
 
+    public class MonolithEventHandler {
+        event MonolithEvent ev;
+        public void Subscribe(MonolithEvent action) { ev += action; }
+        public void Unsubscribe(MonolithEvent action) { ev -= action; }
+        public void Invoke(Environment.MonolithType value) { if (ev != null) ev.Invoke(value); }
+    }
+
     public class HealthEventHandler {
         event HealthEvent ev;
         public void Subscribe(HealthEvent action) { ev += action; }
@@ -118,7 +126,9 @@ namespace Core {
         public VoidEventHandler OnRespawnPlayer = new VoidEventHandler();
         public PlayerEventHandler OnPlayerSpawned = new PlayerEventHandler();
         public VoidEventHandler OnPlayerDeath = new VoidEventHandler();
+
         public EnemyEventHandler OnEnemyDeath = new EnemyEventHandler();
+        public MonolithEventHandler OnMonolithDeath = new MonolithEventHandler();
 
         public VoidEventHandler OnUseKeyPress = new VoidEventHandler();
         public VoidEventHandler OnUseKeyRelease = new VoidEventHandler();

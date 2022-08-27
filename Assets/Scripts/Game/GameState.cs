@@ -24,6 +24,20 @@ namespace Game {
             IsBlueMonolithDestroyed = false;
         }
 
+        public void SetMonolithDestroyed(Environment.MonolithType monolithType) {
+            switch (monolithType) {
+                case Environment.MonolithType.Red:
+                    IsRedMonolithDestroyed = true;
+                    break;
+                case Environment.MonolithType.Yellow:
+                    IsYellowMonolithDestroyed = true;
+                    break;
+                case Environment.MonolithType.Blue:
+                    IsBlueMonolithDestroyed = true;
+                    break;
+            }
+        }
+
         public void SetRespawnPoint(Vector2 value) {
             respawnPoint = value;
         }

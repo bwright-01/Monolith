@@ -45,6 +45,7 @@ namespace Audio {
             }
 
             public void OnPlayMusic(string trackName) {
+                if (IsTrackPlayingOrEnqueued(trackName)) return;
                 incomingTrack = LookupTrack(trackName);
                 if (incomingTrack == null) {
                     Debug.LogError($"No track was found matching name of \"{trackName}\"");
@@ -101,6 +102,12 @@ namespace Audio {
                     return value;
                 }
                 return null;
+            }
+
+            bool IsTrackPlayingOrEnqueued(string trackName) {
+                if (currentTrack != null && currentTrack.name == trackName) return true;
+                if (incomingTrack != null && incomingTrack.name == trackName) return true;
+                return false;
             }
 
             void OnGUI() {

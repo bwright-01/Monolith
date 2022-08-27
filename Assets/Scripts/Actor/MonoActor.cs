@@ -9,10 +9,10 @@ namespace Actor {
     [RequireComponent(typeof(Actor.Health))]
 
     public abstract class MonoActor : MonoBehaviour, iActor {
-        [SerializeField] bool debug = false;
+        // [SerializeField] bool debug = false;
 
-        [Space]
-        [Space]
+        // [Space]
+        // [Space]
 
         [SerializeField] SingleSound damageSound;
         [SerializeField] SingleSound deathSound;
@@ -29,9 +29,6 @@ namespace Actor {
         [Space]
 
         [SerializeField] protected EventChannelSO eventChannel;
-
-        [Space]
-        [Space]
 
         // props
         System.Guid guid = System.Guid.NewGuid();
@@ -151,13 +148,13 @@ namespace Actor {
             foreach (var obj in disableObjectsOnDeath) if (obj != null) obj.SetActive(false);
         }
 
-        void OnGUI() {
-            if (!debug) return;
-            GUILayout.TextField(gameObject.name);
-            if (GUILayout.Button("Take Damage")) {
-                TakeDamage(10f, Vector2.zero);
-            }
-        }
+        // void OnGUI() {
+        //     if (!debug) return;
+        //     GUILayout.TextField(gameObject.name);
+        //     if (GUILayout.Button("Take Damage")) {
+        //         TakeDamage(10f, Vector2.zero);
+        //     }
+        // }
     }
 }
 

@@ -87,15 +87,19 @@ namespace Actor {
             if (other == null) return;
             if (hitThisFrame) return;
             if (ignoreTag == other.tag) return;
-            if (LayerUtils.LayerMaskContainsLayer(ignoreLayers, other.gameObject.layer)) return;
+            if (LayerUtils.LayerMaskContainsLayer(ignoreLayers.value, other.gameObject.layer)) return;
             if (parentActor != null && !parentActor.IsAlive()) return;
+
+            if (debug) Debug.Log($"ignoreLayers {ignoreLayers.value}");
+            if (debug) Debug.Log($"other.gameObject.layer {other.gameObject.layer}");
+            if (debug) Debug.Log($"LayerUtils.LayerMaskContainsLayer(ignoreLayers, other.gameObject.layer) {LayerUtils.LayerMaskContainsLayer(ignoreLayers, other.gameObject.layer)}");
+
+            currentReceiver = GetDamageReceiverFromCollider(other);
+            if (ignoreGUID != null && currentReceiver != null && ignoreGUID == currentReceiver.guid) return;
 
             OnHit.Invoke(other.gameObject.layer);
 
-            currentReceiver = GetDamageReceiverFromCollider(other);
-
             if (currentReceiver == null) return;
-            if (ignoreGUID != null && ignoreGUID == currentReceiver.guid) return;
 
             float damage = GetAppliedDamageAmount();
             if (currentReceiver.TakeDamage(damage, GetHeadingTowardsOtherCollider(other) * impactForce)) {

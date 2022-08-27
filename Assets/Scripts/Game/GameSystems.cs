@@ -24,10 +24,12 @@ namespace Game {
 
         private void OnEnable() {
             eventChannel.OnPlayerDeath.Subscribe(OnPlayerDeath);
+            eventChannel.OnMonolithDeath.Subscribe(OnMonolithDeath);
         }
 
         private void OnDisable() {
             eventChannel.OnPlayerDeath.Unsubscribe(OnPlayerDeath);
+            eventChannel.OnMonolithDeath.Unsubscribe(OnMonolithDeath);
         }
 
         void Awake() {
@@ -42,6 +44,10 @@ namespace Game {
                 // TODO: HANDLE GAME OVER STATE
             }
             eventChannel.OnRespawnPlayer.Invoke();
+        }
+
+        void OnMonolithDeath(Environment.MonolithType monolithType) {
+            state.SetMonolithDestroyed(monolithType);
         }
     }
 }
