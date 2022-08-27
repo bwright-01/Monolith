@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8673064300727665657}
   - component: {fileID: 8673064300727665659}
   - component: {fileID: 8673064300727665656}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4827,7 +4827,7 @@ GameObject:
   - component: {fileID: 8673064300862581263}
   - component: {fileID: 8673064300862581260}
   - component: {fileID: 8673064300862581250}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BulletProto
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4976,7 +4976,7 @@ GameObject:
   - component: {fileID: 8673064302038137287}
   - component: {fileID: 8673064302038137286}
   - component: {fileID: 2986246393526197179}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}

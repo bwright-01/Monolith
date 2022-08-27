@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Cinemachine;
 
 using Actor;
@@ -10,6 +11,7 @@ namespace Player {
     [RequireComponent(typeof(Health))]
     public class PlayerMain : MonoActor {
 
+        [SerializeField] LoopableSound footstepsSound;
         [SerializeField] LoopableSound hazardLavaSound;
 
         [Space]
@@ -21,6 +23,8 @@ namespace Player {
         // cached
         PlayerController controller;
         PlayerMovement movement;
+        PlayerShooter shooter;
+        PlayerInput input;
 
         void OnEnable() {
             SubscribeToEvents();
@@ -32,13 +36,25 @@ namespace Player {
             UnsubscribeFromEvents();
             eventChannel.OnHazardEnter.Unsubscribe(OnHazardEnter);
             eventChannel.OnHazardExit.Unsubscribe(OnHazardExit);
+            StopAllCoroutines();
         }
 
         void Awake() {
             Init();
             controller = GetComponent<PlayerController>();
             movement = GetComponent<PlayerMovement>();
+            shooter = GetComponent<PlayerShooter>();
+            input = GetComponent<PlayerInput>();
+            footstepsSound.Init(this);
             hazardLavaSound.Init(this);
+        }
+
+        private void Update() {
+            if (IsAlive() && movement != null && movement.HasMoveInput()) {
+                footstepsSound.Play();
+            } else {
+                footstepsSound.Stop();
+            }
         }
 
         public override Region GetRegion() {
@@ -65,9 +81,28 @@ namespace Player {
 
         public override void OnDeath(float damage, float hp) {
             CommonDeathActions();
+            gameObject.name = "Player (DEAD)";
 
+            footstepsSound.Stop();
+            hazardLavaSound.Stop();
+
+            footstepsSound.Unload();
+            hazardLavaSound.Unload();
+
+            shooter.enabled = false;
             controller.enabled = false;
             movement.enabled = false;
+            input.enabled = false;
+            Destroy(shooter);
+            Destroy(input);
+            Destroy(controller);
+
+            GameObject[] objectsWithPlayerTag = GameObject.FindGameObjectsWithTag("Player");
+            foreach (var obj in objectsWithPlayerTag) {
+                obj.tag = "Untagged";
+            }
+
+            eventChannel.OnPlayerDeath.Invoke();
 
             StartCoroutine(ScreenShakeOnDeath());
             eventChannel.OnShakeGamepad.Invoke(1f, .7f);

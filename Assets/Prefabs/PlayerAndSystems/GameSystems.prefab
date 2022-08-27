@@ -485,6 +485,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91d78eedbb8366a4694ad827b167a0f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _state: {fileID: 11400000, guid: b00c9967c0c49734199613197a365bb9, type: 2}
+  eventChannel: {fileID: 11400000, guid: 7981a9b65533ac444b7650afd7b5691d, type: 2}
+  timeBeforeRespawn: 2.5
 --- !u!1 &3665653906443672350
 GameObject:
   m_ObjectHideFlags: 0

@@ -18,7 +18,7 @@ MonoBehaviour:
   ignoreListenerPause: 0
   realtimeEditorInspect: 0
   mixerGroup: {fileID: 0}
-  spatialBlend: 1
+  spatialBlend: 0
   spread: 180
   minFalloffDistance: 20
   maxFalloffDistance: 40

@@ -32,6 +32,8 @@ namespace Audio {
 
             public abstract void Init(MonoBehaviour script, AudioMixerGroup mix = null, AudioSource _source = null);
 
+            public abstract void Unload();
+
             public abstract void Play();
 
             public abstract void Stop();

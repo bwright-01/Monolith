@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e36459a4cb634074097c94fb7d2fe4d2, type: 3}
+  m_Name: EnemySpawn
+  m_EditorClassIdentifier: 
+  soundName: EnemySpawn
+  volume: 0.5
+  pitch: 1
+  ignoreListenerPause: 0
+  realtimeEditorInspect: 0
+  mixerGroup: {fileID: 0}
+  spatialBlend: 1
+  spread: 180
+  minFalloffDistance: 5
+  maxFalloffDistance: 40
+  dopplerLevel: 1
+  volumeVariance: 0.1
+  pitchVariance: 0.1
+  delayVariance: 0.03
+  courseDelayVariance: 0
+  clips:
+  - {fileID: 8300000, guid: ed75532145060504d8db2575d95b3c3f, type: 3}
+  oneShot: 0
+  maxSimultaneousClips: 99
+  simulPlayThreshold: 0.05

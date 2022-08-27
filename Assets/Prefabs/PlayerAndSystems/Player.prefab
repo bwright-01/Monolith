@@ -936,6 +936,7 @@ MonoBehaviour:
   killActorsOnDeath: []
   disableObjectsOnDeath: []
   eventChannel: {fileID: 11400000, guid: 7981a9b65533ac444b7650afd7b5691d, type: 2}
+  footstepsSound: {fileID: 11400000, guid: 38e6e14e178921942b6862873af2a60a, type: 2}
   hazardLavaSound: {fileID: 11400000, guid: ffeaad66442ede3458b4f195a00d8955, type: 2}
   screenShakeOnDamage: {fileID: 3844958333024966017}
   screenShakeOnDeath: {fileID: 3844958334921337016}

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aadd44443267268479d0a492ac30fa69, type: 3}
+  m_Name: Footsteps
+  m_EditorClassIdentifier: 
+  soundName: HazardD
+  volume: 0.3
+  pitch: 1
+  ignoreListenerPause: 0
+  realtimeEditorInspect: 0
+  mixerGroup: {fileID: 0}
+  spatialBlend: 1
+  spread: 180
+  minFalloffDistance: 20
+  maxFalloffDistance: 40
+  dopplerLevel: 1
+  pitchVariance: 0
+  clipHead: {fileID: 0}
+  clipLoop: {fileID: 8300000, guid: dafc0b39dd77488479610a190bdca34f, type: 3}
+  clipTail: {fileID: 0}
+  playLoopToEnd: 0
