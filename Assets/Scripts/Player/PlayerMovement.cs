@@ -12,7 +12,7 @@ namespace Player {
         [SerializeField][Tooltip("How quickly the player accelerates to max speed after receiving input")][Range(0.001f, 2f)] float throttleUpTime = 0.1f;
         [SerializeField][Tooltip("How quickly the player comes to a stop after no input")][Range(0.001f, 2f)] float throttleDownTime = 0.05f;
         [SerializeField][Tooltip("How fast the player can change directions")][Range(0.001f, 2f)] float speedDelta = 0.1f;
-        [SerializeField][Tooltip("How fast the player can rotate (degrees / sec)")][Range(0f, 1080f)] float rotateSpeed = 720f;
+        // [SerializeField][Tooltip("How fast the player can rotate (degrees / sec)")][Range(0f, 1080f)] float rotateSpeed = 720f;
 
         [Space]
         [Space]
