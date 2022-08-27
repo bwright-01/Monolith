@@ -18,6 +18,7 @@ namespace Environment {
         [Space]
 
         [SerializeField] MonolithType type;
+        [SerializeField] Game.UpgradeType upgradeType;
 
         [Space]
         [Space]
@@ -50,6 +51,7 @@ namespace Environment {
         Vector2 monolithPosition;
         Transform prevCameraTarget;
         Timer cutsceneTimer = new Timer(TimerDirection.Increment, TimerStep.UnscaledDeltaTime);
+        System.Action OnRemoveDoors;
 
         void OnEnable() {
             SubscribeToEvents();
@@ -64,8 +66,13 @@ namespace Environment {
             actorHealth.SetIsInvulnerable(true);
         }
 
-        private void Start() {
+        void Start() {
             transform.SetParent(transform.parent.parent);
+        }
+
+        public void PanToMonolith(System.Action handleRemoveDoors = null) {
+            OnRemoveDoors = handleRemoveDoors;
+            StartCoroutine(IPanToMonolith());
         }
 
         public void RegisterDoor(MonolithDoor door) {
@@ -85,7 +92,7 @@ namespace Environment {
             if (didReportAllPylonsKilled) return;
             didReportAllPylonsKilled = true;
             actorHealth.SetIsInvulnerable(false);
-            StartCoroutine(IPanToMonolith());
+            PanToMonolith();
         }
 
         void RemoveAllDoors() {
@@ -116,9 +123,15 @@ namespace Environment {
 
         public override void OnDeath(float damage, float hp) {
             CommonDeathActions();
-            eventChannel.OnMonolithDeath.Invoke(type);
+            StartCoroutine(IMonolithDestroyedCutscene());
         }
 
+        void AfterMonolithDeath() {
+            eventChannel.OnMonolithDeath.Invoke(type);
+            eventChannel.OnApplyUpgrade.Invoke(upgradeType);
+        }
+
+        // in a larger scale project this would def be a generalized method
         IEnumerator IPanToMonolith() {
             var target = new GameObject("CutsceneCameraTarget");
 
@@ -158,6 +171,7 @@ namespace Environment {
             yield return new WaitForSecondsRealtime(timePause * 0.2f);
 
             RemoveAllDoors();
+            if (OnRemoveDoors != null) OnRemoveDoors.Invoke();
 
             yield return new WaitForSecondsRealtime(timePause * 0.2f);
 
@@ -185,11 +199,21 @@ namespace Environment {
             Destroy(target);
         }
 
+        IEnumerator IMonolithDestroyedCutscene() {
+            // TODO: ADD CUTSCENE
+            yield return null;
+            AfterMonolithDeath();
+        }
+
         void OnGUI() {
             if (!debugCutscene) return;
+            if (!IsAlive()) return;
             GUILayout.TextField(gameObject.name);
             if (GUILayout.Button("Test Pan")) {
-                StartCoroutine(IPanToMonolith());
+                PanToMonolith();
+            }
+            if (GUILayout.Button("Destroy")) {
+                TakeDamage(Actor.Constants.INSTAKILL, Vector2.zero);
             }
         }
     }

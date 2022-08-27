@@ -38,10 +38,12 @@ namespace Audio {
 
             void OnEnable() {
                 eventChannel.OnPlayMusic.Subscribe(OnPlayMusic);
+                eventChannel.OnStopMusic.Subscribe(OnStopMusic);
             }
 
             void OnDisable() {
                 eventChannel.OnPlayMusic.Unsubscribe(OnPlayMusic);
+                eventChannel.OnStopMusic.Unsubscribe(OnStopMusic);
             }
 
             public void OnPlayMusic(string trackName) {
@@ -71,13 +73,19 @@ namespace Audio {
                 OnPlayMusic(currentTrack.name);
             }
 
-            public void StopMusic() {
+            public void OnStopMusic() {
                 if (ieFadeIn != null) StopCoroutine(ieFadeIn);
                 if (ieFadeOut != null) StopCoroutine(ieFadeOut);
                 if (ieCrossFade != null) StopCoroutine(ieCrossFade);
                 foreach (var track in tracks) {
                     ieFadeOut = StartCoroutine(MusicUtils.FadeOut(track, fadeOutDuration));
                 }
+                currentTrack = null;
+                incomingTrack = null;
+            }
+
+            public void StopMusic() {
+                OnStopMusic();
             }
 
             void Start() {

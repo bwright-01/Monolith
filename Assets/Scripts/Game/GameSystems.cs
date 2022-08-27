@@ -29,11 +29,13 @@ namespace Game {
         private void OnEnable() {
             eventChannel.OnPlayerDeath.Subscribe(OnPlayerDeath);
             eventChannel.OnMonolithDeath.Subscribe(OnMonolithDeath);
+            eventChannel.OnApplyUpgrade.Subscribe(OnApplyUpgrade);
         }
 
         private void OnDisable() {
             eventChannel.OnPlayerDeath.Unsubscribe(OnPlayerDeath);
             eventChannel.OnMonolithDeath.Unsubscribe(OnMonolithDeath);
+            eventChannel.OnApplyUpgrade.Unsubscribe(OnApplyUpgrade);
         }
 
         void Awake() {
@@ -52,6 +54,14 @@ namespace Game {
 
         void OnMonolithDeath(Environment.MonolithType monolithType) {
             state.SetMonolithDestroyed(monolithType);
+            if (state.AreAllMonolithsDestroyed) {
+                eventChannel.OnAllMonolithsDestroyed.Invoke();
+            }
+        }
+
+        void OnApplyUpgrade(UpgradeType upgradeType) {
+            state.ApplyUpgrade(upgradeType);
+            eventChannel.OnAbilityUpgraded.Invoke(upgradeType);
         }
     }
 }

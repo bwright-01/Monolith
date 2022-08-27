@@ -78,6 +78,7 @@ namespace Player {
         void OnAim(InputValue value) {
             if (_isPaused) return;
             isAiming = value.isPressed;
+            recentlyFired.End();
         }
 
         // UNITY WHYYYYYYY??

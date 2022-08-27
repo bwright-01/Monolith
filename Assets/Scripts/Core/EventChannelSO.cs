@@ -14,6 +14,7 @@ namespace Core {
     public delegate void PlayerEvent(Player.PlayerMain player);
     public delegate void EnemyEvent(Enemy.EnemyMain enemy);
     public delegate void MonolithEvent(Environment.MonolithType monolithType);
+    public delegate void UpgradeEvent(Game.UpgradeType upgradeType);
     public delegate void HealthEvent(float damage, float hp);
     public delegate void HazardEvent(Environment.HazardType hazardType);
     public delegate void FreezeTimeEvent(float duration = 0.1f, float timeScale = 0f);
@@ -89,6 +90,13 @@ namespace Core {
         public void Invoke(Environment.MonolithType value) { if (ev != null) ev.Invoke(value); }
     }
 
+    public class UpgradeEventHandler {
+        event UpgradeEvent ev;
+        public void Subscribe(UpgradeEvent action) { ev += action; }
+        public void Unsubscribe(UpgradeEvent action) { ev -= action; }
+        public void Invoke(Game.UpgradeType value) { if (ev != null) ev.Invoke(value); }
+    }
+
     public class HealthEventHandler {
         event HealthEvent ev;
         public void Subscribe(HealthEvent action) { ev += action; }
@@ -122,6 +130,7 @@ namespace Core {
         public GuidEventHandler OnRegionActivate = new GuidEventHandler();
         public GuidEventHandler OnRegionDeactivate = new GuidEventHandler();
         public StringEventHandler OnPlayMusic = new StringEventHandler();
+        public VoidEventHandler OnStopMusic = new VoidEventHandler();
 
         public VoidEventHandler OnRespawnPlayer = new VoidEventHandler();
         public PlayerEventHandler OnPlayerSpawned = new PlayerEventHandler();
@@ -129,6 +138,9 @@ namespace Core {
 
         public EnemyEventHandler OnEnemyDeath = new EnemyEventHandler();
         public MonolithEventHandler OnMonolithDeath = new MonolithEventHandler();
+        public VoidEventHandler OnAllMonolithsDestroyed = new VoidEventHandler();
+        public UpgradeEventHandler OnApplyUpgrade = new UpgradeEventHandler();
+        public UpgradeEventHandler OnAbilityUpgraded = new UpgradeEventHandler();
 
         public VoidEventHandler OnUseKeyPress = new VoidEventHandler();
         public VoidEventHandler OnUseKeyRelease = new VoidEventHandler();

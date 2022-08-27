@@ -3,7 +3,13 @@ guid: 24994d4b41e90e648b51c2b377916a69
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - animator: {instanceID: 0}
+  - debugSprite: {instanceID: 0}
+  - attackSound: {fileID: 11400000, guid: b23a2bb785d7f0b4990a1cdb02289644, type: 2}
+  - upgradedAttackSound: {fileID: 11400000, guid: b23a2bb785d7f0b4990a1cdb02289644, type: 2}
+  - hitEnemySound: {fileID: 11400000, guid: b23a2bb785d7f0b4990a1cdb02289644, type: 2}
+  - hitEnvironmentSound: {fileID: 11400000, guid: b23a2bb785d7f0b4990a1cdb02289644, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

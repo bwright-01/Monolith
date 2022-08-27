@@ -50,7 +50,7 @@ namespace Actor {
         public bool TakeDamage(float damage) {
             if (!isAlive) return false;
             if (damage <= 0) return false;
-            if (isInvulnerable) return false;
+            if (isInvulnerable && damage != Constants.INSTAKILL) return false;
             if (hp <= 0) return false;
 
             hp -= damage;

@@ -21,8 +21,15 @@ namespace Player {
         [SerializeField][Range(0f, 10f)] float timeRecharge = 3f;
         [SerializeField][Range(0f, 10)] int numberOfShots = 5;
 
+        [Space]
+        [Space]
+
+        [SerializeField] EventChannelSO eventChannel;
+
+        // cached
         PlayerController controller;
 
+        // state
         Timer recharging = new Timer();
 
         public int GetNumShots() {
@@ -36,11 +43,13 @@ namespace Player {
         void OnEnable() {
             controller.OnFirePress.Subscribe(OnFirePress);
             controller.OnMeleePress.Subscribe(OnMeleePress);
+            eventChannel.OnAbilityUpgraded.Subscribe(OnAbilityUpgraded);
         }
 
         void OnDisable() {
             controller.OnFirePress.Unsubscribe(OnFirePress);
             controller.OnMeleePress.Unsubscribe(OnMeleePress);
+            eventChannel.OnAbilityUpgraded.Unsubscribe(OnAbilityUpgraded);
         }
 
         void Awake() {
@@ -52,10 +61,25 @@ namespace Player {
             recharging.Start();
         }
 
-        private void Update() {
-            recharging.TickReversed();
+        void Start() {
+            CheckForUpgrades();
+        }
 
-            Debug.Log($"{GetNumAvailableShots()} {recharging.ToString()}");
+        void Update() {
+            recharging.TickReversed();
+        }
+
+        void OnAbilityUpgraded(Game.UpgradeType upgradeType) {
+            CheckForUpgrades();
+        }
+
+        void CheckForUpgrades() {
+            if (Game.GameSystems.current.state.IsWeaponUpgraded) {
+                numberOfShots = Game.GameSystems.current.state.UpgradedShotsCount;
+            }
+            if (Game.GameSystems.current.state.IsMeleeUpgraded) {
+                melee.SetDamageMultiplier(Game.GameSystems.current.state.UpgradedMeleeDamageMod);
+            }
         }
 
         void OnFirePress() {
