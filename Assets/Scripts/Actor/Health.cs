@@ -26,6 +26,10 @@ namespace Actor {
         float hp = 100f;
         Timer timeInvincible = new Timer();
 
+        public Collider2D[] GetColliders() {
+            return colliders;
+        }
+
         void Awake() {
             colliders = GetComponentsInChildren<Collider2D>(true);
             hp = startingHP;

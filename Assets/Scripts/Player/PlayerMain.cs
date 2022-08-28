@@ -95,6 +95,8 @@ namespace Player {
 
         public override void OnDeath(float damage, float hp) {
             CommonDeathActions();
+            rigidbody.drag = 5f;
+
             gameObject.name = "Player (DEAD)";
 
             footstepsSound.Stop();
@@ -121,6 +123,8 @@ namespace Player {
             StartCoroutine(ScreenShakeOnDeath());
             eventChannel.OnShakeGamepad.Invoke(1f, .7f);
             eventChannel.OnFreezeTime.Invoke(1f, 0.3f);
+
+            Destroy(gameObject, 10f);
         }
 
         IEnumerator ScreenShakeOnDamage(float damage) {

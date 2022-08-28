@@ -30,11 +30,11 @@ namespace Enemy {
         [Space]
 
         [SerializeField] string animatorAttackTriggerName = "Attacking";
+        [SerializeField] Animator animator;
 
         // cached
         ActorMovement movement;
         PlayerMain player;
-        Animator animator;
         EnemyMain enemy;
         EnemySight sight;
 
@@ -62,7 +62,7 @@ namespace Enemy {
             enemy = GetComponent<EnemyMain>();
             sight = GetComponent<EnemySight>();
             movement = GetComponent<ActorMovement>();
-            animator = GetComponent<Animator>();
+            if (animator == null) animator = GetComponent<Animator>();
             if (disableOnAwake) enabled = false;
         }
 

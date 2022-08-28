@@ -14,6 +14,9 @@ namespace Enemy {
         [SerializeField] bool debug;
         [SerializeField] float rangeOfSight = 5f;
 
+        [SerializeField] string animatorSightTriggerName = "SeesPlayer";
+        [SerializeField] Animator animator;
+
         PlayerMain player;
         ActorMovement movement;
 
@@ -26,14 +29,21 @@ namespace Enemy {
         public void LookAtPlayer() {
             if (movement == null) return;
             if (CanSeePlayer()) {
+                if (HasAnimator()) animator.SetBool(animatorSightTriggerName, true);
                 movement.LookAt(player.transform);
             } else {
+                if (HasAnimator()) animator.SetBool(animatorSightTriggerName, false);
                 movement.LookAt(null);
             }
         }
 
         private void Awake() {
             movement = GetComponent<ActorMovement>();
+            if (animator == null) animator = GetComponent<Animator>();
+        }
+
+        bool HasAnimator() {
+            return animator != null && animator.runtimeAnimatorController != null;
         }
 
         void OnDrawGizmos() {

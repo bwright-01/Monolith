@@ -17,6 +17,11 @@ namespace Player {
         [Space]
         [Space]
 
+        [SerializeField][Range(0f, 20f)] float additionalAttackForce = 10f;
+
+        [Space]
+        [Space]
+
         [SerializeField] EventChannelSO eventChannel;
 
         // cached

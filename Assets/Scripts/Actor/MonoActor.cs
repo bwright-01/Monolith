@@ -34,8 +34,8 @@ namespace Actor {
         System.Guid guid = System.Guid.NewGuid();
 
         // cached
-        Rigidbody2D rb;
-        SpriteRenderer sr;
+        Rigidbody2D _rb;
+        SpriteRenderer[] sprites;
         Health health;
         DamageFlash damageFlash;
         Map.MinimapComponent minimapComponent;
@@ -51,6 +51,8 @@ namespace Actor {
 
         public Health actorHealth => health;
         public float healthPercentage => health != null ? health.healthPercentage : 0;
+
+        new protected Rigidbody2D rigidbody => _rb;
 
         void OnDestroy() {
             CleanupOthers();
@@ -74,8 +76,8 @@ namespace Actor {
         protected void Init() {
             Layer.Init();
 
-            rb = GetComponent<Rigidbody2D>();
-            sr = GetComponentInChildren<SpriteRenderer>();
+            _rb = GetComponent<Rigidbody2D>();
+            sprites = GetComponentsInChildren<SpriteRenderer>();
             health = GetComponent<Health>();
             damageFlash = GetComponent<DamageFlash>();
             minimapComponent = GetComponent<Map.MinimapComponent>();
@@ -110,7 +112,7 @@ namespace Actor {
         }
 
         public bool TakeDamage(float damage, Vector2 force) {
-            if (rb != null) rb.AddForce(force, ForceMode2D.Impulse);
+            if (_rb != null) _rb.AddForce(force, ForceMode2D.Impulse);
             return health.TakeDamage(damage);
         }
 
@@ -130,7 +132,7 @@ namespace Actor {
         protected void CommonDeathActions() {
             deathSound.Play();
 
-            if (hideOnDeath && sr != null) sr.enabled = false;
+            if (hideOnDeath) foreach (var sprite in sprites) if (sprite != null) sprite.enabled = false;
             if (minimapComponent != null) Destroy(minimapComponent);
 
             if (behaviourTree != null) behaviourTree.enabled = false;

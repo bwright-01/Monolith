@@ -57,8 +57,9 @@ namespace Weapon {
         bool isTryingToShoot;
 
         // this method should ideally be called every frame
-        public override void TryAttack() {
+        public override bool TryAttack() {
             isTryingToShoot = true;
+            return true;
         }
 
         void Awake() {

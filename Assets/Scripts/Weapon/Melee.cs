@@ -17,6 +17,7 @@ namespace Weapon {
         [Space]
 
         [SerializeField][Range(0f, 2f)] float timeWaitAfterAttack = 0.2f;
+        [SerializeField][Range(0f, 2f)] float timeWaitBeforeAttack = 0f;
 
         [Space]
         [Space]
@@ -65,8 +66,8 @@ namespace Weapon {
             hitEnvironmentSound.Init(this);
         }
 
-        public override void TryAttack() {
-            if (ieAttack != null) return;
+        public override bool TryAttack() {
+            if (ieAttack != null) return false;
 
             if (ieScreenShake != null) StopCoroutine(ieScreenShake);
 
@@ -83,6 +84,7 @@ namespace Weapon {
             } else {
                 ApplyDamage();
             }
+            return true;
         }
 
         public void ApplyDamage() {
@@ -99,6 +101,8 @@ namespace Weapon {
         }
 
         IEnumerator IAttack() {
+            yield return new WaitForSeconds(timeWaitBeforeAttack);
+
             damageDealer.enabled = true;
             collider.enabled = true;
             if (debug && debugSprite != null) debugSprite.enabled = true;

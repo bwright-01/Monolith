@@ -16,6 +16,7 @@ namespace Movement {
         [SerializeField][Tooltip("How quickly the actor comes to a stop")][Range(0.001f, 2f)] float throttleDownTime = 0.05f;
         [SerializeField][Tooltip("How fast the actor can change directions")][Range(0.001f, 2f)] float speedDelta = 0.1f;
         [SerializeField][Tooltip("How fast the actor can rotate (degrees / sec)")][Range(0f, 1080f)] float rotateSpeed = 720f;
+        [SerializeField] bool disableRotation;
 
         [Space]
         [Space]
@@ -125,6 +126,7 @@ namespace Movement {
         }
 
         void HandleRotate() {
+            if (disableRotation) return;
             if (!HasAimTarget() && !HasMoveTarget()) return;
             desiredRotation = GetAimRotation();
             transform.rotation = Quaternion.RotateTowards(transform.rotation, desiredRotation, rotateSpeed * Time.deltaTime);

@@ -24,6 +24,12 @@ namespace Player {
         [Space]
         [Space]
 
+        [SerializeField][Range(0f, 10f)] float timeIsShootingThreshold = 0.1f;
+        [SerializeField][Range(0f, 10f)] float timeIsMeleeingThreshold = 0.1f;
+
+        [Space]
+        [Space]
+
         [SerializeField] EventChannelSO eventChannel;
 
         // cached
@@ -31,6 +37,11 @@ namespace Player {
 
         // state
         Timer recharging = new Timer();
+        Timer meleeing = new Timer();
+        Timer shooting = new Timer();
+
+        public bool IsMeleeing => meleeing.active;
+        public bool IsShooting => shooting.active;
 
         public int GetNumShots() {
             return numberOfShots;
@@ -59,6 +70,8 @@ namespace Player {
             noAmmoClick.Init(this);
             recharging.SetDuration(timeRecharge);
             recharging.Start();
+            shooting.SetDuration(timeIsShootingThreshold);
+            meleeing.SetDuration(timeIsMeleeingThreshold);
         }
 
         void Start() {
@@ -67,6 +80,8 @@ namespace Player {
 
         void Update() {
             recharging.TickReversed();
+            shooting.Tick();
+            meleeing.Tick();
         }
 
         void OnAbilityUpgraded(Game.UpgradeType upgradeType) {
@@ -84,6 +99,7 @@ namespace Player {
 
         void OnFirePress() {
             if (HasAvailableBullet()) {
+                shooting.Start();
                 gun.TryAttack();
                 SpendAmmo();
             } else {
@@ -92,7 +108,9 @@ namespace Player {
         }
 
         void OnMeleePress() {
-            melee.TryAttack();
+            if (melee.TryAttack()) {
+                meleeing.Start();
+            }
         }
 
         bool HasAvailableBullet() {
