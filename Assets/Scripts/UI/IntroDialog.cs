@@ -9,6 +9,7 @@ namespace UI {
 
     public class IntroDialog : MonoBehaviour {
         [SerializeField] string musicTrack = "Transition";
+        [SerializeField] bool resetLivesOnLevelLoad;
 
         [Space]
         [Space]
@@ -25,7 +26,7 @@ namespace UI {
         [SerializeField] EventChannelSO eventChannel;
 
         public void OnGotoLevel() {
-            Game.GameSystems.current.ResetForContinue();
+            if (resetLivesOnLevelLoad) Game.GameSystems.current.ResetForContinue();
             StopAllCoroutines();
             StartCoroutine(IFadeToNextScene("Level01"));
             eventChannel.OnStopMusic.Invoke();

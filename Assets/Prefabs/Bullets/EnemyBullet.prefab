@@ -85,11 +85,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8673064302038137287, guid: 42aec47ca2ab376439cca64f2ce5e227, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.5
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 8673064302038137287, guid: 42aec47ca2ab376439cca64f2ce5e227, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.5
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 8673064302038137287, guid: 42aec47ca2ab376439cca64f2ce5e227, type: 3}
       propertyPath: m_LocalRotation.w

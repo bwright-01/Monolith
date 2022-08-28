@@ -39,6 +39,7 @@ namespace Enemy {
         EnemySight sight;
 
         public void AttackImmediately() {
+            if (!enemy.IsAlive()) return;
             weapon.TryAttack();
         }
 

@@ -11,10 +11,22 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: e9ac51ffe8e485c4abdb6675318f116e, type: 2}
+    - target: {fileID: 6565066347014586354, guid: b901b3530da270741842c1614b8e6557, type: 3}
+      propertyPath: m_Radius
+      value: 0.64
+      objectReference: {fileID: 0}
+    - target: {fileID: 6565066347014586354, guid: b901b3530da270741842c1614b8e6557, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.33
+      objectReference: {fileID: 0}
+    - target: {fileID: 6565066347014586357, guid: b901b3530da270741842c1614b8e6557, type: 3}
+      propertyPath: m_Radius
+      value: 0.67
+      objectReference: {fileID: 0}
     - target: {fileID: 6565066348156119633, guid: b901b3530da270741842c1614b8e6557, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -1508386012, guid: e94b60e8c2a8a094fbbc883a5adb7c5e, type: 3}
+      objectReference: {fileID: -673157474, guid: e94b60e8c2a8a094fbbc883a5adb7c5e, type: 3}
     - target: {fileID: 6565066348232381284, guid: b901b3530da270741842c1614b8e6557, type: 3}
       propertyPath: debug
       value: 0
@@ -99,6 +111,14 @@ PrefabInstance:
       propertyPath: tree
       value: 
       objectReference: {fileID: 11400000, guid: fa293ac2b5f786940be893a53313c4f0, type: 2}
+    - target: {fileID: 6565066348232381309, guid: b901b3530da270741842c1614b8e6557, type: 3}
+      propertyPath: m_BodyType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6565066348232381309, guid: b901b3530da270741842c1614b8e6557, type: 3}
+      propertyPath: m_Constraints
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b901b3530da270741842c1614b8e6557, type: 3}
 --- !u!1 &2837403098781220566 stripped

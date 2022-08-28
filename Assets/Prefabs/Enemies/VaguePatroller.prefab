@@ -478,7 +478,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebeb68fa9cba1e14b9cbb9407ee85aed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debug: 1
+  debug: 0
   disableOnAwake: 1
   weapon: {fileID: 6565066346141863061}
   attackRange: 5
@@ -486,6 +486,7 @@ MonoBehaviour:
   timeWaitAfterAttack: 2
   timeWaitVariance: 0.2
   animatorAttackTriggerName: Attacking
+  animator: {fileID: 0}
 --- !u!114 &6565066348232381284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -498,8 +499,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3753fcf0a133ad4eab4732531b2b889, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debug: 1
+  debug: 0
   rangeOfSight: 10
+  animatorSightTriggerName: SeesPlayer
+  animator: {fileID: 0}
 --- !u!114 &6565066348232381307
 MonoBehaviour:
   m_ObjectHideFlags: 0
