@@ -45,11 +45,26 @@ namespace Audio {
             void OnEnable() {
                 eventChannel.OnPlayMusic.Subscribe(OnPlayMusic);
                 eventChannel.OnStopMusic.Subscribe(OnStopMusic);
+                eventChannel.OnResetMusic.Subscribe(OnResetMusic);
             }
 
             void OnDisable() {
                 eventChannel.OnPlayMusic.Unsubscribe(OnPlayMusic);
                 eventChannel.OnStopMusic.Unsubscribe(OnStopMusic);
+                eventChannel.OnResetMusic.Unsubscribe(OnResetMusic);
+            }
+
+            void OnResetMusic() {
+                StopAllCoroutines();
+                isPlaying = false;
+                currentTrack = null;
+                incomingTrack = null;
+                outgoingTrack = null;
+                foreach (var track in tracks) {
+                    track.Source.volume = 0;
+                    track.Source.Stop();
+                    track.Source.PlayScheduled(AudioSettings.dspTime + 1f);
+                }
             }
 
             public void OnPlayMusic(string trackName) {
@@ -87,7 +102,7 @@ namespace Audio {
             }
 
             public void StartMusic() {
-                OnPlayMusic(currentTrack.name);
+                OnPlayMusic(currentTrack != null ? currentTrack.name : tracks[0].name);
             }
 
             public void OnStopMusic() {
@@ -111,7 +126,7 @@ namespace Audio {
                     tracksMap.TryAdd(track.name, track);
                     if (track.Source == null) { Debug.LogWarning($"MusicPlayer track \"{track.name}\" has no audio source!!"); continue; }
                     track.Source.volume = 0;
-                    track.Source.PlayScheduled(AudioSettings.dspTime + 0.5f);
+                    track.Source.PlayScheduled(AudioSettings.dspTime + 1f);
                 }
             }
 

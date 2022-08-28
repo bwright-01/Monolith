@@ -1249,7 +1249,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debug: 0
-  fadeInDuration: 4
+  fadeInDuration: 0
   fadeOutDuration: 2
   crossfadeDuration: 10
   musicVolume: 0.7

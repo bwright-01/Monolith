@@ -10,6 +10,7 @@ namespace Environment {
         Red,
         Yellow,
         Blue,
+        Center,
     }
 
     public class Monolith : Actor.MonoActor {
@@ -68,6 +69,18 @@ namespace Environment {
 
         void Start() {
             transform.SetParent(transform.parent.parent);
+            bool IsRedMonolithDestroyed = Game.GameSystems.current.state.IsRedMonolithDestroyed;
+            bool IsYellowMonolithDestroyed = Game.GameSystems.current.state.IsYellowMonolithDestroyed;
+            bool IsBlueMonolithDestroyed = Game.GameSystems.current.state.IsBlueMonolithDestroyed;
+            if (
+                (IsRedMonolithDestroyed && type == MonolithType.Red) ||
+                (IsYellowMonolithDestroyed && type == MonolithType.Yellow) ||
+                (IsBlueMonolithDestroyed && type == MonolithType.Blue)
+            ) {
+                TakeDamage(Actor.Constants.INSTAKILL, Vector2.zero);
+                RemoveAllDoors();
+                DestroyAllPylons();
+            }
         }
 
         public void PanToMonolith(System.Action handleRemoveDoors = null) {
@@ -99,6 +112,14 @@ namespace Environment {
             foreach (var door in doors) {
                 door.Remove();
             }
+            doors.Clear();
+        }
+
+        void DestroyAllPylons() {
+            foreach (var pylon in pylons) {
+                Destroy(pylon.gameObject);
+            }
+            pylons.Clear();
         }
 
         public override Region GetRegion() {

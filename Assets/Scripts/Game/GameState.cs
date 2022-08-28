@@ -25,7 +25,7 @@ namespace Game {
         [Space]
 
         [SerializeField] bool redDestroyedAtStart;
-        [SerializeField] bool yelloeDestroyedAtStart;
+        [SerializeField] bool yellowDestroyedAtStart;
         [SerializeField] bool blueDestroyedAtStart;
 
         [Space]
@@ -55,11 +55,16 @@ namespace Game {
         public void Init() {
             lives = initialLives;
             IsRedMonolithDestroyed = redDestroyedAtStart;
-            IsYellowMonolithDestroyed = yelloeDestroyedAtStart;
+            IsYellowMonolithDestroyed = yellowDestroyedAtStart;
             IsBlueMonolithDestroyed = blueDestroyedAtStart;
             IsWeaponUpgraded = weaponUpgradedAtStart;
             IsMeleeUpgraded = meleeUpgradedAtStart;
             IsMovementUpgraded = movementUpgradedAtStart;
+            // IsMovementUpgraded = System.Convert.ToBoolean(PlayerPrefs.GetInt("IsMovementUpgraded", 0));
+        }
+
+        public void ResetForContinue() {
+            lives = initialLives;
         }
 
         public int GetNumMonolithsDestroyed() {
