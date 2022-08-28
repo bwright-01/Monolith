@@ -60,10 +60,12 @@ namespace Map {
 
         void Activate() {
             canvas.enabled = true;
+            canvas.gameObject.SetActive(true);
         }
 
         void Reset() {
             canvas.enabled = false;
+            canvas.gameObject.SetActive(false);
         }
 
         void OnPlayerSpawned(Player.PlayerMain incoming) {

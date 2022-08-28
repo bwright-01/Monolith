@@ -3,6 +3,7 @@ using UnityEngine;
 
 using Core;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 // This class houses all of the main systems that should persist from one scene to another
 // This, and only this MonoBehaviour, should be a Singleton
@@ -38,18 +39,32 @@ namespace Game {
             eventChannel.OnApplyUpgrade.Unsubscribe(OnApplyUpgrade);
         }
 
+        public void ResetGameState() {
+            state.Init();
+        }
+
+        public void ResetForContinue() {
+            state.ResetForContinue();
+        }
+
         void Awake() {
             Layer.Init();
-            state.Init();
+            ResetGameState();
             _current = SystemUtils.ManageSingleton<GameSystems>(_current, this);
         }
 
         void OnPlayerDeath() {
             state.LoseLife();
             if (state.lives <= 0) {
-                // TODO: HANDLE GAME OVER STATE
+                StartCoroutine(IGameOver());
+            } else {
+                eventChannel.OnRespawnPlayer.Invoke();
             }
-            eventChannel.OnRespawnPlayer.Invoke();
+        }
+
+        void GotoGameOver() {
+            eventChannel.OnStopMusic.Invoke();
+            SceneManager.LoadScene("GameOver");
         }
 
         void OnMonolithDeath(Environment.MonolithType monolithType) {
@@ -62,6 +77,12 @@ namespace Game {
         void OnApplyUpgrade(UpgradeType upgradeType) {
             state.ApplyUpgrade(upgradeType);
             eventChannel.OnAbilityUpgraded.Invoke(upgradeType);
+        }
+
+        IEnumerator IGameOver() {
+            yield return new WaitForSecondsRealtime(2f);
+            Time.timeScale = 1f;
+            GotoGameOver();
         }
     }
 }

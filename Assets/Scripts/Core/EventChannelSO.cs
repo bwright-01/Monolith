@@ -131,6 +131,7 @@ namespace Core {
         public GuidEventHandler OnRegionDeactivate = new GuidEventHandler();
         public StringEventHandler OnPlayMusic = new StringEventHandler();
         public VoidEventHandler OnStopMusic = new VoidEventHandler();
+        public VoidEventHandler OnResetMusic = new VoidEventHandler();
 
         public VoidEventHandler OnRespawnPlayer = new VoidEventHandler();
         public PlayerEventHandler OnPlayerSpawned = new PlayerEventHandler();

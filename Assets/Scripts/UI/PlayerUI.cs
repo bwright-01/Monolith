@@ -87,6 +87,7 @@ namespace UI {
         }
 
         void Reset() {
+            canvas.gameObject.SetActive(false);
             canvas.enabled = false;
             if (health != null) {
                 health.OnHealthGained.Unsubscribe(OnHealthGained);
@@ -98,6 +99,7 @@ namespace UI {
         }
 
         void Activate() {
+            canvas.gameObject.SetActive(true);
             canvas.enabled = true;
         }
 
