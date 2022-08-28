@@ -18,7 +18,7 @@ namespace Environment {
 
         bool hasTeleported;
 
-        private void Awake() {
+        void Awake() {
             portalSound.Init(this);
         }
 
