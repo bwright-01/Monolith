@@ -124,10 +124,14 @@ TextureImporter:
         width: 12
         height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -6, y: 6}
+        - {x: -6, y: -6}
+        - {x: 6, y: -6}
+        - {x: 6, y: 6}
       tessellationDetail: 0
       bones: []
       spriteID: bf0d55b6b6b540b45bb1d64570b962d4
@@ -145,10 +149,14 @@ TextureImporter:
         width: 12
         height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -6, y: 6}
+        - {x: -6, y: -6}
+        - {x: 6, y: -6}
+        - {x: 6, y: 6}
       tessellationDetail: 0
       bones: []
       spriteID: dd24ce31841d3404b9064c2eafc16592
@@ -166,10 +174,14 @@ TextureImporter:
         width: 12
         height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -6, y: 6}
+        - {x: -6, y: -6}
+        - {x: 6, y: -6}
+        - {x: 6, y: 6}
       tessellationDetail: 0
       bones: []
       spriteID: b41d2242842a9684a9198dad47f32c3f
@@ -187,10 +199,14 @@ TextureImporter:
         width: 12
         height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -6, y: 6}
+        - {x: -6, y: -6}
+        - {x: 6, y: -6}
+        - {x: 6, y: 6}
       tessellationDetail: 0
       bones: []
       spriteID: 1fab4926588eb394897a9c3a4a325253
@@ -208,10 +224,14 @@ TextureImporter:
         width: 12
         height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -6, y: 6}
+        - {x: -6, y: -6}
+        - {x: 6, y: -6}
+        - {x: 6, y: 6}
       tessellationDetail: 0
       bones: []
       spriteID: adb5de1f7fb81ec47917526da5d30781
@@ -229,10 +249,14 @@ TextureImporter:
         width: 12
         height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -6, y: 6}
+        - {x: -6, y: -6}
+        - {x: 6, y: -6}
+        - {x: 6, y: 6}
       tessellationDetail: 0
       bones: []
       spriteID: 9c6ea2b73a87f1f42a6497e371866587
@@ -250,10 +274,14 @@ TextureImporter:
         width: 12
         height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -6, y: 6}
+        - {x: -6, y: -6}
+        - {x: 6, y: -6}
+        - {x: 6, y: 6}
       tessellationDetail: 0
       bones: []
       spriteID: d088c6280769dc54893885155030e370
@@ -271,10 +299,14 @@ TextureImporter:
         width: 12
         height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -6, y: 6}
+        - {x: -6, y: -6}
+        - {x: 6, y: -6}
+        - {x: 6, y: 6}
       tessellationDetail: 0
       bones: []
       spriteID: d57c3add21482164e996e47c514e8096
@@ -292,10 +324,14 @@ TextureImporter:
         width: 12
         height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -6, y: 6}
+        - {x: -6, y: -6}
+        - {x: 6, y: -6}
+        - {x: 6, y: 6}
       tessellationDetail: 0
       bones: []
       spriteID: 04f0172a4c9c1f54096ea4aaf844b40b

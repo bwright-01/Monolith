@@ -44,7 +44,7 @@ namespace Environment {
         void ApplyDamage(Collider2D other) {
             currentReceiver = GetDamageReceiverFromCollider(other);
             if (currentReceiver == null) return;
-            float damage = damagePerSecond * Time.deltaTime;
+            float damage = instakill ? Actor.Constants.INSTAKILL : damagePerSecond * Time.deltaTime;
             currentReceiver.TakeDamage(damage, Vector2.zero);
         }
 

@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 251b90c643f279846a5c5a28f212f832, type: 3}
   m_Name: GameState
   m_EditorClassIdentifier: 
-  initialLives: 4
+  initialLives: 5
   _upgradedShotsCount: 10
   _upgradedMeleeDamageMod: 3
-  _upgradedMoveSpeed: 8
+  _upgradedMoveSpeed: 9
   redDestroyedAtStart: 0
   yellowDestroyedAtStart: 0
   blueDestroyedAtStart: 0

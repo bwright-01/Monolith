@@ -80,7 +80,6 @@ namespace Weapon {
                 AfterNoFire();
             }
             TickTimers();
-            isTryingToShoot = false;
         }
 
         bool IsCycle(int cycle) { return !cycles || firingCycle % cycleRepeat == cycle; }
@@ -115,6 +114,7 @@ namespace Weapon {
         }
 
         void AfterFire() {
+            isTryingToShoot = false;
             firingCycle++;
             if (firingCycle > 99) firingCycle = 0;
             if (overheats) {

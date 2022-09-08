@@ -149,6 +149,7 @@ namespace Weapons {
             timeAlive += Time.deltaTime;
             if (timeAlive > lifetime) Die();
             if ((transform.position - startingPosition).magnitude > outOfRange) Die();
+            if (rb != null && rb.velocity.magnitude <= float.Epsilon && timeAlive > 0.2f) Die();
         }
 
         void OnBecameInvisible() {
