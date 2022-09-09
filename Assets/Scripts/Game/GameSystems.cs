@@ -48,9 +48,10 @@ namespace Game {
         }
 
         void Awake() {
+            _current = SystemUtils.ManageSingleton<GameSystems>(_current, this);
+            if (!enabled) return;
             Layer.Init();
             ResetGameState();
-            _current = SystemUtils.ManageSingleton<GameSystems>(_current, this);
         }
 
         void OnPlayerDeath() {

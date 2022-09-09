@@ -98,6 +98,7 @@ namespace Player {
         }
 
         void OnFirePress() {
+            if (shooting.active) return;
             if (HasAvailableBullet()) {
                 shooting.Start();
                 gun.TryAttack();
@@ -108,6 +109,7 @@ namespace Player {
         }
 
         void OnMeleePress() {
+            if (meleeing.active) return;
             if (melee.TryAttack()) {
                 meleeing.Start();
             }

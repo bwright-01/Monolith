@@ -19,6 +19,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: VaguePatrollerYellow
       objectReference: {fileID: 0}
+    - target: {fileID: 6565066348232381304, guid: b901b3530da270741842c1614b8e6557, type: 3}
+      propertyPath: maxSpeed
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 6565066348232381306, guid: b901b3530da270741842c1614b8e6557, type: 3}
       propertyPath: m_RootOrder
       value: 0

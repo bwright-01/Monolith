@@ -38,8 +38,6 @@ namespace Movement {
         float t;
         int tries;
 
-        float distanceToTraverse;
-
         void OnEnable() {
             StopAllCoroutines();
             StartCoroutine(IWander());
@@ -99,11 +97,11 @@ namespace Movement {
                 t = 0;
                 tries = 0;
 
-                while (IsCloseToTargetPosition() && tries < 10) {
+                do {
                     target.transform.position = GetWanderPoint();
                     tries++;
                     yield return null;
-                }
+                } while (IsCloseToTargetPosition() && tries < 10);
 
                 movement.SetTarget(target.transform);
 
@@ -119,6 +117,7 @@ namespace Movement {
         void OnDrawGizmos() {
             if (!debug) return;
             Utils.DebugDrawCircle(initialPosition != Vector2.zero ? initialPosition : transform.position, wanderRadius, Utils.Transparentize(Color.yellow, 0.1f));
+            if (target != null) Utils.DebugDrawRect(target.transform.position, 0.2f, Color.cyan);
         }
     }
 }

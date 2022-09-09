@@ -233,7 +233,7 @@ MonoBehaviour:
   wanderRadius: 25
   wanderEdgeThickness: 0.1
   wanderTargetThreshold: 2
-  wanderMinDistance: 2
+  wanderMinDistance: 1.5
   wanderTimeout: 10
 --- !u!114 &1620768740405018839
 MonoBehaviour:

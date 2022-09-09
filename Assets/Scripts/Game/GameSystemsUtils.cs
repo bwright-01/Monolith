@@ -7,8 +7,9 @@ namespace Game {
         public static T ManageSingleton<T>(T instance = null, T incoming = null, bool shouldSetDontDestroyOnLoad = true) where T : UnityEngine.MonoBehaviour {
             var objectsInScene = Object.FindObjectsOfType<T>();
             if (objectsInScene.Length > 1 && instance != incoming) {
-                incoming.gameObject.SetActive(false);
                 Object.Destroy(incoming.gameObject);
+                incoming.gameObject.SetActive(false);
+                incoming.enabled = false;
                 return instance;
             } else {
                 if (shouldSetDontDestroyOnLoad) Object.DontDestroyOnLoad(incoming.gameObject);
