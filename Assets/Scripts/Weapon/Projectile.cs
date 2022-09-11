@@ -84,7 +84,7 @@ namespace Weapons {
         public void OnHitSomething(int layer) {
             if (!IsAlive()) return;
             numCollisions++;
-            impactSound.Play();
+            impactSound.Play(this);
             bool ShouldRichochet = UnityEngine.Random.Range(0f, 1f) <= ricochetProbability;
             if (numCollisions >= numCollisionsMax || !ShouldRichochet) {
                 AddImpactFx();
@@ -184,7 +184,7 @@ namespace Weapons {
 
         void Ricochet() {
             if (!IsAlive()) return;
-            ricochetSound.Play();
+            ricochetSound.Play(this);
             heading = -heading;
             Quaternion ricochet = GetRicochet();
             heading = (ricochet * heading).normalized;

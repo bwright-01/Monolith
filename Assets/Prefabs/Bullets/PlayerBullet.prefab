@@ -57,7 +57,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8673064300862581261, guid: 42aec47ca2ab376439cca64f2ce5e227, type: 3}
       propertyPath: debug
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8673064300862581261, guid: 42aec47ca2ab376439cca64f2ce5e227, type: 3}
       propertyPath: ignoreTag

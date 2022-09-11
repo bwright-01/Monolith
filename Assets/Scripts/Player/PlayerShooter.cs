@@ -104,7 +104,7 @@ namespace Player {
                 gun.TryAttack();
                 SpendAmmo();
             } else {
-                noAmmoClick.Play();
+                noAmmoClick.Play(this);
             }
         }
 

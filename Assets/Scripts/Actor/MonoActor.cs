@@ -20,6 +20,11 @@ namespace Actor {
         [Space]
         [Space]
 
+        [SerializeField] ParticleSystem deathParticles;
+
+        [Space]
+        [Space]
+
         [SerializeField] bool hideOnDeath = true;
         [SerializeField] bool destroyOnDeath;
         [SerializeField] MonoActor[] killActorsOnDeath = new MonoActor[] { };
@@ -57,8 +62,8 @@ namespace Actor {
         void OnDestroy() {
             CleanupOthers();
             StopAllCoroutines();
-            damageSound.Unload();
-            deathSound.Unload();
+            damageSound.Unload(this);
+            deathSound.Unload(this);
         }
 
         protected void SubscribeToEvents() {
@@ -126,11 +131,13 @@ namespace Actor {
 
         protected void CommonDamageActions() {
             if (damageFlash != null) damageFlash.StartFlashing();
-            damageSound.Play();
+            damageSound.Play(this);
         }
 
         protected void CommonDeathActions() {
-            deathSound.Play();
+            deathSound.Play(this);
+
+            if (deathParticles != null) deathParticles.Play();
 
             if (hideOnDeath) foreach (var sprite in sprites) if (sprite != null) sprite.enabled = false;
             if (minimapComponent != null) Destroy(minimapComponent);

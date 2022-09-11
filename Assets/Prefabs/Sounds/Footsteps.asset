@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aadd44443267268479d0a492ac30fa69, type: 3}
   m_Name: Footsteps
   m_EditorClassIdentifier: 
-  soundName: HazardD
-  volume: 0.3
-  pitch: 1
+  soundName: Footsteps
+  volume: 0.2
+  pitch: 0.9
   ignoreListenerPause: 0
   realtimeEditorInspect: 0
   mixerGroup: {fileID: 0}
@@ -22,7 +22,7 @@ MonoBehaviour:
   spread: 180
   minFalloffDistance: 20
   maxFalloffDistance: 40
-  dopplerLevel: 1
+  dopplerLevel: 0
   pitchVariance: 0
   clipHead: {fileID: 0}
   clipLoop: {fileID: 8300000, guid: dafc0b39dd77488479610a190bdca34f, type: 3}

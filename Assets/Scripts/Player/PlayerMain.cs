@@ -57,9 +57,9 @@ namespace Player {
 
         private void Update() {
             if (IsAlive() && movement != null && movement.HasMoveInput()) {
-                footstepsSound.Play();
+                footstepsSound.Play(this);
             } else {
-                footstepsSound.Stop();
+                footstepsSound.Stop(this);
             }
         }
 
@@ -68,11 +68,11 @@ namespace Player {
         }
 
         void OnHazardEnter(Environment.HazardType hazardType) {
-            hazardLavaSound.Play();
+            hazardLavaSound.Play(this);
         }
 
         void OnHazardExit(Environment.HazardType hazardType) {
-            hazardLavaSound.Stop();
+            hazardLavaSound.Stop(this);
         }
 
         void OnGainHealth(float amount) {
@@ -99,11 +99,11 @@ namespace Player {
 
             gameObject.name = "Player (DEAD)";
 
-            footstepsSound.Stop();
-            hazardLavaSound.Stop();
+            footstepsSound.Stop(this);
+            hazardLavaSound.Stop(this);
 
-            footstepsSound.Unload();
-            hazardLavaSound.Unload();
+            footstepsSound.Unload(this);
+            hazardLavaSound.Unload(this);
 
             shooter.enabled = false;
             controller.enabled = false;

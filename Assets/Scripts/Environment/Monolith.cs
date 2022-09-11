@@ -134,7 +134,7 @@ namespace Environment {
             CommonDamageActions();
             if (!didBreakCasing && hp < brokenCasingThreshold) {
                 didBreakCasing = true;
-                brokenFX.Play();
+                if (brokenFX != null) brokenFX.Play();
             }
         }
 

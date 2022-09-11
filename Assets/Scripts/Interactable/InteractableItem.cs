@@ -60,7 +60,7 @@ namespace Interactable {
             isUseActionInvoked = true;
             isTriggerActive = false;
 
-            useSuccessSound.Play();
+            useSuccessSound.Play(this);
 
             switch (interactableType) {
                 case InteractableType.Health:
@@ -97,10 +97,10 @@ namespace Interactable {
             if (!isTriggerActive) return;
             if (ieUse != null) StopCoroutine(ieUse);
             if (isInteractable) {
-                useStartSound.Play();
+                useStartSound.Play(this);
                 ieUse = StartCoroutine(Use());
             } else {
-                useErrorSound.Play();
+                useErrorSound.Play(this);
             }
         }
 

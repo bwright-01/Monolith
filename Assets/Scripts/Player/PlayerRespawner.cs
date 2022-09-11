@@ -69,11 +69,11 @@ namespace Player {
             virtualCamera.LookAt = temp.transform;
             virtualCamera.Follow = temp.transform;
 
-            spawnStartSound.Play();
+            spawnStartSound.Play(this);
 
             if (respawnFX != null) {
                 respawnFX.transform.position = respawnLocation;
-                respawnFX.Play();
+                respawnFX.Play(this);
             }
 
             yield return new WaitForSeconds(spawnDuration);
@@ -83,7 +83,7 @@ namespace Player {
             virtualCamera.LookAt = spawned.transform;
             virtualCamera.Follow = spawned.transform;
 
-            spawnEndSound.Play();
+            spawnEndSound.Play(this);
 
             if (respawnFX != null) respawnFX.Stop();
 

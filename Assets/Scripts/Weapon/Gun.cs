@@ -73,7 +73,7 @@ namespace Weapon {
 
         void Update() {
             if (ShouldFire()) {
-                shotSound.Play();
+                shotSound.Play(this);
                 SpawnProjectile(transform.position, transform.rotation);
                 AfterFire();
             } else {

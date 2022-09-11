@@ -22,21 +22,21 @@ namespace Audio {
 
             // getters
             public new string name => soundName;
-            public abstract bool hasClip { get; }
-            public abstract bool hasSource { get; }
-            public abstract bool isPlaying { get; }
-            public float Volume => volume;
-            public float Pitch => pitch;
+            // public abstract bool hasClip { get; }
+            // public abstract bool hasSource { get; }
+            // public abstract bool isPlaying { get; }
+            // public float Volume => volume;
+            // public float Pitch => pitch;
 
             // public methods
 
             public abstract void Init(MonoBehaviour script, AudioMixerGroup mix = null, AudioSource _source = null);
 
-            public abstract void Unload();
+            public abstract void Unload(MonoBehaviour script);
 
-            public abstract void Play();
+            public abstract void Play(MonoBehaviour script);
 
-            public abstract void Stop();
+            public abstract void Stop(MonoBehaviour script);
 
             // PRIVATE
 
