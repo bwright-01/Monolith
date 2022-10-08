@@ -68,7 +68,7 @@ namespace Core {
 
         public static void DebugDrawCircle(Vector2 position, float radius, Color color) {
             Gizmos.color = color;
-            Gizmos.DrawSphere(position, radius);
+            Gizmos.DrawWireSphere(position, radius);
         }
         public static void DebugDrawCircle(Vector2 position, float radius) {
             DebugDrawCircle(position, radius, Utils.Transparentize(Color.magenta, 0.3f));

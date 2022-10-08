@@ -72,10 +72,10 @@ namespace Weapon {
             if (ieScreenShake != null) StopCoroutine(ieScreenShake);
 
             if (isUpgraded) {
-                upgradedAttackSound.Play();
+                upgradedAttackSound.Play(this);
                 ieScreenShake = StartCoroutine(ScreenShakeOnMeleeUpgraded());
             } else {
-                attackSound.Play();
+                attackSound.Play(this);
                 ieScreenShake = StartCoroutine(ScreenShakeOnMelee());
             }
 
@@ -94,9 +94,9 @@ namespace Weapon {
         public void OnHit(int layer) {
             int mask = Layer.Enemy.mask | Layer.NPC.mask;
             if (LayerUtils.LayerMaskContainsLayer(mask, layer)) {
-                hitEnemySound.Play();
+                hitEnemySound.Play(this);
             } else {
-                hitEnvironmentSound.Play();
+                hitEnvironmentSound.Play(this);
             }
         }
 

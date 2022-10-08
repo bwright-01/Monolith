@@ -18,41 +18,35 @@ namespace Audio {
             [SerializeField][Range(0f, 5f)] protected float courseDelayVariance = 0f;
             [SerializeField] AudioClip[] clips;
             [SerializeField] bool oneShot = false;
+            [SerializeField] bool loops = false;
             [SerializeField][Range(1, 99)] int maxSimultaneousClips = 99;
             [SerializeField][Range(0f, 1f)] float simulPlayThreshold = 0.05f;
 
-            [HideInInspector]
-            AudioSource source;
-
             // getters
-            public AudioClip Clip => clips[currentClipIndex];
-            public override bool isPlaying => source != null && source.isPlaying;
-            public override bool hasClip => clips.Length > 0;
-            public override bool hasSource => source != null;
+            // public AudioClip Clip => clips[currentClipIndex];
+            // public override bool isPlaying => source != null && source.isPlaying;
+            // public override bool hasClip => clips.Length > 0;
+            // public override bool hasSource => source != null;
 
             // state
-            Timer fadeTimer = new Timer();
             int currentClipIndex = 0;
 
             // simultaneous clips - keep track of timestamps
             static Dictionary<string, double> simulPlayLookup = new Dictionary<string, double>(100);
             double simulPlayStepAmount = 0.0;
 
-            MonoBehaviour _script;
-            Coroutine iRetryPlay;
-            Coroutine iInspect;
+            Dictionary<MonoBehaviour, AudioSource> soundMap = new Dictionary<MonoBehaviour, AudioSource>();
 
             public override void Init(MonoBehaviour script, AudioMixerGroup mix = null, AudioSource existingSource = null) {
-                _script = script;
                 if (existingSource != null && existingSource.clip != null) {
                     clips = new AudioClip[1] { existingSource.clip };
                 }
                 if (clips.Length == 0) return;
                 // nullSound.SetSource(gameObject.AddComponent<AudioSource>(), soundFXMix);
-                source = existingSource != null ? existingSource : script.gameObject.AddComponent<AudioSource>();
+                AudioSource source = existingSource != null ? existingSource : script.gameObject.AddComponent<AudioSource>();
                 if (existingSource == null) {
                     source.clip = clips[0];
-                    source.loop = false;
+                    source.loop = loops;
                 }
                 source.volume = volume;
                 source.pitch = pitch;
@@ -67,44 +61,39 @@ namespace Audio {
                 source.minDistance = minFalloffDistance;
                 source.maxDistance = maxFalloffDistance;
 
+                // set up player to play the sound on the current gameObject, not the scriptableobject :facepalm
+                soundMap[script] = source;
+
                 // simultaneous play / max voices
                 simulPlayStepAmount = (double)(simulPlayThreshold / maxSimultaneousClips);
 
                 InitSimultaneousSoundLookup();
-
-                if (existingSource == null) iInspect = script.StartCoroutine(RealtimeEditorInspection());
             }
 
-            public override void Unload() {
-                if (_script != null && iRetryPlay != null) _script.StopCoroutine(iRetryPlay);
-                if (_script != null && iInspect != null) _script.StopCoroutine(iInspect);
-                _script = null;
-                Destroy(source);
-                source = null;
+            public override void Unload(MonoBehaviour script) {
+                if (!ValidateSound(script)) return;
+                Destroy(soundMap[script]);
+                soundMap[script] = null;
+                soundMap.Remove(script);
             }
 
-            public override void Play() {
-                if (!ValidateSound()) return;
+            public override void Play(MonoBehaviour script) {
+                if (!ValidateSound(script)) return;
                 if (!CanPlaySimultaneousSound()) return;
                 if (oneShot) {
-                    UpdateVariance();
-                    source.PlayOneShot(clips[currentClipIndex]);
+                    UpdateVariance(script);
+                    soundMap[script].PlayOneShot(clips[currentClipIndex]);
                 } else {
-                    UpdateVariance();
-                    source.Stop();
-                    source.PlayDelayed(UnityEngine.Random.Range(0f, delayVariance + courseDelayVariance));
+                    UpdateVariance(script);
+                    soundMap[script].Stop();
+                    soundMap[script].PlayDelayed(UnityEngine.Random.Range(0f, delayVariance + courseDelayVariance));
                 }
             }
 
-            public void PlayAtLocation(Vector3 location) {
-                if (!ValidateSound()) return;
-                UpdateVariance();
-                AudioSource.PlayClipAtPoint(clips[currentClipIndex], location, volume);
-            }
-
-            public override void Stop() {
-                if (!ValidateSound()) return;
-                source.Stop();
+            public override void Stop(MonoBehaviour script) {
+                if (!ValidateSound(script)) return;
+                if (!script.enabled) return;
+                soundMap[script].Stop();
             }
 
             // PRIVATE
@@ -126,38 +115,24 @@ namespace Audio {
                 return true;
             }
 
-            void UpdateVariance() {
+            void UpdateVariance(MonoBehaviour script) {
                 currentClipIndex = UnityEngine.Random.Range(0, clips.Length);
-                source.clip = clips[currentClipIndex];
-                source.volume = Utils.RandomVariance(volume, volumeVariance, 0f, 1f);
-                source.pitch = Utils.RandomVariance(pitch, pitchVariance, 0f, 1f);
+                soundMap[script].clip = clips[currentClipIndex];
+                soundMap[script].volume = Utils.RandomVariance(volume, volumeVariance, 0f, 1f);
+                soundMap[script].pitch = Utils.RandomVariance(pitch, pitchVariance, 0f, 1f);
             }
 
-            bool ValidateSound() {
-                if (_script == null) return false;
+            bool ValidateSound(MonoBehaviour script) {
+                if (script == null || !script.enabled) return false;
+                if (!soundMap.ContainsKey(script)) return false;
                 if (clips.Length == 0) return false;
-                if (source == null) return false;
+                if (!soundMap[script].enabled) return false;
+                if (soundMap[script] == null) return false;
                 return true;
             }
 
             protected override IEnumerator RealtimeEditorInspection() {
-                while (_script != null) {
-                    yield return new WaitForSecondsRealtime(1f);
-                    if (!realtimeEditorInspect) continue;
-                    if (source == null) continue;
-
-                    source.volume = volume;
-                    source.pitch = pitch;
-
-                    // 3d settings
-                    source.spread = spread;
-                    source.spatialBlend = spatialBlend;
-                    source.minDistance = minFalloffDistance;
-                    source.maxDistance = maxFalloffDistance;
-
-                    // simultaneous play
-                    simulPlayStepAmount = (double)(simulPlayThreshold / maxSimultaneousClips);
-                }
+                yield return null;
             }
         }
     }

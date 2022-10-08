@@ -918,7 +918,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0.5
+  m_LinearDrag: 1
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
@@ -983,9 +983,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 6
-  throttleUpTime: 0.5
+  throttleUpTime: 0.2
   throttleDownTime: 0.05
-  speedDelta: 0.5
+  speedDelta: 0.8
   additionalAttackForce: 10
   eventChannel: {fileID: 11400000, guid: 7981a9b65533ac444b7650afd7b5691d, type: 2}
 --- !u!114 &3844958334926485776
@@ -1017,6 +1017,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageSound: {fileID: 11400000, guid: 18c50da0e9cb8e64a866cb8d1ea29675, type: 2}
   deathSound: {fileID: 11400000, guid: 04350ea02692db149971b645dc28d451, type: 2}
+  deathParticles: {fileID: 0}
   hideOnDeath: 0
   destroyOnDeath: 0
   killActorsOnDeath: []
@@ -1061,7 +1062,7 @@ MonoBehaviour:
   defaultMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   damageFlashMaterial: {fileID: 2100000, guid: 2255ee51952c0264bb82744ab97e3567, type: 2}
   damageFlashDuration: 0.1
-  damageSpriteTarget: {fileID: 0}
+  damageSpriteTarget: {fileID: 1846733899}
   secondaryDamageSpriteTargets: []
 --- !u!1 &7397556698269183505
 GameObject:

@@ -36,7 +36,7 @@ namespace Audio {
             Dictionary<Track, TrackStatus> coroutineMap = new Dictionary<Track, TrackStatus>();
 
             // state
-            bool isPlaying = false; // note this keeps track of what can currently be *heard*, not necessarily of what is currently playing (all tracks start playing silently)
+            bool isPlaying => currentTrack != null;
             Track foundTrack;
             Track currentTrack;
             Track incomingTrack;
@@ -56,7 +56,6 @@ namespace Audio {
 
             void OnResetMusic() {
                 StopAllCoroutines();
-                isPlaying = false;
                 currentTrack = null;
                 incomingTrack = null;
                 outgoingTrack = null;
@@ -77,7 +76,6 @@ namespace Audio {
                 StopAllCoroutines();
                 if (isPlaying) {
                     if (debug) Debug.Log($"CROSSFADE >> current={currentTrack.name} found={foundTrack.name} incoming={(incomingTrack != null ? incomingTrack.name : "null")} outgoing={(outgoingTrack != null ? outgoingTrack.name : "null")}");
-
                     // in the last iteration, the incoming track would eventually become the current track
                     // here, `incomingTrack` represents the track that we now should be fading FROM
                     currentTrack = incomingTrack != null ? incomingTrack : currentTrack;
@@ -94,7 +92,6 @@ namespace Audio {
                     }));
                 } else {
                     if (debug) Debug.Log($"FADEIN >> found={foundTrack.name}");
-                    isPlaying = true;
                     currentTrack = foundTrack;
                     ZeroOutAllTracks();
                     StartCoroutine(MusicUtils.FadeIn(currentTrack, fadeInDuration, musicVolume));

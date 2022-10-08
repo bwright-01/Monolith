@@ -49,7 +49,7 @@ namespace Environment {
         }
 
         IEnumerator IFadeToNextScene() {
-            portalSound.Play();
+            portalSound.Play(this);
             if (portalFX != null) portalFX.Play();
             yield return new WaitForSeconds(timeToTeleport);
             LoadNextScene();

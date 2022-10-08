@@ -17,12 +17,23 @@ namespace Actor {
             ieFlash = StartCoroutine(IEDamageFlash());
         }
 
-        IEnumerator IEDamageFlash() {
+        void ActivateFlash() {
             if (damageSpriteTarget != null) damageSpriteTarget.material = damageFlashMaterial;
             foreach (var sprite in secondaryDamageSpriteTargets) if (sprite != null) sprite.material = damageFlashMaterial;
-            yield return new WaitForSeconds(damageFlashDuration);
+        }
+
+        void DeactivateFlash() {
             if (damageSpriteTarget != null) damageSpriteTarget.material = defaultMaterial;
             foreach (var sprite in secondaryDamageSpriteTargets) if (sprite != null) sprite.material = defaultMaterial;
+        }
+
+        IEnumerator IEDamageFlash() {
+            for (int i = 0; i < 2; i++) {
+                ActivateFlash();
+                yield return new WaitForSeconds(damageFlashDuration);
+                DeactivateFlash();
+                yield return new WaitForSeconds(damageFlashDuration);
+            }
             ieFlash = null;
         }
     }

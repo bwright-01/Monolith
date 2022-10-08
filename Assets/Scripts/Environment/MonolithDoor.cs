@@ -33,7 +33,7 @@ namespace Environment {
             sr.enabled = false;
             collider.enabled = false;
             if (doorRemoveFX != null) doorRemoveFX.Play();
-            doorRemoveSound.Play();
+            doorRemoveSound.Play(this);
         }
 
         IEnumerator IRemove() {

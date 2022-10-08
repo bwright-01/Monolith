@@ -28,6 +28,7 @@ public class Boss : MonoActor {
     [Space]
 
     [SerializeField] Animator animator;
+    [SerializeField][Range(0f, 4f)] float timeDelayPan = 0.5f;
     [SerializeField][Range(0f, 4f)] float timePanToMonolith = 2f;
     [SerializeField][Range(0f, 4f)] float timePause = 1.5f;
     [SerializeField][Range(0f, 4f)] float timePanFromMonolith = 1f;
@@ -58,6 +59,7 @@ public class Boss : MonoActor {
     Transform prevCameraTarget;
     Timer cutsceneTimer = new Timer(TimerDirection.Increment, TimerStep.UnscaledDeltaTime);
 
+    Coroutine iAttack;
     Timer chargeTimer = new Timer();
 
     bool hasStartedBattle;
@@ -87,7 +89,7 @@ public class Boss : MonoActor {
         if (!hasStartedBattle) {
             hasStartedBattle = true;
             StartCoroutine(IPanToMonolith());
-            StartCoroutine(IAttack());
+            iAttack = StartCoroutine(IAttack());
         }
     }
 
@@ -104,8 +106,8 @@ public class Boss : MonoActor {
     }
 
     public override void OnDeath(float damage, float hp) {
-        CommonDeathActions();
         deathFX.SetActive(true);
+        CommonDeathActions();
         eventChannel.OnStopMusic.Invoke();
         Destroy(healthSlider.gameObject);
         StartCoroutine(IWin());
@@ -151,6 +153,7 @@ public class Boss : MonoActor {
     }
 
     IEnumerator IWin() {
+        if (iAttack != null) StopCoroutine(iAttack);
         yield return new WaitForSeconds(3f);
         eventChannel.OnResetMusic.Invoke();
         GotoWinScreen();
@@ -175,6 +178,8 @@ public class Boss : MonoActor {
     }
 
     IEnumerator IPanToMonolith() {
+        yield return new WaitForSeconds(timeDelayPan);
+
         var target = new GameObject("CutsceneCameraTarget");
 
         prevCameraTarget = virtualCamera.LookAt;
